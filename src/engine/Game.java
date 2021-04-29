@@ -146,5 +146,6 @@ public class Game {
 	public static void main(String[] args) throws IOException{
 		Game a=new Game("Abdelrahman", "Cairo");
 		System.out.println(a.availableCities);
+		System.out.println("hello world!");
 	}
 }
