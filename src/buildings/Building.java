@@ -3,13 +3,15 @@ package buildings;
 abstract public class Building {
 
 	private int cost;
-	private int level = 1;
+	private int level;
 	private int upgradeCost;
-	private boolean coolDown = true;
+	private boolean coolDown;
 
 	public Building(int cost, int upgradeCost) {
 		this.cost = cost;
 		this.upgradeCost = upgradeCost;
+		level = 1;
+		coolDown = true;
 	}
 
 	public int getCost() {

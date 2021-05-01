@@ -19,16 +19,22 @@ public class Game {
 		City x=new City(playerCity);
 		player.getControlledCities().add(x);
 		loadCitiesAndDistances();
-		if (playerCity.equals("Cairo")) {
-			loadArmy("Rome", "rome_army.csv");
-			loadArmy("Sparta","sparta_army.csv");
-		} else if (playerCity.equals("Rome")) {
-			loadArmy("Cairo", "cairo_army.csv");
-			loadArmy("Sparta","sparta_army.csv");
-		} else if (playerCity.equals("Sparta")) {
-			loadArmy("Rome", "rome_army.csv");
-			loadArmy("Cairo","cairo_army.csv");
+		//load the army of any available city
+		for (City e:availableCities) {
+			if(!e.getName().equals(playerCity)) {
+				loadArmy(e.getName(),e.getName().toLowerCase()+"_army.csv" );
+			}
 		}
+//		if (playerCity.equals("Cairo")) {
+//			loadArmy("Rome", "rome_army.csv");
+//			loadArmy("Sparta","sparta_army.csv");
+//		} else if (playerCity.equals("Rome")) {
+//			loadArmy("Cairo", "cairo_army.csv");
+//			loadArmy("Sparta","sparta_army.csv");
+//		} else if (playerCity.equals("Sparta")) {
+//			loadArmy("Rome", "rome_army.csv");
+//			loadArmy("Cairo","cairo_army.csv");
+//		}
 		
 		
 
@@ -143,9 +149,4 @@ public class Game {
 		return maxTurnCount;
 	}
 	
-	public static void main(String[] args) throws IOException{
-		Game a=new Game("Abdelrahman", "Cairo");
-		System.out.println(a.availableCities);
-		System.out.println("hello world!");
-	}
 }

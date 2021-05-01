@@ -8,14 +8,18 @@ import units.Army;
 
 public class City {
 	private String name;
-	private ArrayList<EconomicBuilding> economicalBuildings=new ArrayList<EconomicBuilding>();
-	private ArrayList<MilitaryBuilding> militaryBuildings=new ArrayList<MilitaryBuilding>();
+	private ArrayList<EconomicBuilding> economicalBuildings;
+	private ArrayList<MilitaryBuilding> militaryBuildings;
 	private Army defendingArmy;
 	private int turnsUnderSiege;
 	private boolean underSiege;
 	public City(String name) {
+		//don't initialize the defending army of a city ;no failures
+		//ArrayLists to be initialized in the constructor
 		this.name=name;
-		this.underSiege = false;  
+		this.underSiege = false;
+		economicalBuildings=new ArrayList<EconomicBuilding>();
+		militaryBuildings=new ArrayList<MilitaryBuilding>();
 		
 	}
 	@Override
