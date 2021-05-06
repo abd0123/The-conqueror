@@ -22,12 +22,6 @@ public class City {
 		militaryBuildings=new ArrayList<MilitaryBuilding>();
 		
 	}
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return name;
-	}
-	
 	public String getName() {
 		return name;
 	}
