@@ -92,7 +92,6 @@ public class Game {
 				availableCities.get(i).setDefendingArmy(ar);
 			}
 		}
-		br.close();
 		
 	}
 	
