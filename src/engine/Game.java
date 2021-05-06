@@ -10,9 +10,10 @@ public class Game {
 	private ArrayList<City> availableCities;
 	private ArrayList<Distance> distances;
 	private final int maxTurnCount = 30;
-	private int currentTurnCount = 1;
+	private int currentTurnCount ;
 
 	public Game(String playerName, String playerCity) throws IOException {
+		currentTurnCount = 1;
 		availableCities= new ArrayList<City>();
 		distances = new ArrayList<Distance>();
 		this.player = new Player(playerName);

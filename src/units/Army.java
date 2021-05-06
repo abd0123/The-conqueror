@@ -2,14 +2,18 @@ package units;
 import java.util.*;
 
 public class Army {
-	private Status currentStatus=Status.IDLE;
-	private ArrayList<Unit> units=new ArrayList<Unit>();
-	private	int distancetoTarget=-1;
-	private	String target="";
+	private Status currentStatus;
+	private ArrayList<Unit> units;
+	private	int distancetoTarget;
+	private	String target;
 	private	String currentLocation;
 	private final int maxToHold=10;
 	
 	public Army(String currentLocation) {
+		currentStatus=Status.IDLE;
+		units=new ArrayList<Unit>();
+		distancetoTarget=-1;
+		target="";
 		this.currentLocation=currentLocation;
 	}
 	
