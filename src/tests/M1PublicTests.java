@@ -19,8 +19,6 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import units.Army;
-
 
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -1965,9 +1963,9 @@ public class M1PublicTests {
 			Object c1da = (Object) fda.get(c1);
 			Object c2da = (Object) fda.get(c2);
 			
-			if(skipArmy) {
+			if(skipArmy)
 				return c1da == c2da && c1da == null;
-			}
+			
 			return checkArmiesEqual(c1n,c1da, c2da);
 		}
 		
@@ -2255,7 +2253,6 @@ public class M1PublicTests {
 						continue;
 					}
 					boolean skipArmy = city.equals(fcn.get(bCity));
-//					System.out.println(skipArmy);
 					loadedCorrectly = loadedCorrectly || checkCitiesEqual(aCity, bCity, skipArmy);	
 				}
 				if(!loadedCorrectly)

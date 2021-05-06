@@ -18,6 +18,7 @@ public class City {
 		//ArrayLists to be initialized in the constructor
 		this.name=name;
 		this.underSiege = false;
+		defendingArmy=new Army(name);
 		economicalBuildings=new ArrayList<EconomicBuilding>();
 		militaryBuildings=new ArrayList<MilitaryBuilding>();
 		
