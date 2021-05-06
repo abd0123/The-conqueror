@@ -145,11 +145,5 @@ public class Game {
 	public int getMaxTurnCount() {
 		return maxTurnCount;
 	}
-	public static void main(String[] args) throws IOException{
-		Game a=new Game("A","Cairo");
-		for (int i = 0; i <a.availableCities.size(); i++) {
-			System.out.println(a.availableCities.get(i).getDefendingArmy());
-			
-		}
-	}
+
 }
