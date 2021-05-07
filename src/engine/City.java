@@ -14,7 +14,6 @@ public class City {
 	private int turnsUnderSiege;
 	private boolean underSiege;
 	public City(String name) {
-		//don't initialize the defending army of a city ;no failures
 		//ArrayLists to be initialized in the constructor
 		this.name=name;
 		this.underSiege = false;
