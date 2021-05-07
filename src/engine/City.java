@@ -22,6 +22,7 @@ public class City {
 		militaryBuildings=new ArrayList<MilitaryBuilding>();
 		
 	}
+	
 	public String getName() {
 		return name;
 	}
