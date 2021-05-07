@@ -10,31 +10,29 @@ public class Game {
 	private ArrayList<City> availableCities;
 	private ArrayList<Distance> distances;
 	private final int maxTurnCount = 30;
-	private int currentTurnCount = 1;
+	private int currentTurnCount ;
 
 	public Game(String playerName, String playerCity) throws IOException {
+		currentTurnCount = 1;
 		availableCities= new ArrayList<City>();
 		distances = new ArrayList<Distance>();
 		this.player = new Player(playerName);
 		City x=new City(playerCity);
+		x.setDefendingArmy(null);
 		player.getControlledCities().add(x);
 		loadCitiesAndDistances();
+		for (int i = 0; i < availableCities.size(); i++) {
+			if(availableCities.get(i).getName().equals(playerCity)) {
+				availableCities.get(i).setDefendingArmy(null);
+			}
+		}
 		//load the army of any available city
 		for (City e:availableCities) {
 			if(!e.getName().equals(playerCity)) {
 				loadArmy(e.getName(),e.getName().toLowerCase()+"_army.csv" );
 			}
 		}
-//		if (playerCity.equals("Cairo")) {
-//			loadArmy("Rome", "rome_army.csv");
-//			loadArmy("Sparta","sparta_army.csv");
-//		} else if (playerCity.equals("Rome")) {
-//			loadArmy("Cairo", "cairo_army.csv");
-//			loadArmy("Sparta","sparta_army.csv");
-//		} else if (playerCity.equals("Sparta")) {
-//			loadArmy("Rome", "rome_army.csv");
-//			loadArmy("Cairo","cairo_army.csv");
-//		}
+		
 		
 		
 
@@ -148,8 +146,5 @@ public class Game {
 	public int getMaxTurnCount() {
 		return maxTurnCount;
 	}
-	public static void main(String[]args) throws Exception {
-		Game g =new Game("farghal","Rome");
-	}
-	
+
 }

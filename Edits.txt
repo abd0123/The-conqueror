@@ -1,3 +1,0 @@
-make it general for the enemies armies
-what is not used not intialized
-

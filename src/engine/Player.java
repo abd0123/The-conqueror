@@ -6,11 +6,13 @@ import units.Army;
 
 public class Player {
 	 private String name;
-	 private ArrayList<City> controlledCities=new ArrayList<City>();
-	 private ArrayList<Army> controlledArmies=new ArrayList<Army>();
+	 private ArrayList<City> controlledCities;
+	 private ArrayList<Army> controlledArmies;
 	 private double treasury;
 	 private double food;
 	 public Player(String name) {
+		 controlledArmies=new ArrayList<Army>();
+		 controlledCities=new ArrayList<City>();
 		 this.name=name;
 	 }
 	public String getName() {
