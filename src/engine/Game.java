@@ -26,11 +26,15 @@ public class Game {
 				availableCities.get(i).setDefendingArmy(null);
 			}
 		}
-		//load the army of any available city
-		for (City e:availableCities) {
-			if(!e.getName().equals(playerCity)) {
-				loadArmy(e.getName(),e.getName().toLowerCase()+"_army.csv" );
-			}
+		if(playerCity.equals("Cairo")) {
+			loadArmy("Sparta","sparta_army.csv");
+			loadArmy("Rome","rome_army.csv");
+		}else if(playerCity.equals("Sparta")) {
+			loadArmy("Cairo","cairo_army.csv");
+			loadArmy("Rome","rome_army.csv");
+		}else if(playerCity.equals("Rome")) {
+			loadArmy("Sparta","sparta_army.csv");
+			loadArmy("Cairo","cairo_army.csv");
 		}
 		
 		
