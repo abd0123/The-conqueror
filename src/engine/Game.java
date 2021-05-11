@@ -26,21 +26,15 @@ public class Game {
 				availableCities.get(i).setDefendingArmy(null);
 			}
 		}
-		if(playerCity.equals("Cairo")) {
-			loadArmy("Sparta","sparta_army.csv");
-			loadArmy("Rome","rome_army.csv");
-		}else if(playerCity.equals("Sparta")) {
-			loadArmy("Cairo","cairo_army.csv");
-			loadArmy("Rome","rome_army.csv");
-		}else if(playerCity.equals("Rome")) {
-			loadArmy("Sparta","sparta_army.csv");
-			loadArmy("Cairo","cairo_army.csv");
+		for (City c : availableCities) {
+			if (!(c.getName().equals(playerCity)))
+				loadArmy(c.getName(), c.getName().toLowerCase() + "_army.csv");
 		}
+	}
 		
 		
 		
 
-	}
 
 	public void loadArmy(String cityName, String path) throws IOException {
 		Army ar = new Army(cityName);
@@ -89,6 +83,7 @@ public class Game {
 			}
 
 		}
+		br.close();
 		
 		ar.setUnits(b);
 		for (int i = 0; i < availableCities.size(); i++) {
