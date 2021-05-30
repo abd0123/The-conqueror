@@ -49,7 +49,7 @@ abstract public class Building {
 			 throw new MaxLevelException();
 		 }else {
 			 level++;
-			 
+			 coolDown=true;
 		 }
 		 
 	 }
