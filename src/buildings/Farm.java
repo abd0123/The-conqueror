@@ -12,4 +12,8 @@ public class Farm extends EconomicBuilding{
 		super.upgrade();
 		this.setUpgradeCost(this.getLevel()==2?700:0);
 	}
+
+	public int harvest() {
+		return this.getLevel()==1?500:this.getLevel()==2?700:1000;
+	}
 }

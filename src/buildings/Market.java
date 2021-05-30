@@ -11,4 +11,8 @@ public class Market extends EconomicBuilding {
 		super.upgrade();
 		this.setUpgradeCost(this.getLevel()==2?1000:0);
 	}
+	
+	public int harvest() {
+		return this.getLevel()==1?1000:this.getLevel()==2?1500:2000;
+	}
 }
