@@ -14,18 +14,13 @@ public class City {
 	private int turnsUnderSiege;
 	private boolean underSiege;
 	public City(String name) {
-		//don't initialize the defending army of a city ;no failures
 		//ArrayLists to be initialized in the constructor
 		this.name=name;
 		this.underSiege = false;
+		defendingArmy=new Army(name);
 		economicalBuildings=new ArrayList<EconomicBuilding>();
 		militaryBuildings=new ArrayList<MilitaryBuilding>();
 		
-	}
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return name;
 	}
 	
 	public String getName() {

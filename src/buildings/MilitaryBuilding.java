@@ -1,6 +1,6 @@
 package buildings;
 
-abstract public class MilitaryBuilding extends Building {
+public abstract class MilitaryBuilding extends Building {
 
 	private int recruitmentCost;
 	private int currentRecruit;

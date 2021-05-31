@@ -11,9 +11,10 @@ public class Game {
 	private ArrayList<City> availableCities; // to add all the cities in the game
 	private ArrayList<Distance> distances; // to add the distance* between each two cities
 	private final int maxTurnCount = 30;
-	private int currentTurnCount = 1;
+	private int currentTurnCount ;
 
 	public Game(String playerName, String playerCity) throws IOException {
+<<<<<<< HEAD
 		availableCities = new ArrayList<City>();
 		distances = new ArrayList<Distance>();
 		this.player = new Player(playerName);
@@ -26,8 +27,30 @@ public class Game {
 				loadArmy(e.getName(), e.getName().toLowerCase() + "_army.csv");
 			}
 		}
-
+=======
+		currentTurnCount = 1;
+		availableCities= new ArrayList<City>();
+		distances = new ArrayList<Distance>();
+		this.player = new Player(playerName);
+		City x=new City(playerCity);
+		x.setDefendingArmy(null);
+		player.getControlledCities().add(x);
+		loadCitiesAndDistances();
+		for (int i = 0; i < availableCities.size(); i++) {
+			if(availableCities.get(i).getName().equals(playerCity)) {
+				availableCities.get(i).setDefendingArmy(null);
+			}
+		}
+		for (City c : availableCities) {
+			if (!(c.getName().equals(playerCity)))
+				loadArmy(c.getName(), c.getName().toLowerCase() + "_army.csv");
+		}
 	}
+		
+		
+		
+>>>>>>> b34c741ffaf19d4b4be9bd787b6128d00ced5ed7
+
 
 	public void loadArmy(String cityName, String path) throws IOException {
 		Army ar = new Army(cityName); // initialize a new army to defend the city
@@ -78,6 +101,7 @@ public class Game {
 			}
 
 		}
+		br.close();
 		
 		// after the loop, we have arrayList contains All the units, so we can use this arrayList 
 		//to initialize an Army
@@ -156,12 +180,15 @@ public class Game {
 		return maxTurnCount;
 	}
 
+<<<<<<< HEAD
 	public static void main(String[] args) throws Exception {
 		Game g = new Game("farghal", "Rome");
 
 		System.out.println(g.getAvailableCities());
 	}
 
+=======
+>>>>>>> b34c741ffaf19d4b4be9bd787b6128d00ced5ed7
 }
 // * : the ArrayList distances is of type <Distance> .. meaning to add an element to the arrayList, you 
 //     should create a new Distance which takes parameters (from City1, to City 2, int dist)
