@@ -54,5 +54,10 @@ abstract public class Unit {
 		return siegeUpkeep;
 	}
 	
-
+	public boolean equals(Object arg0) {
+		Unit c=(Unit)arg0;
+		return level==c.level&&maxSoldierCount==c.maxSoldierCount&&idleUpkeep==c.idleUpkeep
+				&&marchingUpkeep==c.marchingUpkeep&&siegeUpkeep==c.siegeUpkeep;
+	}
+	
 }

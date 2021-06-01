@@ -46,86 +46,16 @@ public class Army {
 	public double foodNeeded() {
 		double sum =0;
 		Status c = currentStatus;
-		switch(c) {
-		case IDLE:
-		   for(int i=0;i<units.size();i++) {
-			 Unit u=units.get(i);
-			 if(u instanceof Archer) {
-				Archer arch =(Archer) u;
-				if(arch.getLevel()==1 || arch.getLevel()==2) 
-				   sum+=(arch.getCurrentSoldierCount()*0.4);
-				else if(arch.getLevel()==3)
-					sum+=(arch.getCurrentSoldierCount()*0.5);
+		for (int i = 0; i < units.size(); i++) {
+			Unit u=units.get(i);
+			if(c==Status.IDLE) {
+				sum+=u.getCurrentSoldierCount()*u.getIdleUpkeep();
+			}else if(c==Status.BESIEGING) {
+				sum+=u.getCurrentSoldierCount()*u.getSiegeUpkeep();
+			}else {
+				sum+=u.getCurrentSoldierCount()*u.getMarchingUpkeep();
 			}
-			 else if(u instanceof Infantry) {
-				 Infantry in=(Infantry) u;
-				 if(in.getLevel()==1 || in.getLevel()==2) 
-					   sum+=(in.getCurrentSoldierCount()*0.5);
-				 else if(in.getLevel()==3)
-						sum+=(in.getCurrentSoldierCount()*0.6);
-				}
-			 else if(u instanceof Cavalry) {
-				 Cavalry ca=(Cavalry)u;
-				 if(ca.getLevel()==1 || ca.getLevel()==2) 
-					   sum+=(ca.getCurrentSoldierCount()*0.6);
-				 else if(ca.getLevel()==3)
-						sum+=(ca.getCurrentSoldierCount()*0.7);
-			 }
-			 }
-		   break;
-		case MARCHING:
-			for(int i=0;i<units.size();i++) {
-				 Unit u=units.get(i);
-				 if(u instanceof Archer) {
-					Archer arch =(Archer) u;
-					if(arch.getLevel()==1 || arch.getLevel()==2) 
-					   sum+=(arch.getCurrentSoldierCount()*0.5);
-					else if(arch.getLevel()==3)
-						sum+=(arch.getCurrentSoldierCount()*0.6);
-				}
-				 else if(u instanceof Infantry) {
-					 Infantry in=(Infantry) u;
-					 if(in.getLevel()==1 || in.getLevel()==2) 
-						   sum+=(in.getCurrentSoldierCount()*0.6);
-					 else if(in.getLevel()==3)
-							sum+=(in.getCurrentSoldierCount()*0.7);
-					}
-				 else if(u instanceof Cavalry) {
-					 Cavalry ca=(Cavalry)u;
-					 if(ca.getLevel()==1 || ca.getLevel()==2) 
-						   sum+=(ca.getCurrentSoldierCount()*0.7);
-					 else if(ca.getLevel()==3)
-							sum+=(ca.getCurrentSoldierCount()*0.8);
-				 }
-				 }
-			break;
-		case BESIEGING:
-			for(int i=0;i<units.size();i++) {
-				 Unit u=units.get(i);
-				 if(u instanceof Archer) {
-					Archer arch =(Archer) u;
-					if(arch.getLevel()==1 || arch.getLevel()==2) 
-					   sum+=(arch.getCurrentSoldierCount()*0.6);
-					else if(arch.getLevel()==3)
-						sum+=(arch.getCurrentSoldierCount()*0.7);
-				}
-				 else if(u instanceof Infantry) {
-					 Infantry in=(Infantry) u;
-					 if(in.getLevel()==1 || in.getLevel()==2) 
-						   sum+=(in.getCurrentSoldierCount()*0.7);
-					 else if(in.getLevel()==3)
-							sum+=(in.getCurrentSoldierCount()*0.8);
-					}
-				 else if(u instanceof Cavalry) {
-					 Cavalry ca=(Cavalry)u;
-					 if(ca.getLevel()==1 || ca.getLevel()==2) 
-						   sum+=(ca.getCurrentSoldierCount()*0.75);
-					 else if(ca.getLevel()==3)
-							sum+=(ca.getCurrentSoldierCount()*0.9);
-				 }
-				 }
-			break;
-	}
+		}
 		return sum;
 	}
 
