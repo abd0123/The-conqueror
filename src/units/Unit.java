@@ -1,5 +1,7 @@
 package units;
 
+import exceptions.FriendlyFireException;
+
 abstract public class Unit {
 	private int level;
 	private int maxSoldierCount;
@@ -16,6 +18,13 @@ abstract public class Unit {
 		this.marchingUpkeep = marchingUpkeep;
 		this.siegeUpkeep = siegeUpkeep;
 		this.currentSoldierCount=maxSoldierCount;
+	}
+	public void attack(Unit target) throws FriendlyFireException{
+		if(this.parentArmy.getUnits().contains(target))
+			throw new FriendlyFireException();
+		else {
+			this.parentArmy.handleAttackedUnit(target);
+		}
 	}
 
 	public Army getParentArmy() {
