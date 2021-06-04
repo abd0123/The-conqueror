@@ -44,7 +44,7 @@ public class Archer extends Unit {
 				c -= (0.2 * this.getCurrentSoldierCount());
 			}
 		}
-		target.setCurrentSoldierCount(c);
+		target.setCurrentSoldierCount((int)c);
 	}
 
 }
