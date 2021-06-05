@@ -45,6 +45,8 @@ public class Archer extends Unit {
 			}
 		}
 		target.setCurrentSoldierCount((int)c);
+		this.getParentArmy().handleAttackedUnit(target);
+
 	}
 
 }

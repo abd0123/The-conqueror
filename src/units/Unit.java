@@ -22,9 +22,9 @@ abstract public class Unit {
 	public void attack(Unit target) throws FriendlyFireException{
 		if(this.parentArmy.getUnits().contains(target))
 			throw new FriendlyFireException();
-		else {
-			this.parentArmy.handleAttackedUnit(target);
-		}
+//		else {
+//			this.parentArmy.handleAttackedUnit(target);
+//		}
 	}
 
 	public Army getParentArmy() {
