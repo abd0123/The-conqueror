@@ -1,7 +1,5 @@
 package engine;
-
 import java.util.ArrayList;
-
 import buildings.ArcheryRange;
 import buildings.Barracks;
 import buildings.Building;
@@ -9,6 +7,8 @@ import buildings.Farm;
 import buildings.Market;
 import buildings.MilitaryBuilding;
 import buildings.Stable;
+import java.util.*;
+import buildings.*;
 import exceptions.*;
 import units.*;
 
@@ -42,12 +42,12 @@ public class Player {
 	public double getTreasury() {
 		return treasury;
 	}
+	
 	public void setTreasury(double treasury) {
 		this.treasury = treasury;
 	}
 	
-	public void recruitUnit(String type,String cityName) throws
-	BuildingInCoolDownException, MaxRecruitedException, NotEnoughGoldException{
+	public void recruitUnit(String type,String cityName) throws BuildingInCoolDownException, MaxRecruitedException, NotEnoughGoldException{
 		City c=new City("Blabizo");
 		for (int i = 0; i < controlledCities.size(); i++) {
 			if(controlledCities.get(i).getName().equals(cityName)) {
@@ -105,6 +105,7 @@ public class Player {
 		}
 		
 	}
+	
 	public void build(String type,String cityName) throws NotEnoughGoldException{
 		City c=new City("Blabizo");
 		for (int i = 0; i < controlledCities.size(); i++) {
@@ -174,10 +175,53 @@ public class Player {
 		
 		}
 	}
-	 public void upgradeBuilding(Building b) throws NotEnoughGoldException,
-	 BuildingInCoolDownException, MaxLevelException{
-		 
-	 }
-	 
 
+
+	public void upgradeBuilding(Building b) throws NotEnoughGoldException,BuildingInCoolDownException, MaxLevelException{
+		if(treasury-b.getUpgradeCost()<0) {
+			throw new NotEnoughGoldException();
+		}
+		treasury-=b.getUpgradeCost();
+		b.upgrade();
+	}
+	
+	public void initiateArmy(City city,Unit unit) {
+		Army n=new Army(city.getName());
+		unit.setParentArmy(n);
+		n.getUnits().add(unit);
+		for (int i = 0; i < city.getDefendingArmy().getUnits().size(); i++) {
+			if(city.getDefendingArmy().getUnits().get(i).equals(unit)) {
+				city.getDefendingArmy().getUnits().remove(i);
+				break;
+			}
+		}
+		controlledArmies.add(n);
+	}
+	
+	public void laySiege(Army army,City city) throws TargetNotReachedException,FriendlyCityException {
+		if(!army.getCurrentLocation().equals(city.getName())) {
+			throw new TargetNotReachedException();
+		}
+		if(controlledCities.contains(city)) {
+			throw new FriendlyCityException();
+		}
+		for (int i = 0; i <controlledArmies.size(); i++) {
+			if(army.equals(controlledArmies.get(i))) {
+				controlledArmies.get(i).setCurrentStatus(Status.BESIEGING);
+				army.setCurrentStatus(Status.BESIEGING);
+				for (int j = 0; j < controlledCities.size(); j++) {
+					if(city.equals(controlledCities.get(j))) {
+						controlledCities.get(j).setUnderSiege(true);
+						controlledCities.get(j).setTurnsUnderSiege(0);
+						city.setUnderSiege(true);
+						city.setTurnsUnderSiege(0);
+						break;
+					}
+					
+				}
+				break;
+			}
+		}
+	}
+	
 }

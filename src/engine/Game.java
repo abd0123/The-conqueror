@@ -3,6 +3,9 @@ package engine;
 import java.io.*;
 import java.util.*;
 
+import org.junit.Ignore;
+
+import exceptions.*;
 import units.*;
 
 public class Game {
@@ -46,38 +49,47 @@ public class Game {
 			String[]result = currentLine.split(",");
 			if (result[0].equals("Archer") && 1 == Integer.parseInt(result[1])) {
 				Archer a = new Archer(1, 60, 0.4, 0.5, 0.6);
+				a.setParentArmy(ar);
 				b.add(a);
 			} else if (result[0].equals("Archer") && 2 == Integer.parseInt(result[1])) {
 				Archer a = new Archer(2, 60, 0.4, 0.5, 0.6);
+				a.setParentArmy(ar);
 				b.add(a);
 
 			} else if (result[0].equals("Archer") && 3 == Integer.parseInt(result[1])) {
 				Archer a = new Archer(3, 70, 0.5, 0.6, 0.7);
+				a.setParentArmy(ar);
 				b.add(a);
 
 			} else if (result[0].equals( "Infantry") && 1 == Integer.parseInt(result[1])) {
 				Infantry a = new Infantry(1, 50, 0.5, 0.6, 0.7);
+				a.setParentArmy(ar);
 				b.add(a);
 
 			} else if (result[0].equals( "Infantry") && 2 == Integer.parseInt(result[1])) {
 				Infantry a = new Infantry(2, 50, 0.5, 0.6, 0.7);
+				a.setParentArmy(ar);
 				b.add(a);
 
 			} else if (result[0].equals( "Infantry") && 3 == Integer.parseInt(result[1])) {
 				Infantry a = new Infantry(3, 60, 0.6, 0.7, 0.8);
+				a.setParentArmy(ar);
 				b.add(a);
 
 			} else if (result[0].equals( "Cavalry") && 1 == Integer.parseInt(result[1])) {
 				Cavalry a = new Cavalry(1, 40, 0.6, 0.7, 0.75);
+				a.setParentArmy(ar);
 				b.add(a);
 
 			} else if (result[0].equals( "Cavalry")&& 2 == Integer.parseInt(result[1])) {
 				Cavalry a = new Cavalry(2, 40, 0.6, 0.7, 0.75);
+				a.setParentArmy(ar);
 				b.add(a);
 				
 
 			} else if (result[0].equals( "Cavalry") && 3 == Integer.parseInt(result[1])) {
 				Cavalry a = new Cavalry(3, 60, 0.7, 0.8, 0.9);
+				a.setParentArmy(ar);
 				b.add(a);
 
 			}
@@ -117,7 +129,50 @@ public class Game {
 			this.distances.add(new Distance(result[0], result[1], Integer.parseInt(result[2])));
 		}
 	}
-
+	
+	public void targetCity(Army army, String targetName) {
+		
+	}
+	
+	public void endTurn() {
+		
+	}
+	
+	public void occupy(Army a,String cityName) {
+		City c = new City(cityName);
+		c.setDefendingArmy(a);
+		c.setTurnsUnderSiege(0);
+		this.player.getControlledCities().add(c);
+	
+	}
+	
+	public void autoResolve(Army attacker, Army defender) throws FriendlyFireException{
+		if(attacker.getUnits().size()==0 || defender.getUnits().size()==0) {
+			if (defender.getUnits().size()==0) {
+				this.occupy(defender, defender.getCurrentLocation());
+			}
+			return;
+		}
+		int turn=0;
+		Random rn = new Random();
+		int randomA = rn.nextInt(attacker.getUnits().size());
+		int randomB = rn.nextInt(defender.getUnits().size());
+		Unit a = attacker.getUnits().get(randomA);
+		Unit b = defender.getUnits().get(randomB);
+		if (turn %2==0) {
+			a.attack(b);	
+		}
+		else {
+			b.attack(a);
+			
+		}
+		autoResolve(attacker, defender);
+		
+	}
+	
+	public boolean isGameOver() {
+		return true;
+	}
 	public Player getPlayer() {
 		return player;
 	}
