@@ -147,6 +147,9 @@ public class Game {
 	}
 	
 	public void autoResolve(Army attacker, Army defender) throws FriendlyFireException{
+		if (this.player.getControlledArmies().contains(defender)) {
+			throw new FriendlyFireException();
+		}
 		if(attacker.getUnits().size()==0 || defender.getUnits().size()==0) {
 			if (defender.getUnits().size()==0) {
 				this.occupy(defender, defender.getCurrentLocation());
@@ -200,5 +203,4 @@ public class Game {
 	public int getMaxTurnCount() {
 		return maxTurnCount;
 	}
-
 }
