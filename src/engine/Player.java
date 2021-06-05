@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import buildings.ArcheryRange;
 import buildings.Barracks;
+import buildings.Building;
 import buildings.Farm;
 import buildings.Market;
 import buildings.MilitaryBuilding;
@@ -173,6 +174,10 @@ public class Player {
 		
 		}
 	}
+	 public void upgradeBuilding(Building b) throws NotEnoughGoldException,
+	 BuildingInCoolDownException, MaxLevelException{
+		 
+	 }
 	 
 
 }
