@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import buildings.ArcheryRange;
 import buildings.Barracks;
+import buildings.Farm;
+import buildings.Market;
 import buildings.MilitaryBuilding;
+import buildings.Stable;
 import exceptions.*;
 import units.*;
 
@@ -100,6 +103,75 @@ public class Player {
 			throw new MaxRecruitedException();
 		}
 		
+	}
+	public void build(String type,String cityName) throws NotEnoughGoldException{
+		City c=new City("Blabizo");
+		for (int i = 0; i < controlledCities.size(); i++) {
+			if(controlledCities.get(i).getName().equals(cityName)) {
+				c=controlledCities.get(i);
+				break;
+			}
+		}
+		if (type.toLowerCase().equals("archeryrange")) {
+			ArcheryRange a = new ArcheryRange();
+			if(treasury-a.getCost()<0) {
+				throw new NotEnoughGoldException();
+			}
+			else {
+				c.getMilitaryBuildings().add(a);
+				treasury-=a.getCost();
+				a.setCoolDown(true);
+		    }
+		
+		}
+		else if (type.toLowerCase().equals("barracks")) {
+			Barracks a = new Barracks();
+			if(treasury-a.getCost()<0) {
+				throw new NotEnoughGoldException();
+			}
+			else {
+				c.getMilitaryBuildings().add(a);
+				treasury-=a.getCost();
+				a.setCoolDown(true);
+		    }
+		
+		}
+		else if (type.toLowerCase().equals("barracks")) {
+			Stable a = new Stable ();
+			if(treasury-a.getCost()<0) {
+				throw new NotEnoughGoldException();
+			}
+			else {
+				c.getMilitaryBuildings().add(a);
+				treasury-=a.getCost();
+				a.setCoolDown(true);
+		    }
+		
+		}
+		else if (type.toLowerCase().equals("farm")) {
+			Farm a = new Farm();
+			if(treasury-a.getCost()<0) {
+				throw new NotEnoughGoldException();
+			}
+			else {
+				c.getEconomicalBuildings().add(a);
+				treasury-=a.getCost();
+				a.setCoolDown(true);
+		    }
+		
+		}
+		else {
+			Market a = new Market();
+			if(treasury-a.getCost()<0) {
+				throw new NotEnoughGoldException();
+			}
+			else {
+				c.getEconomicalBuildings().add(a);
+				treasury-=a.getCost();
+				a.setCoolDown(true);
+		    }
+		
+		}
 	}
 	 
 

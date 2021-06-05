@@ -62,10 +62,6 @@ abstract public class Unit {
 	public double getSiegeUpkeep() {
 		return siegeUpkeep;
 	}
-	public void attack (Unit target) throws FriendlyFireException{
-		
-	}
-	
 	public boolean equals(Object arg0) {
 		Unit c=(Unit)arg0;
 		return level==c.level&&maxSoldierCount==c.maxSoldierCount&&idleUpkeep==c.idleUpkeep
