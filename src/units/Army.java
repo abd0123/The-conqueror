@@ -102,5 +102,9 @@ public class Army {
 	public int getMaxToHold() {
 		return maxToHold;
 	}
-
+	
+	public boolean equals(Object o) {
+		Army a=(Army)o;
+		return this.currentLocation.equals(a.getCurrentLocation())&&this.units.equals(a.getUnits());
+	}
 }
