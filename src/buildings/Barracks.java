@@ -2,6 +2,9 @@ package buildings;
 
 import exceptions.BuildingInCoolDownException;
 import exceptions.MaxLevelException;
+import exceptions.MaxRecruitedException;
+import units.Infantry;
+import units.Unit;
 
 public class Barracks extends MilitaryBuilding {
 
@@ -13,5 +16,16 @@ public class Barracks extends MilitaryBuilding {
 		super.upgrade();
 		this.setUpgradeCost(this.getLevel()==2?1500:0);
 		this.setRecruitmentCost(this.getLevel()==2?550:600);
+	}
+
+	public Unit recruit() throws BuildingInCoolDownException, MaxRecruitedException {
+		if(isCoolDown()) {
+			throw new BuildingInCoolDownException();
+		}
+		if(getCurrentRecruit()==getMaxRecruit()) {
+			throw new MaxRecruitedException();
+		}
+		
+		return new Infantry(1, 50, 0.5, 0.6, 0.7); 
 	}
 }

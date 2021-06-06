@@ -239,7 +239,11 @@ public class Game {
 	}
 	
 	public boolean isGameOver() {
-		return true;
+		if(currentTurnCount>maxTurnCount||availableCities.size()==player.getControlledCities().size()) {
+			return true;
+		}else {
+			return false;
+		}	
 	}
 	public Player getPlayer() {
 		return player;
