@@ -204,12 +204,15 @@ public class Game {
 	}
 	
 	public void occupy(Army a,String cityName) {
-		City c = new City(cityName);
-		c.setDefendingArmy(a);
-		c.setTurnsUnderSiege(0);
-		c.setUnderSiege(false);
-		this.player.getControlledCities().add(c);
-	
+		for (City c : availableCities) {
+			if (c.getName().equals(cityName)) 
+			{
+				c.setDefendingArmy(a);
+				c.setUnderSiege(false);
+				c.setTurnsUnderSiege(-1);
+				this.player.getControlledCities().add(c);
+			}
+		}
 	}
 	
 	public void autoResolve(Army attacker, Army defender) throws FriendlyFireException{
