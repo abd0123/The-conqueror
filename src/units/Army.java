@@ -25,6 +25,7 @@ public class Army {
 			throw new MaxCapacityException();
 		else {
 			Army a = unit.getParentArmy();
+			unit.setParentArmy(this);
 			units.add(unit);
 			for (int i = 0; i < a.getUnits().size(); i++) {
 				if (a.getUnits().get(i).equals(unit))
