@@ -7,6 +7,7 @@ import org.junit.Ignore;
 
 import exceptions.*;
 import units.*;
+import buildings.*;
 
 public class Game {
 	private Player player;
@@ -147,7 +148,59 @@ public class Game {
 	}
 	
 	public void endTurn() {
-		
+		currentTurnCount++;
+		ArrayList<City>c=player.getControlledCities();
+		for (int i = 0; i < c.size();i++) {
+			City curr=c.get(i);
+			if(curr.isUnderSiege()) {
+				curr.setTurnsUnderSiege(curr.getTurnsUnderSiege()+1);
+				Army a=curr.getDefendingArmy();
+				for (int j = 0; j <a.getUnits().size(); j++) {
+					Unit cc=a.getUnits().get(i);
+					cc.setCurrentSoldierCount((int) (cc.getCurrentSoldierCount()-cc.getCurrentSoldierCount()*0.1));
+				}
+			}
+			for (int j = 0; j < curr.getEconomicalBuildings().size(); j++) {
+				EconomicBuilding b=curr.getEconomicalBuildings().get(i);
+				if(b instanceof Farm) {
+					player.setFood(player.getFood()+b.harvest());
+				}else {
+					player.setTreasury(player.getTreasury()+b.harvest());
+				}
+				b.setCoolDown(false);
+			}
+			for (int j = 0; j < curr.getMilitaryBuildings().size(); j++) {
+				MilitaryBuilding b=curr.getMilitaryBuildings().get(i);
+				b.setCurrentRecruit(0);
+				b.setCoolDown(false);
+			}
+		}
+		double foodNeeded=0;
+		ArrayList<Army>a=player.getControlledArmies();
+		for (int i = 0; i <a.size(); i++) {
+			Army curr=a.get(i);
+			if(curr.getCurrentStatus()==Status.MARCHING) {
+				curr.setDistancetoTarget(curr.getDistancetoTarget()-1);
+				if(curr.getDistancetoTarget()==0) {
+					curr.setCurrentLocation(curr.getTarget());
+					curr.setTarget(null);
+					curr.setCurrentStatus(Status.IDLE);
+				}
+			}
+			foodNeeded+=curr.foodNeeded();
+		}
+		if(foodNeeded>player.getFood()) {
+			player.setFood(0);
+			for (int i = 0; i < a.size(); i++) {
+				Army curr=a.get(i);
+				for (int j = 0; j <curr.getUnits().size(); j++) {
+					Unit cc=curr.getUnits().get(i);
+					cc.setCurrentSoldierCount((int) (cc.getCurrentSoldierCount()-cc.getCurrentSoldierCount()*0.1));
+				}
+			}
+		}else {
+			player.setFood(player.getFood()-foodNeeded);
+		}
 	}
 	
 	public void occupy(Army a,String cityName) {
