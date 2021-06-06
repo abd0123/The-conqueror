@@ -19,4 +19,9 @@ public class Distance {
 	public int getDistance() {
 		return distance;
 	}
+	
+	public boolean equals(Object o) {
+		Distance d=(Distance)o;
+		return this.from.equals(d.from)&&this.to.equals(d.to);
+	}
 }

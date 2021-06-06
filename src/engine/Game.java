@@ -131,7 +131,19 @@ public class Game {
 	}
 	
 	public void targetCity(Army army, String targetName) {
-		
+		if(army.getCurrentStatus()!=Status.MARCHING) {
+			army.setCurrentLocation("onRoad");
+			army.setCurrentStatus(Status.MARCHING);
+			for (int i = 0; i < distances.size(); i++) {
+				Distance d=distances.get(i);
+				if(d.getFrom().equals(army.getCurrentLocation())&&d.getTo().equals(targetName)||
+						d.getFrom().equals(targetName)&&d.getTo().equals(army.getCurrentLocation())) {
+					army.setDistancetoTarget(d.getDistance());
+					
+				}
+			}
+				
+		}
 	}
 	
 	public void endTurn() {
