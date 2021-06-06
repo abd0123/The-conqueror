@@ -26,6 +26,13 @@ public class Stable extends MilitaryBuilding {
 		if(getCurrentRecruit()==getMaxRecruit()) {
 			throw new MaxRecruitedException();
 		}
-		return new Cavalry(1, 40, 0.6, 0.7, 0.75);
+		setCurrentRecruit(getCurrentRecruit()+1);
+		if(getLevel()==1) {
+			return new Cavalry(1, 40, 0.6, 0.7, 0.75);
+		}else if(getLevel()==2) {
+			return  new Cavalry(2, 40, 0.6, 0.7, 0.75);
+		}else {
+			return  new Cavalry(3, 60, 0.7, 0.8, 0.9);
+		}
 	}
 }

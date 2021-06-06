@@ -55,55 +55,29 @@ public class Player {
 				break;
 			}
 		}
-		boolean fCoolDown=false;
-		boolean fMaxR=false;
-		for (int i = 0; i < c.getMilitaryBuildings().size(); i++) {
-			MilitaryBuilding b=c.getMilitaryBuildings().get(i);
-			String btype="";
-			if(b instanceof ArcheryRange) {
-				btype="archer";
-			}else if(b instanceof Barracks){
-				btype="infantry";
-			}else {
-				btype="cavalry";
-			}
-			if(type.toLowerCase().equals(btype)) {
-				if(b.getCurrentRecruit()<b.getMaxRecruit()) {
-					fMaxR=true;
+		if(c.getDefendingArmy().getUnits().size()<c.getDefendingArmy().getMaxToHold()) {
+			for (int i = 0; i < c.getMilitaryBuildings().size(); i++) {
+				MilitaryBuilding b=c.getMilitaryBuildings().get(i);
+				String btype="";
+				if(b instanceof ArcheryRange) {
+					btype="archer";
+				}else if(b instanceof Barracks) {
+					btype="infantry";
+				}else {
+					btype="cavalry";
 				}
-				if(!b.isCoolDown()) {
-					fCoolDown=true;
-				}
-				if(b.getCurrentRecruit()<b.getMaxRecruit()&&!b.isCoolDown()) {
+				if(type.toLowerCase().equals(btype)) {	
 					if(treasury-b.getRecruitmentCost()<0) {
 						throw new NotEnoughGoldException();
 					}else {
+						Unit u=b.recruit();
+						u.setParentArmy(c.getDefendingArmy());
+						c.getDefendingArmy().getUnits().add(u);
 						treasury-=b.getRecruitmentCost();
-						if(type.toLowerCase().equals("archer")) {
-							Archer a = new Archer(1, 60, 0.4, 0.5, 0.6);
-							a.setParentArmy(c.getDefendingArmy());
-							c.getDefendingArmy().getUnits().add(a);
-						}else if(type.toLowerCase().equals("cavalry")) {
-							Cavalry a=new Cavalry(1, 40, 0.6, 0.7, 0.75);
-							a.setParentArmy(c.getDefendingArmy());
-							c.getDefendingArmy().getUnits().add(a);
-						}else {
-							Infantry a=new Infantry(1, 50, 0.5, 0.6, 0.7);
-							a.setParentArmy(c.getDefendingArmy());
-							c.getDefendingArmy().getUnits().add(a);
-						}
 					}
-					break;
-				}
-			}	
+				}	
+			}
 		}
-		if(!fCoolDown) {
-			throw new BuildingInCoolDownException();
-		}
-		if(!fMaxR) {
-			throw new MaxRecruitedException();
-		}
-		
 	}
 	
 	public void build(String type,String cityName) throws NotEnoughGoldException{
@@ -181,8 +155,9 @@ public class Player {
 		if(treasury-b.getUpgradeCost()<0) {
 			throw new NotEnoughGoldException();
 		}
-		treasury-=b.getUpgradeCost();
 		b.upgrade();
+		treasury-=b.getUpgradeCost();
+		
 	}
 	
 	public void initiateArmy(City city,Unit unit) {
@@ -205,23 +180,9 @@ public class Player {
 		if(controlledCities.contains(city)) {
 			throw new FriendlyCityException();
 		}
-		for (int i = 0; i <controlledArmies.size(); i++) {
-			if(army.equals(controlledArmies.get(i))) {
-				controlledArmies.get(i).setCurrentStatus(Status.BESIEGING);
-				army.setCurrentStatus(Status.BESIEGING);
-				for (int j = 0; j < controlledCities.size(); j++) {
-					if(city.equals(controlledCities.get(j))) {
-						controlledCities.get(j).setUnderSiege(true);
-						controlledCities.get(j).setTurnsUnderSiege(0);
-						city.setUnderSiege(true);
-						city.setTurnsUnderSiege(0);
-						break;
-					}
-					
-				}
-				break;
-			}
-		}
+		army.setCurrentStatus(Status.BESIEGING);
+		city.setUnderSiege(true);
+		city.setTurnsUnderSiege(0);
 	}
 	
 }
