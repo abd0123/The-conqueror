@@ -48,7 +48,7 @@ public class Player {
 	}
 	
 	public void recruitUnit(String type,String cityName) throws BuildingInCoolDownException, MaxRecruitedException, NotEnoughGoldException{
-		City c=new City("Blabizo");
+		City c=new City(cityName);
 		for (int i = 0; i < controlledCities.size(); i++) {
 			if(controlledCities.get(i).getName().equals(cityName)) {
 				c=controlledCities.get(i);
