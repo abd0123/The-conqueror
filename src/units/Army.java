@@ -37,10 +37,7 @@ public class Army {
 	public void handleAttackedUnit(Unit u) {
 		if (u.getCurrentSoldierCount() <= 0) {
 			Army a = u.getParentArmy();
-			for (int i = 0; i < a.getUnits().size(); i++) {
-				if (a.getUnits().get(i).equals(u))
-					a.getUnits().remove(i);
-			}
+			a.getUnits().remove(u);
 		}
 	}
 	
@@ -103,9 +100,18 @@ public class Army {
 	public int getMaxToHold() {
 		return maxToHold;
 	}
-	
-	public boolean equals(Object o) {
-		Army a=(Army)o;
-		return this.currentLocation.equals(a.getCurrentLocation())&&this.units.equals(a.getUnits());
+	public static void main(String[] args) {
+		Army a=new Army("ggsl");
+		Archer archer=new Archer(1, 60, 4, 66, 44);
+		a.getUnits().add(archer);
+		a.handleAttackedUnit(archer);
+		Army pArmy = archer.getParentArmy();
+		System.out.println(pArmy.getUnits().contains(archer));
+		System.out.println(a.getUnits().contains(archer));
 	}
+
+//	public boolean equals(Object o) {
+//		Army a=(Army)o;
+//		return this.currentLocation.equals(a.getCurrentLocation())&&this.units.equals(a.getUnits());
+//	}
 }
