@@ -155,8 +155,9 @@ public class Player {
 		if(treasury-b.getUpgradeCost()<0) {
 			throw new NotEnoughGoldException();
 		}
+		int x=b.getUpgradeCost();
 		b.upgrade();
-		treasury-=b.getUpgradeCost();
+		treasury-=x;
 		
 	}
 	
