@@ -22,14 +22,8 @@ public class Game {
 		distances = new ArrayList<Distance>();
 		this.player = new Player(playerName);
 		City x=new City(playerCity);
-		x.setDefendingArmy(null);
 		player.getControlledCities().add(x);
 		loadCitiesAndDistances();
-		for (int i = 0; i < availableCities.size(); i++) {
-			if(availableCities.get(i).getName().equals(playerCity)) {
-				availableCities.get(i).setDefendingArmy(null);
-			}
-		}
 		for (City c : availableCities) {
 			if (!(c.getName().equals(playerCity)))
 				loadArmy(c.getName(), c.getName().toLowerCase() + "_army.csv");
@@ -156,12 +150,12 @@ public class Game {
 				curr.setTurnsUnderSiege(curr.getTurnsUnderSiege()+1);
 				Army a=curr.getDefendingArmy();
 				for (int j = 0; j <a.getUnits().size(); j++) {
-					Unit cc=a.getUnits().get(i);
+					Unit cc=a.getUnits().get(j);
 					cc.setCurrentSoldierCount((int) (cc.getCurrentSoldierCount()-cc.getCurrentSoldierCount()*0.1));
 				}
 			}
 			for (int j = 0; j < curr.getEconomicalBuildings().size(); j++) {
-				EconomicBuilding b=curr.getEconomicalBuildings().get(i);
+				EconomicBuilding b=curr.getEconomicalBuildings().get(j);
 				if(b instanceof Farm) {
 					player.setFood(player.getFood()+b.harvest());
 				}else {
@@ -170,7 +164,7 @@ public class Game {
 				b.setCoolDown(false);
 			}
 			for (int j = 0; j < curr.getMilitaryBuildings().size(); j++) {
-				MilitaryBuilding b=curr.getMilitaryBuildings().get(i);
+				MilitaryBuilding b=curr.getMilitaryBuildings().get(j);
 				b.setCurrentRecruit(0);
 				b.setCoolDown(false);
 			}
@@ -183,7 +177,7 @@ public class Game {
 				curr.setDistancetoTarget(curr.getDistancetoTarget()-1);
 				if(curr.getDistancetoTarget()==0) {
 					curr.setCurrentLocation(curr.getTarget());
-					curr.setTarget(null);
+					curr.setTarget("");
 					curr.setCurrentStatus(Status.IDLE);
 				}
 			}
