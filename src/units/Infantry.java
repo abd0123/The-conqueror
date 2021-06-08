@@ -45,7 +45,7 @@ public class Infantry extends Unit {
 			}
 		}
 		target.setCurrentSoldierCount(c>=0?c:0);
-		this.getParentArmy().handleAttackedUnit(target);
+		target.getParentArmy().handleAttackedUnit(target);
 	}
 	
 }

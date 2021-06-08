@@ -36,8 +36,8 @@ public class Army {
 
 	public void handleAttackedUnit(Unit u) {
 		if (u.getCurrentSoldierCount() <= 0) {
-			Army a = u.getParentArmy();
-			a.getUnits().remove(u);
+//			Army a = u.getParentArmy();
+			units.remove(u);
 		}
 	}
 	
