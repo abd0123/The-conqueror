@@ -55,6 +55,9 @@ public class Player {
 				break;
 			}
 		}
+		if (treasury==0) {
+			throw new NotEnoughGoldException();
+		}
 		if(c.getDefendingArmy().getUnits().size()<c.getDefendingArmy().getMaxToHold()) {
 			for (int i = 0; i < c.getMilitaryBuildings().size(); i++) {
 				MilitaryBuilding b=c.getMilitaryBuildings().get(i);
