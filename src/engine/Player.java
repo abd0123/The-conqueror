@@ -48,31 +48,26 @@ public class Player {
 				break;
 			}
 		}
-//		if (treasury==0) {
-//			throw new NotEnoughGoldException();
-//		}
-		if(c.getDefendingArmy().getUnits().size()<c.getDefendingArmy().getMaxToHold()) {
-			for (int i = 0; i < c.getMilitaryBuildings().size(); i++) {
-				MilitaryBuilding b=c.getMilitaryBuildings().get(i);
-				String btype="";
-				if(b instanceof ArcheryRange) {
-					btype="archer";
-				}else if(b instanceof Barracks) {
-					btype="infantry";
-				}else {
-					btype="cavalry";
-				}
-				if(type.toLowerCase().equals(btype)) {	
-					if(treasury-b.getRecruitmentCost()<0) {
-						throw new NotEnoughGoldException();
-					}else {
-						Unit u=b.recruit();
-						u.setParentArmy(c.getDefendingArmy());
-						c.getDefendingArmy().getUnits().add(u);
-						treasury-=b.getRecruitmentCost();
-					}
-				}	
+		for (int i = 0; i < c.getMilitaryBuildings().size(); i++) {
+			MilitaryBuilding b=c.getMilitaryBuildings().get(i);
+			String btype="";
+			if(b instanceof ArcheryRange) {
+				btype="archer";
+			}else if(b instanceof Barracks) {
+				btype="infantry";
+			}else {
+				btype="cavalry";
 			}
+			if(type.toLowerCase().equals(btype)) {	
+				if(treasury-b.getRecruitmentCost()<0) {
+					throw new NotEnoughGoldException();
+				}else {
+					Unit u=b.recruit();
+					u.setParentArmy(c.getDefendingArmy());
+					c.getDefendingArmy().getUnits().add(u);
+					treasury-=b.getRecruitmentCost();
+				}
+			}	
 		}
 	}
 	
