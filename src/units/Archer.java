@@ -21,7 +21,7 @@ public class Archer extends Unit {
 			if (this.getLevel() == 3) {
 				c -=(int) (0.5 * this.getCurrentSoldierCount());
 			}
-		}
+		}else
 		if (target instanceof Infantry) {
 			if (this.getLevel() == 1) {
 				c -= (int)(0.2 * this.getCurrentSoldierCount());
@@ -32,7 +32,7 @@ public class Archer extends Unit {
 			if (this.getLevel() == 3) {
 				c -= (int)(0.4 * this.getCurrentSoldierCount());
 			}
-		}
+		}else
 		if(target instanceof Cavalry) {
 			if (this.getLevel() == 1) {
 				c -= (int)(0.1 * this.getCurrentSoldierCount());
