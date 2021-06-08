@@ -130,8 +130,8 @@ public class Game {
 	}
 	
 	public void targetCity(Army army, String targetName) {
-		if(army.getCurrentStatus()!=Status.MARCHING) {
-			army.setCurrentLocation("onRoad");
+		if(army.getTarget().equals("")) {
+			army.setTarget(targetName);
 			army.setCurrentStatus(Status.MARCHING);
 			for (int i = 0; i < distances.size(); i++) {
 				Distance d=distances.get(i);
@@ -148,16 +148,21 @@ public class Game {
 	public void endTurn() {
 		currentTurnCount++;
 		ArrayList<City>c=player.getControlledCities();
-		for (int i = 0; i < c.size();i++) {
-			City curr=c.get(i);
+		ArrayList<City>x=availableCities;
+		for(City curr:x) {
 			if(curr.isUnderSiege()) {
 				curr.setTurnsUnderSiege(curr.getTurnsUnderSiege()+1);
 				Army a=curr.getDefendingArmy();
 				for (int j = 0; j <a.getUnits().size(); j++) {
 					Unit cc=a.getUnits().get(j);
-					cc.setCurrentSoldierCount((int) (cc.getCurrentSoldierCount()-cc.getCurrentSoldierCount()*0.1));
+					cc.setCurrentSoldierCount( (cc.getCurrentSoldierCount()-(int)(cc.getCurrentSoldierCount()*0.1)));
+					a.handleAttackedUnit(cc);
 				}
 			}
+		}
+		for (int i = 0; i < c.size();i++) {
+			City curr=c.get(i);
+			
 			for (int j = 0; j < curr.getEconomicalBuildings().size(); j++) {
 				EconomicBuilding b=curr.getEconomicalBuildings().get(j);
 				if(b instanceof Farm) {
@@ -192,8 +197,9 @@ public class Game {
 			for (int i = 0; i < a.size(); i++) {
 				Army curr=a.get(i);
 				for (int j = 0; j <curr.getUnits().size(); j++) {
-					Unit cc=curr.getUnits().get(i);
+					Unit cc=curr.getUnits().get(j);
 					cc.setCurrentSoldierCount((int) (cc.getCurrentSoldierCount()-cc.getCurrentSoldierCount()*0.1));
+					curr.handleAttackedUnit(cc);
 				}
 			}
 		}else {
