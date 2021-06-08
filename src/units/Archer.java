@@ -48,5 +48,5 @@ public class Archer extends Unit {
 		this.getParentArmy().handleAttackedUnit(target);
 
 	}
-
+	
 }
