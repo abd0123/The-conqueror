@@ -37,14 +37,14 @@ public class Cavalry extends Unit {
 			if (this.getLevel() == 1) {
 				c -=(int) (0.2 * this.getCurrentSoldierCount());
 			}
-			if (this.getLevel() == 1) {
+			if (this.getLevel() == 2) {
 				c -= (int)(0.2 * this.getCurrentSoldierCount());
 			}
-			if (this.getLevel() == 1) {
+			if (this.getLevel() == 3) {
 				c -= (int)(0.3 * this.getCurrentSoldierCount());
 			}
 		}
-		target.setCurrentSoldierCount((int)c);
+		target.setCurrentSoldierCount(c>=0?c:0);
 		this.getParentArmy().handleAttackedUnit(target);
 	}
 }
