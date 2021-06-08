@@ -23,7 +23,7 @@ public class Stable extends MilitaryBuilding {
 		if(isCoolDown()) {
 			throw new BuildingInCoolDownException();
 		}
-		if(getCurrentRecruit()==getMaxRecruit()) {
+		if(getCurrentRecruit()>=getMaxRecruit()) {
 			throw new MaxRecruitedException();
 		}
 		setCurrentRecruit(getCurrentRecruit()+1);

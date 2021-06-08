@@ -17,17 +17,21 @@ public class Game {
 	private int currentTurnCount ;
 
 	public Game(String playerName, String playerCity) throws IOException {
-		currentTurnCount = 1;
-		availableCities= new ArrayList<City>();
+		player = new Player(playerName);
+		availableCities = new ArrayList<City>();
 		distances = new ArrayList<Distance>();
-		this.player = new Player(playerName);
-		City x=new City(playerCity);
-		player.getControlledCities().add(x);
+		currentTurnCount = 1;
 		loadCitiesAndDistances();
 		for (City c : availableCities) {
-			if (!(c.getName().equals(playerCity)))
+			if (c.getName().equals(playerCity))
+
+				player.getControlledCities().add(c);
+
+			else
 				loadArmy(c.getName(), c.getName().toLowerCase() + "_army.csv");
+
 		}
+
 	}
 		
 		
@@ -208,7 +212,7 @@ public class Game {
 			}
 		}
 	}
-	
+	static int turn=0;
 	public void autoResolve(Army attacker, Army defender) throws FriendlyFireException{
 		if (this.player.getControlledArmies().contains(defender)) {
 			throw new FriendlyFireException();
@@ -216,10 +220,11 @@ public class Game {
 		if(attacker.getUnits().size()==0 || defender.getUnits().size()==0) {
 			if (defender.getUnits().size()==0) {
 				this.occupy(defender, defender.getCurrentLocation());
+				turn = 0;
 			}
 			return;
 		}
-		int turn=0;
+		
 		Random rn = new Random();
 		int randomA = rn.nextInt(attacker.getUnits().size());
 		int randomB = rn.nextInt(defender.getUnits().size());
@@ -232,6 +237,7 @@ public class Game {
 			b.attack(a);
 			
 		}
+		turn++;
 		autoResolve(attacker, defender);
 		
 	}

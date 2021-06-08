@@ -1,12 +1,5 @@
 package engine;
 import java.util.ArrayList;
-import buildings.ArcheryRange;
-import buildings.Barracks;
-import buildings.Building;
-import buildings.Farm;
-import buildings.Market;
-import buildings.MilitaryBuilding;
-import buildings.Stable;
 import java.util.*;
 import buildings.*;
 import exceptions.*;
@@ -55,9 +48,9 @@ public class Player {
 				break;
 			}
 		}
-		if (treasury==0) {
-			throw new NotEnoughGoldException();
-		}
+//		if (treasury==0) {
+//			throw new NotEnoughGoldException();
+//		}
 		if(c.getDefendingArmy().getUnits().size()<c.getDefendingArmy().getMaxToHold()) {
 			for (int i = 0; i < c.getMilitaryBuildings().size(); i++) {
 				MilitaryBuilding b=c.getMilitaryBuildings().get(i);
@@ -91,65 +84,81 @@ public class Player {
 				break;
 			}
 		}
+		
 		if (type.toLowerCase().equals("archeryrange")) {
-			ArcheryRange a = new ArcheryRange();
-			if(treasury-a.getCost()<0) {
-				throw new NotEnoughGoldException();
-			}
-			else {
-				c.getMilitaryBuildings().add(a);
-				treasury-=a.getCost();
-				a.setCoolDown(true);
-		    }
-		
+			boolean flag=false;
+			for(MilitaryBuilding e: c.getMilitaryBuildings())if(e instanceof ArcheryRange)flag=true;
+			if(!flag) {	
+				ArcheryRange a = new ArcheryRange();
+				if(treasury-a.getCost()<0) {
+					throw new NotEnoughGoldException();
+				}
+				else {
+					c.getMilitaryBuildings().add(a);
+					treasury-=a.getCost();
+					a.setCoolDown(true);
+			    }
+			}	
 		}
 		else if (type.toLowerCase().equals("barracks")) {
-			Barracks a = new Barracks();
-			if(treasury-a.getCost()<0) {
-				throw new NotEnoughGoldException();
-			}
-			else {
-				c.getMilitaryBuildings().add(a);
-				treasury-=a.getCost();
-				a.setCoolDown(true);
-		    }
-		
+			boolean flag=false;
+			for(MilitaryBuilding e: c.getMilitaryBuildings())if(e instanceof Barracks)flag=true;
+			if(!flag) {	
+				Barracks a = new Barracks();
+				if(treasury-a.getCost()<0) {
+					throw new NotEnoughGoldException();
+				}
+				else {
+					c.getMilitaryBuildings().add(a);
+					treasury-=a.getCost();
+					a.setCoolDown(true);
+			    }
+			}	
 		}
-		else if (type.toLowerCase().equals("barracks")) {
-			Stable a = new Stable ();
-			if(treasury-a.getCost()<0) {
-				throw new NotEnoughGoldException();
+		else if (type.toLowerCase().equals("stable")) {
+			boolean flag=false;
+			for(MilitaryBuilding e: c.getMilitaryBuildings())if(e instanceof Stable)flag=true;
+			if(!flag) {	
+				Stable a = new Stable ();
+				if(treasury-a.getCost()<0) {
+					throw new NotEnoughGoldException();
+				}
+				else {
+					c.getMilitaryBuildings().add(a);
+					treasury-=a.getCost();
+					a.setCoolDown(true);
+			    }
 			}
-			else {
-				c.getMilitaryBuildings().add(a);
-				treasury-=a.getCost();
-				a.setCoolDown(true);
-		    }
-		
 		}
 		else if (type.toLowerCase().equals("farm")) {
-			Farm a = new Farm();
-			if(treasury-a.getCost()<0) {
-				throw new NotEnoughGoldException();
-			}
-			else {
-				c.getEconomicalBuildings().add(a);
-				treasury-=a.getCost();
-				a.setCoolDown(true);
-		    }
-		
+			boolean f=false;
+			for(EconomicBuilding e:c.getEconomicalBuildings())if(e instanceof Farm)f=true;
+			if(!f) {	
+				Farm a = new Farm();
+				if(treasury-a.getCost()<0) {
+					throw new NotEnoughGoldException();
+				}
+				else {
+					c.getEconomicalBuildings().add(a);
+					treasury-=a.getCost();
+					a.setCoolDown(true);
+			    }
+			}	
 		}
 		else {
-			Market a = new Market();
-			if(treasury-a.getCost()<0) {
-				throw new NotEnoughGoldException();
-			}
-			else {
-				c.getEconomicalBuildings().add(a);
-				treasury-=a.getCost();
-				a.setCoolDown(true);
-		    }
-		
+			boolean f=false;
+			for(EconomicBuilding e:c.getEconomicalBuildings())if(e instanceof Market)f=true;
+			if(!f) {	
+				Market a = new Market();
+				if(treasury-a.getCost()<0) {
+					throw new NotEnoughGoldException();
+				}
+				else {
+					c.getEconomicalBuildings().add(a);
+					treasury-=a.getCost();
+					a.setCoolDown(true);
+			    }
+			}	
 		}
 	}
 
