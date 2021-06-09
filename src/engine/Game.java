@@ -151,13 +151,17 @@ public class Game {
 		ArrayList<City>x=availableCities;
 		for(City curr:x) {
 			if(curr.isUnderSiege()) {
-				curr.setTurnsUnderSiege(curr.getTurnsUnderSiege()+1);
-				Army a=curr.getDefendingArmy();
-				for (int j = 0; j <a.getUnits().size(); j++) {
-					Unit cc=a.getUnits().get(j);
-					cc.setCurrentSoldierCount( (cc.getCurrentSoldierCount()-(int)(cc.getCurrentSoldierCount()*0.1)));
-					a.handleAttackedUnit(cc);
-				}
+				if(curr.getTurnsUnderSiege()==3) {
+					curr.setUnderSiege(false);
+				}else {
+					curr.setTurnsUnderSiege(curr.getTurnsUnderSiege()+1);
+					Army a=curr.getDefendingArmy();
+					for (int j = 0; j <a.getUnits().size(); j++) {
+						Unit cc=a.getUnits().get(j);
+						cc.setCurrentSoldierCount( (cc.getCurrentSoldierCount()-(int)(cc.getCurrentSoldierCount()*0.1)));
+						a.handleAttackedUnit(cc);
+					}
+				}	
 			}
 		}
 		for (int i = 0; i < c.size();i++) {
@@ -226,8 +230,8 @@ public class Game {
 		if(attacker.getUnits().size()==0 || defender.getUnits().size()==0) {
 			if (defender.getUnits().size()==0) {
 				this.occupy(defender, defender.getCurrentLocation());
-				turn = 0;
-			}
+				
+			}turn = 0;
 			return;
 		}
 		
