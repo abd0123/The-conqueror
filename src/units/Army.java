@@ -21,22 +21,18 @@ public class Army {
 	}
 
 	public void relocateUnit(Unit unit) throws MaxCapacityException {
-		if (units.size() >= 10)
+		if (units.size() >= maxToHold)
 			throw new MaxCapacityException();
 		else {
 			Army a = unit.getParentArmy();
 			unit.setParentArmy(this);
 			units.add(unit);
-			for (int i = 0; i < a.getUnits().size(); i++) {
-				if (a.getUnits().get(i).equals(unit))
-					a.getUnits().remove(i);
-			}
+			a.getUnits().remove(unit);
 		}
 	}
 
 	public void handleAttackedUnit(Unit u) {
 		if (u.getCurrentSoldierCount() <= 0) {
-//			Army a = u.getParentArmy();
 			units.remove(u);
 		}
 	}
