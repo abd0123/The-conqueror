@@ -20,6 +20,7 @@ public class City {
 		defendingArmy=new Army(name);
 		economicalBuildings=new ArrayList<EconomicBuilding>();
 		militaryBuildings=new ArrayList<MilitaryBuilding>();
+		turnsUnderSiege=-1;
 		
 	}
 	

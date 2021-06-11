@@ -172,12 +172,7 @@ public class Player {
 		Army n=new Army(city.getName());
 		unit.setParentArmy(n);
 		n.getUnits().add(unit);
-		for (int i = 0; i < city.getDefendingArmy().getUnits().size(); i++) {
-			if(city.getDefendingArmy().getUnits().get(i).equals(unit)) {
-				city.getDefendingArmy().getUnits().remove(i);
-				break;
-			}
-		}
+		city.getDefendingArmy().getUnits().remove(unit);
 		controlledArmies.add(n);
 	}
 	

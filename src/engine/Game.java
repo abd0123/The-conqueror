@@ -141,6 +141,7 @@ public class Game {
 					
 				}
 			}
+			army.setCurrentLocation("onRoad");
 				
 		}
 	}
@@ -191,6 +192,7 @@ public class Game {
 				if(curr.getDistancetoTarget()==0) {
 					curr.setCurrentLocation(curr.getTarget());
 					curr.setTarget("");
+					curr.setDistancetoTarget(-1);
 					curr.setCurrentStatus(Status.IDLE);
 				}
 			}
