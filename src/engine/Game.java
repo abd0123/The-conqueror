@@ -158,7 +158,7 @@ public class Game {
 					Army a=curr.getDefendingArmy();
 					for (int j = 0; j <a.getUnits().size(); j++) {
 						Unit cc=a.getUnits().get(j);
-						cc.setCurrentSoldierCount( (cc.getCurrentSoldierCount()-(int)(cc.getCurrentSoldierCount()*0.1)));
+						cc.setCurrentSoldierCount((int) (0.9*cc.getCurrentSoldierCount()));
 						a.handleAttackedUnit(cc);
 					}
 				}	
@@ -202,7 +202,7 @@ public class Game {
 				Army curr=a.get(i);
 				for (int j = 0; j <curr.getUnits().size(); j++) {
 					Unit cc=curr.getUnits().get(j);
-					cc.setCurrentSoldierCount((int) (cc.getCurrentSoldierCount()-cc.getCurrentSoldierCount()*0.1));
+					cc.setCurrentSoldierCount((int) (0.9*cc.getCurrentSoldierCount()));
 					curr.handleAttackedUnit(cc);
 				}
 			}
@@ -231,7 +231,10 @@ public class Game {
 			if (defender.getUnits().size()==0) {
 				this.occupy(defender, defender.getCurrentLocation());
 				
-			}turn = 0;
+			}else{
+				player.getControlledArmies().remove(attacker);
+			}
+			turn = 0;
 			return;
 		}
 		
