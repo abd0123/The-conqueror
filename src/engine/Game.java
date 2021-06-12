@@ -141,7 +141,7 @@ public class Game {
 					
 				}
 			}
-			army.setCurrentLocation("onRoad");
+//			army.setCurrentLocation("onRoad");
 				
 		}
 	}
@@ -188,6 +188,9 @@ public class Game {
 		for (int i = 0; i <a.size(); i++) {
 			Army curr=a.get(i);
 			if(curr.getCurrentStatus()==Status.MARCHING) {
+				if(!curr.getCurrentLocation().equals("onRoad")) {
+					curr.setCurrentLocation("onRoad");
+				}
 				curr.setDistancetoTarget(curr.getDistancetoTarget()-1);
 				if(curr.getDistancetoTarget()==0) {
 					curr.setCurrentLocation(curr.getTarget());
