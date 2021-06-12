@@ -52,10 +52,6 @@ public class City {
 		this.underSiege = underSiege;
 	}
 	
-//	public boolean equals(Object o) {
-//		City c=(City)o;
-//		return this.name==c.getName();
-//	}
 	  
 
 }

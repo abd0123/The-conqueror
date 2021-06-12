@@ -234,10 +234,16 @@ public class Game {
 		}
 		if(attacker.getUnits().size()==0 || defender.getUnits().size()==0) {
 			if (defender.getUnits().size()==0) {
-				this.occupy(defender, defender.getCurrentLocation());
+				this.occupy(attacker, defender.getCurrentLocation());
 				
 			}else{
 				player.getControlledArmies().remove(attacker);
+				for(City c:availableCities) {
+					if(defender.equals(c.getDefendingArmy())) {
+						c.setUnderSiege(false);
+						c.setTurnsUnderSiege(-1);
+					}
+				}
 			}
 			turn = 0;
 			return;
