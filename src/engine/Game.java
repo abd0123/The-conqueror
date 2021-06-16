@@ -18,6 +18,7 @@ public class Game {
 
 	public Game(String playerName, String playerCity) throws IOException {
 		player = new Player(playerName);
+		player.setTreasury(5000);
 		availableCities = new ArrayList<City>();
 		distances = new ArrayList<Distance>();
 		currentTurnCount = 1;
@@ -130,19 +131,18 @@ public class Game {
 	}
 	
 	public void targetCity(Army army, String targetName) {
-		if(army.getTarget().equals("")) {
-			army.setTarget(targetName);
-			army.setCurrentStatus(Status.MARCHING);
-			for (int i = 0; i < distances.size(); i++) {
-				Distance d=distances.get(i);
-				if(d.getFrom().equals(army.getCurrentLocation())&&d.getTo().equals(targetName)||
-						d.getFrom().equals(targetName)&&d.getTo().equals(army.getCurrentLocation())) {
-					army.setDistancetoTarget(d.getDistance());
-					
-				}
+		String from = army.getCurrentLocation();
+		if (army.getCurrentLocation().equals("onRoad"))
+			from = army.getTarget();
+		for (Distance d : distances) {
+			if ((d.getFrom().equals(from) || d.getFrom().equals(targetName))
+					&& (d.getTo().equals(from) || d.getTo().equals(targetName))) {
+				army.setTarget(targetName);
+				int distance = d.getDistance();
+				if (army.getCurrentLocation().equals("onRoad"))
+					distance += army.getDistancetoTarget();
+				army.setDistancetoTarget(distance);
 			}
-//			army.setCurrentLocation("onRoad");
-				
 		}
 	}
 	
@@ -152,22 +152,22 @@ public class Game {
 		ArrayList<City>x=availableCities;
 		for(City curr:x) {
 			if(curr.isUnderSiege()) {
-				if(curr.getTurnsUnderSiege()==3) {
+				if(curr.getTurnsUnderSiege()>=3) {
 					curr.setUnderSiege(false);
 				}else {
 					curr.setTurnsUnderSiege(curr.getTurnsUnderSiege()+1);
 					Army a=curr.getDefendingArmy();
 					for (int j = 0; j <a.getUnits().size(); j++) {
 						Unit cc=a.getUnits().get(j);
-						cc.setCurrentSoldierCount((int) (0.9*cc.getCurrentSoldierCount()));
-						a.handleAttackedUnit(cc);
+						cc.setCurrentSoldierCount((cc.getCurrentSoldierCount()-(int)(cc.getCurrentSoldierCount()*0.1)));
 					}
 				}	
 			}
 		}
+		double foodNeeded=0;
 		for (int i = 0; i < c.size();i++) {
 			City curr=c.get(i);
-			
+			foodNeeded+=curr.getDefendingArmy().foodNeeded();
 			for (int j = 0; j < curr.getEconomicalBuildings().size(); j++) {
 				EconomicBuilding b=curr.getEconomicalBuildings().get(j);
 				if(b instanceof Farm) {
@@ -183,21 +183,19 @@ public class Game {
 				b.setCoolDown(false);
 			}
 		}
-		double foodNeeded=0;
 		ArrayList<Army>a=player.getControlledArmies();
 		for (int i = 0; i <a.size(); i++) {
 			Army curr=a.get(i);
-			if(curr.getCurrentStatus()==Status.MARCHING) {
-				if(!curr.getCurrentLocation().equals("onRoad")) {
-					curr.setCurrentLocation("onRoad");
-				}
-				curr.setDistancetoTarget(curr.getDistancetoTarget()-1);
-				if(curr.getDistancetoTarget()==0) {
-					curr.setCurrentLocation(curr.getTarget());
-					curr.setTarget("");
-					curr.setDistancetoTarget(-1);
-					curr.setCurrentStatus(Status.IDLE);
-				}
+			if (!curr.getTarget() .equals("") && curr.getCurrentStatus() == Status.IDLE) {
+				curr.setCurrentStatus(Status.MARCHING);
+				curr.setCurrentLocation("onRoad");
+			}
+			if(curr.getDistancetoTarget()>0 &&!curr.getTarget().equals(""))
+			curr.setDistancetoTarget(curr.getDistancetoTarget() - 1);
+			if (curr.getDistancetoTarget() == 0) {
+				curr.setCurrentLocation(curr.getTarget());
+				curr.setTarget("");
+				curr.setCurrentStatus(Status.IDLE);
 			}
 			foodNeeded+=curr.foodNeeded();
 		}
@@ -207,8 +205,7 @@ public class Game {
 				Army curr=a.get(i);
 				for (int j = 0; j <curr.getUnits().size(); j++) {
 					Unit cc=curr.getUnits().get(j);
-					cc.setCurrentSoldierCount((int) (0.9*cc.getCurrentSoldierCount()));
-					curr.handleAttackedUnit(cc);
+					cc.setCurrentSoldierCount( (cc.getCurrentSoldierCount()-(int)(cc.getCurrentSoldierCount()*0.1)));
 				}
 			}
 		}else {
