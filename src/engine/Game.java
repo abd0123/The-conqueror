@@ -218,6 +218,8 @@ public class Game {
 			if (c.getName().equals(cityName)) 
 			{
 				c.setDefendingArmy(a);
+				player.getControlledArmies().remove(a);
+				a.setCurrentStatus(Status.IDLE);
 				c.setUnderSiege(false);
 				c.setTurnsUnderSiege(-1);
 				this.player.getControlledCities().add(c);
