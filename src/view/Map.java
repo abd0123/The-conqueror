@@ -4,8 +4,6 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import javafx.scene.layout.Border;
-
 public class Map extends JPanel {
 	private JButton cairo=new JButton("Cairo");
 	private JButton sparta=new JButton("Sparta");
@@ -27,7 +25,7 @@ public class Map extends JPanel {
 		Map m=new Map();
 		x.setLayout(null);
 		m.setBounds(50,100, 1300,800);
-		m.setBackground(Color.red);
+		m.setBackground(Color.gray);
 		x.add( m);
 		JButton b=new JButton("hh");
 		b.setBounds(1350,100,550,800);
