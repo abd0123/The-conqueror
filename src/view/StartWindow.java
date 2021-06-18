@@ -4,13 +4,13 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class GameView extends JFrame {
+public class StartWindow extends JFrame {
 	JButton b=new JButton("Start");
 	TextField t=new TextField();
 	JLabel l=new JLabel("Player Name");
 	JLabel l2=new JLabel("Player City");
 	JComboBox c=new JComboBox(new String[] {"Cairo","Sparta","Rome"});
-	public GameView() {
+	public StartWindow() {
 		setTitle("The Conqueror");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -34,6 +34,6 @@ public class GameView extends JFrame {
 		repaint();
 	}
 	public static void main(String[] args) {
-		new GameView();
+		new StartWindow();
 	}
 }
