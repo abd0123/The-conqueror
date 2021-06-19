@@ -18,11 +18,10 @@ public class Armyview extends JPanel {
 	public Armyview() {
 		setLayout(null);
 		setPreferredSize(new Dimension(550,800));
-		this.setBounds(1030,100, 500,650);
+		this.setBounds(1350,100, 500,800);
 		this.setBackground(Color.blue);
 		this.setVisible(true);
-		revalidate();
-		repaint();
+		setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 
 	public static void main(String[] args) {

@@ -11,13 +11,14 @@ public class Map extends JPanel {
 	
 	public Map() {
 		setLayout(null);
-		setPreferredSize(new Dimension(1300,800));
+		setBounds(25,100, 1300,800);
 		cairo.setBounds(600,50,100,100);
 		sparta.setBounds(300,650,100,100);
 		rome.setBounds(900,650,100,100);
 		add(rome);
 		add(sparta);
 		add(cairo);
+		setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 	public static void main(String[] args) {
 		JFrame x=new JFrame();
