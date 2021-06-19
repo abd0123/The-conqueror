@@ -10,6 +10,7 @@ public class StartWindow extends JFrame {
 	private JLabel playerNameLbl=new JLabel("Player Name");
 	private JLabel PlayerCityLbl=new JLabel("Player City");
 	private JComboBox cities=new JComboBox(new String[] {"Cairo","Sparta","Rome"});
+//	private JLabel jp;
 	public StartWindow() {
 		setTitle("The Conqueror");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -29,6 +30,11 @@ public class StartWindow extends JFrame {
 		add(cities);
 		add(PlayerNameTxt);
 		add(PlayerCityLbl);
+		//A fail try to add backgroung photo
+//		jp = new JLabel();
+//		jp.setIcon(new ImageIcon("C://StartWindow.JPG"));
+//		jp.setBounds(200,100,1000,1000);;
+//		this.add(jp);
 		setVisible(true);
 		revalidate();
 		repaint();
