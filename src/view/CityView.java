@@ -19,11 +19,10 @@ public class CityView extends JPanel {
 	private JLabel turnsUnderSeige;
 	private JButton initiateArmy;
 	public CityView() {
-		this.setBounds(1030,100, 500,650);
+		this.setBounds(1350,100,550,800);
 		this.setVisible(true);
 		this.setLayout(new GridLayout(0,1));
-		this.setPreferredSize(new Dimension(500,800));
-		this.setBackground(Color.red);
+		this.setPreferredSize(new Dimension(550,800));
 		buildings=new JButton("Buildings");
 		name = new JLabel("city name :");
 		build = new JButton("Build");
