@@ -26,14 +26,17 @@ public class CityView extends JPanel {
 		this.setLayout(new GridLayout(0,1,4,10));
 		this.setPreferredSize(new Dimension(550,800));
 		buildings=new JButton("Buildings");
+		buildings.setFont(new Font("Arial", Font.BOLD, 19));
 		name = new JLabel("   city name :");
 		name.setFont(new Font("Arial", Font.BOLD, 19));
 		build = new JButton("Build");
+		build.setFont(new Font("Arial", Font.BOLD, 19));
 		status = new JLabel("   Status : ");
 		status.setFont(new Font("Arial", Font.BOLD, 19));
 		turnsUnderSeige=new JLabel("   Turns Under Seige : ");
 		turnsUnderSeige.setFont(new Font("Arial", Font.BOLD, 19));
 		initiateArmy = new JButton("Initiate Army");
+		initiateArmy.setFont(new Font("Arial", Font.BOLD, 19));
 		this.add(name);
 		this.add(status);
 		this.add(turnsUnderSeige);
