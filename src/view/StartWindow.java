@@ -14,6 +14,7 @@ public class StartWindow extends JFrame {
 	public StartWindow() {
 		setTitle("The Conqueror");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setMinimumSize(new Dimension(500,500));
 		setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		playerNameLbl.setFont(new Font("Player Name",Font.PLAIN,20));
 		PlayerNameTxt.setFont(new Font("",Font.PLAIN,20));
