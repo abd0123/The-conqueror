@@ -25,6 +25,7 @@ public class StartWindow extends JFrame {
 		start.setBounds(875, 470, 200,40);
 		PlayerCityLbl.setBounds(670,350,150,30);
 		cities.setBounds(875, 350, 200,30);
+		start.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
 		setLayout(null);
 		add(playerNameLbl);
 		add(start);

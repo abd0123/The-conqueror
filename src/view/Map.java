@@ -15,9 +15,9 @@ public class Map extends JPanel {
 		cairo.setBounds(600,50,100,100);
 		sparta.setBounds(300,650,100,100);
 		rome.setBounds(900,650,100,100);
-		cairo.setFont(new Font("Arial", Font.BOLD, 19));
-		sparta.setFont(new Font("Arial", Font.BOLD, 19));
-		rome.setFont(new Font("Arial", Font.BOLD, 19));
+		cairo.setFont(new Font("Forte", Font.BOLD, 19));
+		sparta.setFont(new Font("Forte", Font.BOLD, 19));
+		rome.setFont(new Font("Forte", Font.BOLD, 19));
 		add(rome);
 		add(sparta);
 		add(cairo);
