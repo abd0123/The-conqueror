@@ -4,8 +4,10 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,13 +23,16 @@ public class CityView extends JPanel {
 	public CityView() {
 		this.setBounds(1350,100,550,800);
 		this.setVisible(true);
-		this.setLayout(new GridLayout(0,1));
+		this.setLayout(new GridLayout(0,1,4,10));
 		this.setPreferredSize(new Dimension(550,800));
 		buildings=new JButton("Buildings");
-		name = new JLabel("city name :");
+		name = new JLabel("   city name :");
+		name.setFont(new Font("Arial", Font.BOLD, 19));
 		build = new JButton("Build");
-		status = new JLabel("Status : ");
-		turnsUnderSeige=new JLabel("Turns Under Seige : ");
+		status = new JLabel("   Status : ");
+		status.setFont(new Font("Arial", Font.BOLD, 19));
+		turnsUnderSeige=new JLabel("   Turns Under Seige : ");
+		turnsUnderSeige.setFont(new Font("Arial", Font.BOLD, 19));
 		initiateArmy = new JButton("Initiate Army");
 		this.add(name);
 		this.add(status);
@@ -35,6 +40,7 @@ public class CityView extends JPanel {
 		this.add(buildings);
 		this.add(build);
 		this.add(initiateArmy);
+		setBorder(BorderFactory.createLineBorder(Color.black));
 		this.revalidate();
 		this.repaint();
 		
