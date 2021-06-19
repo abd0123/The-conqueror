@@ -26,6 +26,13 @@ public class Controller implements ActionListener {
 			}
 		}
 	}
+//////	private void txt_playerName (java.awt.event.KeyEvent e) {
+//////		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+//////			start.dispose();
+//////			this.view=new GameView();
+//////			
+////		}
+//	}
 	public static void main(String[] args) {
 		new Controller();
 	}
