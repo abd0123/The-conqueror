@@ -10,26 +10,57 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import buildings.*;
+import engine.City;
+import units.Cavalry;
+
 public class CityView extends JPanel {
 	private JLabel name;
-	private JButton buildings;
+	private JButton openBuilding;
+	private JLabel lbuildings;
+	private JComboBox Buildings;
 	private JButton build;
 	private JLabel status;
 	private JLabel turnsUnderSeige;
 	private JButton initiateArmy;
 	private JButton back;
-	public CityView() {
+	private City c;
+	public CityView(City c) {
+		this.c=c;
 		this.setBounds(1350,100,550,800);
 		this.setVisible(true);
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(550,800));
-		buildings=new JButton("Buildings");
-		buildings.setFont(new Font("Forte", Font.BOLD, 19));
-		buildings.setBounds(0,420,550,100);
+//		buildings=new JButton("Buildings");
+//		buildings.setFont(new Font("Forte", Font.BOLD, 19));
+//		buildings.setBounds(0,420,550,100);
+		lbuildings =new JLabel("   Buildings");
+		lbuildings.setFont(new Font("Forte", Font.BOLD, 19));
+		lbuildings.setBounds(0,420,180,100);
+		String[] cbox=new String[c.getEconomicalBuildings().size()+c.getMilitaryBuildings().size()];
+		int i=0;
+		for (Building b:c.getMilitaryBuildings()) {
+			if(b instanceof ArcheryRange)cbox[i]="Archery Range";
+			if(b instanceof Barracks)cbox[i]="Barracks";
+			if(b instanceof Stable)cbox[i]="stable";
+			i++;
+		}
+		for(Building b:c.getEconomicalBuildings()) {
+			if(b instanceof Farm)cbox[i]="Farm";
+			if(b instanceof Market)cbox[i]="Market";
+			i++;
+		}
+		Buildings=new JComboBox(cbox);
+		Buildings.setBounds(190,445,180,50);
+		Buildings.setFont(new Font("Forte", Font.BOLD, 19));
+		openBuilding=new JButton("open Building");
+		openBuilding.setBounds(380,445,170,50);
+		openBuilding.setFont(new Font("Forte", Font.BOLD, 19));
 		name = new JLabel("   city name :");
 		name.setBounds(0,40,200,100);
 		name.setFont(new Font("Forte", Font.BOLD, 19));
@@ -48,10 +79,12 @@ public class CityView extends JPanel {
 		back = new JButton();
 		back.setIcon(new ImageIcon("C://back.PNG"));
 		back.setBounds(10,10,50,50);
+		add(Buildings);
+		add(lbuildings);
+		add(openBuilding);
 		this.add(name);
 		this.add(status);
 		this.add(turnsUnderSeige);
-		this.add(buildings);
 		this.add(build);
 		this.add(initiateArmy);
 		this.add(back);
@@ -63,12 +96,6 @@ public class CityView extends JPanel {
 	
 	public void setName(JLabel name) {
 		this.name = name;
-	}
-	public JButton getBuildings() {
-		return buildings;
-	}
-	public void setBuildings(JButton buildings) {
-		this.buildings = buildings;
 	}
 	public JButton getBuild() {
 		return build;
@@ -97,8 +124,9 @@ public class CityView extends JPanel {
 	public static void main(String[] args) {
 		JFrame x =new JFrame();
 		x.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		CityView a =new 
-				  CityView();
+		City c=new City("Cairo");
+		c.getEconomicalBuildings().add(new Market());
+		CityView a =new CityView(c);
 		x.setLayout(null);
 		x.add(a);
 		x.setVisible(true);
