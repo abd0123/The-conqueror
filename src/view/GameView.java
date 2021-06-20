@@ -14,7 +14,6 @@ public class GameView extends JFrame {
 		o=new ArrayList<Object>();
 		panels=new ArrayList<JPanel>();
 		setTitle("The Conqueror");
-		add(new CityView());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setLayout(null);
