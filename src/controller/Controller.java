@@ -4,6 +4,7 @@ import java.awt.event.*;
 
 import javax.swing.JOptionPane;
 
+import engine.Player;
 import view.*;
 
 public class Controller implements ActionListener {
@@ -22,7 +23,7 @@ public class Controller implements ActionListener {
 				JOptionPane.showMessageDialog(start, "write Player Name","Alert",JOptionPane.INFORMATION_MESSAGE);
 			}else {
 				start.dispose();
-				this.view=new GameView();
+				this.view=new GameView(new Player(start.getPlayerNameTxt().getText()),50);
 			}
 		}
 	}
