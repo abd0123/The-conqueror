@@ -19,7 +19,6 @@ public class Armyview extends JPanel {
 	public Armyview() {
 		setLayout(null);
 		setPreferredSize(new Dimension(550,800));
-		
 		this.setBounds(1350,100, 500,800);
 		this.setBackground(Color.orange);
 		this.setVisible(true);
