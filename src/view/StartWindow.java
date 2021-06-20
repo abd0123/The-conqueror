@@ -32,7 +32,7 @@ public class StartWindow extends JFrame {
 		add(cities);
 		add(PlayerNameTxt);
 		add(PlayerCityLbl);
-		//A fail try to add backgroung photo
+		//A fail try to add background photo
 //		jp = new JLabel();
 //		jp.setIcon(new ImageIcon("C://StartWindow.JPG"));
 //		jp.setBounds(200,100,1000,1000);;
