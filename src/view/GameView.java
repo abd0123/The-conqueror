@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import engine.City;
+
 public class GameView extends JFrame {
 	private Map map;
 	private ArrayList<JPanel> panels;
