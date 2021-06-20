@@ -42,7 +42,7 @@ public class CityView extends JPanel {
 	private City c;
 	public CityView(City c) {
 		this.c=c;
-		this.setBounds(1350,100,550,800);
+		this.setBounds(900,100,550,800);
 		this.setVisible(true);
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(550,800));

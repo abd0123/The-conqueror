@@ -4,14 +4,13 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import javafx.scene.layout.Border;
-
 public class Map extends JPanel {
 	private JButton cairo=new JButton("Cairo");
 	private JButton sparta=new JButton("Sparta");
 	private JButton rome=new JButton("Rome");
 	private JPanel p=new JPanel();
 	private String[][]grid;
+	
 	public JButton getCairo() {
 		return cairo;
 	}
@@ -59,7 +58,7 @@ public class Map extends JPanel {
 				else if(grid[i][j].equals("Rome"))p.add(rome);
 				else {
 					JPanel x=new JPanel();
-					x.setBorder(BorderFactory.createLineBorder(Color.black));
+//					x.setBorder(BorderFactory.createLineBorder(Color.black));
 					p.add(x);
 				}
 			}
