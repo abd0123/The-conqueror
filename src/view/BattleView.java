@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,18 +27,18 @@ public class BattleView extends JFrame {
 	private Game game;
 	private JPanel army1Panel;
 	private JPanel army2Panel;
-	private JPanel logPanel;
+	private ImagePanel logPanel;
 	private JPanel infoPanel;
 	private JPanel attackPanel;
 	private ArrayList<Unit> units1;
 	private ArrayList<Unit> units2;
 	
 	private JButton endTurn=new JButton("End Turn");
-	private JLabel playerName=new JLabel("Player's Name: Farghal");
-	private JLabel gold=new JLabel("Gold: 5000");
-	private JLabel turnsLeft=new JLabel("Turns Left: 50");
+	private JLabel playerName=new JLabel("Player's Name:");
+	private JLabel gold=new JLabel("Gold:");
+	private JLabel turnsLeft=new JLabel("Turns Left:");
 	
-	private JButton attack=new JButton("Attack");;
+	private JButton attack=new JButton("Attack");
 	
 	public BattleView(Army ar1,Army ar2,Game g) {
 		playerArmy =ar1; defendingArmy =ar2; game =g;
@@ -66,7 +67,7 @@ public class BattleView extends JFrame {
 		army2Panel.setLayout(new FlowLayout());
 		add(BorderLayout.EAST,army2Panel);
 		
-		logPanel =new JPanel();
+		logPanel =new ImagePanel("sa.jpg");
 		logPanel.setBackground(Color.pink);
 		logPanel.setPreferredSize(new Dimension(500,this.getHeight()-200));
 		add(BorderLayout.CENTER,logPanel);
