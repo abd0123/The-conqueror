@@ -317,9 +317,21 @@ public class Controller implements ActionListener {
 				}
 			}else if(s.equals("Cairo")) {
 				City cairo =null;
-				for(City c:g.getAvailableCities())if(c.getName().equals("Cairo"))cairo = c;
-				drawCity(cairo);
-				selectedCity=cairo;
+				boolean flag=false;
+				for(City c:g.getAvailableCities())if(c.getName().equals("Cairo")) {
+					cairo = c;
+					flag = true;
+				}
+				if (flag){
+					drawCity(cairo);
+					selectedCity=cairo;
+					
+				}
+				else {
+					JOptionPane.showMessageDialog(view, "Not controlled city","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			
 			}else if(s.equals("Rome")){
 				City Rome =null;
 				boolean flag=false;
@@ -338,9 +350,19 @@ public class Controller implements ActionListener {
 			}
 			else if(s.equals("Sparta")){
 				City Sparta =null;
-				for(City c:g.getAvailableCities())if(c.getName().equals("Sparta"))Sparta = c;
-				drawCity(Sparta);
-				selectedCity=Sparta;
+				boolean flag=false;
+				for(City c:g.getAvailableCities())if(c.getName().equals("Sparta")) {
+					Sparta = c;
+					flag = true;
+				}
+				if (flag){
+					drawCity(Sparta);
+					selectedCity=Sparta;
+					
+				}
+				else {
+					JOptionPane.showMessageDialog(view, "Not controlled city","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
 			}else if(s.equals("Return to map")) {
 				drawMap();
 			}else if(s.equals("Defending Army")) {
