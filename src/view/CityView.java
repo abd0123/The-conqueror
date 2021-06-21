@@ -125,7 +125,7 @@ public class CityView extends JPanel {
 		
 		
 		//------------------
-		back = new JButton();
+		back = new JButton("Back");
 		back.setFont(new Font("Forte", Font.BOLD, 14));
 		back.setIcon(new ImageIcon("images/back.png"));
 		back.setBounds(10,10,50,50);

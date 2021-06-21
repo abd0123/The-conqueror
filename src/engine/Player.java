@@ -49,7 +49,7 @@ public class Player {
 			}
 		}
 		for (int i = 0; i < c.getMilitaryBuildings().size(); i++) {
-			MilitaryBuilding b=c.getMilitaryBuildings().get(i);
+			MilitaryBuilding b=c.getMilitaryBuildings().get(i);cd
 			String btype="";
 			if(b instanceof ArcheryRange) {
 				btype="archer";

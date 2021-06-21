@@ -36,77 +36,83 @@ public class GameView extends JFrame {
 	public void setCurrPanel(JPanel currPanel) {
 		this.currPanel = currPanel;
 	}
-	public GameView(Player player,int turncount){
-		this.setTurncount(turncount);
-		this.setPlayer(player);
-		playerBar.setLayout(new FlowLayout());
-		
-		playerName.setText(playerName.getText()+":  "+player.getName()+"            ");
-		playerName.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
-		
-		gold.setText(gold.getText()+":  "+player.getTreasury()+"$            ");
-		gold.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
-		
-		turnsLeft.setText(turnsLeft.getText()+":  "+turncount+"            ");
-		turnsLeft.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
-		
-		food.setText(food.getText()+":  "+this.player.getFood()+"            ");
-		food.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
-		
-		playerBar.add(playerName);
-		playerBar.add(gold);
-		playerBar.add(food);
-		playerBar.add(turnsLeft);
-		
-		o=new ArrayList<Object>();
-		panels=new ArrayList<JPanel>();
+	public GameView(){
+		setVisible(true);
 		setTitle("The Conqueror");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setLayout(new BorderLayout());
-		map=new Map();
-		endTurn.setPreferredSize(new Dimension(this.getWidth(),100));
-		endTurn.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
-		add(map,BorderLayout.CENTER);
-		
-		add(endTurn,BorderLayout.SOUTH);
-		add(playerBar,BorderLayout.NORTH);
-		draw();
-		setVisible(true);
-		revalidate();
-		repaint();
+//		Player player,int turncount
+//		this.setTurncount(turncount);
+//		this.setPlayer(player);
+//		playerBar.setLayout(new FlowLayout());
+//		
+//		playerName.setText(playerName.getText()+":  "+player.getName()+"            ");
+//		playerName.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+//		
+//		gold.setText(gold.getText()+":  "+player.getTreasury()+"$            ");
+//		gold.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+//		
+//		turnsLeft.setText(turnsLeft.getText()+":  "+turncount+"            ");
+//		turnsLeft.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+//		
+//		food.setText(food.getText()+":  "+this.player.getFood()+"            ");
+//		food.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+//		
+//		playerBar.add(playerName);
+//		playerBar.add(gold);
+//		playerBar.add(food);
+//		playerBar.add(turnsLeft);
+//		
+//		o=new ArrayList<Object>();
+//		panels=new ArrayList<JPanel>();
+//		setTitle("The Conqueror");
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		setLayout(new BorderLayout());
+//		map=new Map();
+//		endTurn.setPreferredSize(new Dimension(this.getWidth(),100));
+//		endTurn.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+//		add(map,BorderLayout.CENTER);
+//		
+//		add(endTurn,BorderLayout.SOUTH);
+//		add(playerBar,BorderLayout.NORTH);
+//		draw();
+//		setVisible(true);
+//		revalidate();
+//		repaint();
 	}
-	public static void main(String[] args) {
-		GameView g = new GameView(new Player("AFASF"), 50);
-		g.panels.add(new CityView(new City("cairo")));
-		g.draw();
-		JPanel jP = g.currPanel;
-		g.remove(jP);
-		g.panels.add(new Armyview());
-		g.draw();
-		g.revalidate();
-		g.repaint();
-	}
-	public void addListener(ActionListener f) {
-		endTurn.addActionListener(f);
-		map.getCairo().addActionListener(f);
-		map.getSparta().addActionListener(f);
-		map.getRome().addActionListener(f);
-		if(panels.size()!=0) {
-			for(JPanel p:panels) {
-				if(p instanceof CityView)((CityView)p).addListener(f);
-				if(p instanceof Armyview)((Armyview)p).addListener(f);
-			}
-		}
-			
-	}
+//	public static void main(String[] args) {
+//		GameView g = new GameView(new Player("AFASF"), 50);
+//		g.panels.add(new CityView(new City("cairo")));
+//		g.draw();
+//		JPanel jP = g.currPanel;
+//		g.remove(jP);
+//		g.panels.add(new Armyview());
+//		g.draw();
+//		g.revalidate();
+//		g.repaint();
+//	}
+//	public void addListener(ActionListener f) {
+//		endTurn.addActionListener(f);
+//		map.getCairo().addActionListener(f);
+//		map.getSparta().addActionListener(f);
+//		map.getRome().addActionListener(f);
+//		if(panels.size()!=0) {
+//			for(JPanel p:panels) {
+//				if(p instanceof CityView)((CityView)p).addListener(f);
+//				if(p instanceof Armyview)((Armyview)p).addListener(f);
+//			}
+//		}
+//			
+//	}
 	
-	public void draw() {
-		if(panels.size()!=0) {
-			currPanel=panels.get(panels.size()-1);
-			add(currPanel,BorderLayout.EAST);
-		}
-	}
+//	public void draw() {
+//		if(panels.size()!=0) {
+//			currPanel=panels.get(panels.size()-1);
+//			add(currPanel,BorderLayout.EAST);
+//		}
+//	}
 	
 	public Map getMap() {
 		return map;
