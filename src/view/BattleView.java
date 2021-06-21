@@ -4,15 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import engine.Game;
+import units.Archer;
 import units.Army;
+import units.Cavalry;
 import units.Unit;
 
 public class BattleView extends JFrame {
@@ -28,7 +32,12 @@ public class BattleView extends JFrame {
 	private ArrayList<Unit> units1;
 	private ArrayList<Unit> units2;
 	
-	private JButton attack;
+	private JButton endTurn=new JButton("End Turn");
+	private JLabel playerName=new JLabel("Player's Name: Farghal");
+	private JLabel gold=new JLabel("Gold: 5000");
+	private JLabel turnsLeft=new JLabel("Turns Left: 50");
+	
+	private JButton attack=new JButton("Attack");;
 	
 	public BattleView(Army ar1,Army ar2,Game g) {
 		playerArmy =ar1; defendingArmy =ar2; game =g;
@@ -41,19 +50,19 @@ public class BattleView extends JFrame {
 		
 		infoPanel =new JPanel();
 		infoPanel.setBackground(Color.BLUE);
-		infoPanel.setPreferredSize(new Dimension(this.getWidth(),100));
+		infoPanel.setPreferredSize(new Dimension(this.getWidth(),50));
 		infoPanel.setLayout(new FlowLayout());
 		add(BorderLayout.NORTH,infoPanel);
 		
 		army1Panel =new JPanel();
 		army1Panel.setBackground(Color.red);
-		army1Panel.setPreferredSize(new Dimension(200,200));
+		army1Panel.setPreferredSize(new Dimension(300,200));
 		army1Panel.setLayout(new FlowLayout());
 		add(BorderLayout.WEST,army1Panel);
 		
 		army2Panel =new JPanel();
 		army2Panel.setBackground(Color.yellow);
-		army2Panel.setPreferredSize(new Dimension(200,200));
+		army2Panel.setPreferredSize(new Dimension(300,200));
 		army2Panel.setLayout(new FlowLayout());
 		add(BorderLayout.EAST,army2Panel);
 		
@@ -64,11 +73,44 @@ public class BattleView extends JFrame {
 		
 		attackPanel =new JPanel();
 		attackPanel.setBackground(Color.green);
-		attackPanel.setPreferredSize(new Dimension(this.getWidth(),100));
+		attackPanel.setPreferredSize(new Dimension(this.getWidth(),60));
 		attackPanel.setLayout(new FlowLayout());
 		add(BorderLayout.SOUTH,attackPanel);
 		
+		for(int i=0;i<units1.size();i++) {
+			Unit u = units1.get(i);
+			JButton b;
+			if(u instanceof Archer)
+			    b =new JButton("Archer");
+			else if(u instanceof Cavalry)
+			    b =new JButton("Cavalry");
+			else
+			    b =new JButton("Infantry");
+			b.setPreferredSize(new Dimension(95,50));
+			army1Panel.add(b);
+		}
+		for(int i=0;i<units2.size();i++) {
+			Unit u = units2.get(i);
+			JButton b;
+			if(u instanceof Archer)
+			    b =new JButton("Archer");
+			else if(u instanceof Cavalry)
+			    b =new JButton("Cavalry");
+			else
+			    b =new JButton("Infantry");
+			b.setPreferredSize(new Dimension(95,50));
+			army2Panel.add(b);
+		}
+		attack.setPreferredSize(new Dimension(650,50));
+		endTurn.setPreferredSize(new Dimension(650,50));
+		attackPanel.add(attack);
+		attackPanel.add(endTurn);
 		
+		playerName.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		gold.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		turnsLeft.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		infoPanel.add(playerName);  infoPanel.add(gold);  infoPanel.add(turnsLeft);
+
 		
 		setVisible(true);
 		revalidate();
@@ -76,8 +118,10 @@ public class BattleView extends JFrame {
 	}
 
 	public static void main(String[] args) throws IOException {
-		
-     BattleView bv = new BattleView(new Army("rome_army.csv"),new Army("cairo_army.csv"),new Game("Far","Rome"));
+	Game game = new Game("ahmed", "cairo");
+	Army army = game.getAvailableCities().get(0).getDefendingArmy();
+	Army army2 = game.getAvailableCities().get(1).getDefendingArmy();
+     BattleView bv = new BattleView(army,army2,game);
 	}
 
 }
