@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -25,8 +26,9 @@ public class Armyview extends JPanel {
 		setLayout(new BorderLayout());
 		this.setBackground(Color.lightGray);
 		setMinimumSize(new Dimension(500, 500));
-
+		setPreferredSize(new Dimension(550,800));
 		back = new JButton(new ImageIcon("back.jpg"));
+		back.setText("Back");
 //		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		this.setVisible(true);
 		Units.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
@@ -74,7 +76,14 @@ public class Armyview extends JPanel {
 		setBorder(BorderFactory.createLineBorder(Color.black));
 
 	}
-
+	
+	public void addListener(ActionListener f) {
+		Units.addActionListener(f);
+		setTarget.addActionListener(f);
+		relocateUnit.addActionListener(f);
+		back.addActionListener(f);
+	}
+	
 	public static void main(String[] args) {
 
 		JFrame x = new JFrame();

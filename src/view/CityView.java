@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -40,16 +41,18 @@ public class CityView extends JPanel {
 	private JLabel defending;
 	private JComboBox units;
 	private City c;
+	private JButton DefendingArmy;
 	public CityView(City c) {
-		this.c=c;
+		setPreferredSize(new Dimension(550,800));
+		this.setC(c);
 		this.setBounds(900,100,550,800);
 		this.setVisible(true);
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(550,800));
 		//buildings button -----------
 		lbuildings =new JLabel("   Buildings");
-		lbuildings.setFont(new Font("Forte", Font.BOLD, 19));
-		lbuildings.setBounds(0,400,180,100);
+		lbuildings.setFont(new Font("Forte", Font.BOLD, 22));
+		lbuildings.setBounds(0,500,180,100);
 		String[] cbox=new String[c.getEconomicalBuildings().size()+c.getMilitaryBuildings().size()];
 		int i=0;
 		for (Building b:c.getMilitaryBuildings()) {
@@ -64,66 +67,74 @@ public class CityView extends JPanel {
 			i++;
 		}
 		Buildings=new JComboBox(cbox);
-		Buildings.setBounds(190,425,180,50);
-		Buildings.setFont(new Font("Forte", Font.BOLD, 19));
+		Buildings.setBounds(190,525,180,50);
+		Buildings.setFont(new Font("Forte", Font.BOLD, 22));
 		openBuilding=new JButton("open Building");
-		openBuilding.setBounds(380,425,170,50);
+		openBuilding.setBounds(380,525,170,50);
 		openBuilding.setFont(new Font("Forte", Font.BOLD, 19));
 		
 		//build button---------------------------
-		String [] ccbox= new String[c.getEconomicalBuildings().size()+c.getMilitaryBuildings().size()];
-		int j = 0 ;
-		for (Building b:c.getMilitaryBuildings()) {
-			if(b instanceof ArcheryRange)ccbox[j]="Archery Range :  "+ b.getCost() + "$";
-			if(b instanceof Barracks)ccbox[j]="Barracks :  "+ b.getCost()+"$";
-			if(b instanceof Stable)ccbox[j]="stable :  "+b.getCost()+"$";
-		    j++;
-		}
-		for(Building b:c.getEconomicalBuildings()) {
-			if(b instanceof Farm)ccbox[j]="Farm :  "+b.getCost()+"$" ;
-			if(b instanceof Market)ccbox[j]="Market :  "+b.getCost()+"$";
-			j++;
-		}
+//		String [] ccbox= new String[c.getEconomicalBuildings().size()+c.getMilitaryBuildings().size()];
+//		int j = 0 ;
+//		for (Building b:c.getMilitaryBuildings()) {
+//			if(b instanceof ArcheryRange)ccbox[j]="Archery Range :  "+ b.getCost() + "$";
+//			if(b instanceof Barracks)ccbox[j]="Barracks :  "+ b.getCost()+"$";
+//			if(b instanceof Stable)ccbox[j]="stable :  "+b.getCost()+"$";
+//		    j++;
+//		}
+//		for(Building b:c.getEconomicalBuildings()) {
+//			if(b instanceof Farm)ccbox[j]="Farm :  "+b.getCost()+"$" ;
+//			if(b instanceof Market)ccbox[j]="Market :  "+b.getCost()+"$";
+//			j++;
+//		}
+		String[]ccbox= {"Market 1500 $","Farm 1000 $","Archery Range 1500 $","Barracks 2000 $","Stable 2500 $"};
 		buildcost = new JComboBox(ccbox);
-		buildcost.setFont(new Font("Forte", Font.BOLD, 19));
-		buildcost.setBounds(10,525,360,50);
+		buildcost.setFont(new Font("Forte", Font.BOLD, 22));
+		buildcost.setBounds(10,625,360,50);
 		build = new JButton("Build");
-		build.setBounds(380,525,170,50);
-		build.setFont(new Font("Forte", Font.BOLD, 19));
+		build.setBounds(380,625,170,50);
+		build.setFont(new Font("Forte", Font.BOLD, 22));
 		//---------------
-		name = new JLabel("   city name :");
-		name.setBounds(0,40,200,100);
-		name.setFont(new Font("Forte", Font.BOLD, 19));
-		status = new JLabel("   Status : ");
-		status.setBounds(0,140,100,100);
-		status.setFont(new Font("Forte", Font.BOLD, 19));
-		turnsUnderSeige=new JLabel("   Turns Under Seige : ");
-		turnsUnderSeige.setFont(new Font("Forte", Font.BOLD, 19));
-		turnsUnderSeige.setBounds(0,240,300,100);
+		name = new JLabel("   city name :  "+c.getName());
+		name.setBounds(0,40,400,100);
+		name.setFont(new Font("Forte", Font.BOLD, 22));
+		status = new JLabel("   Status : "+(c.isUnderSiege()?"Besieged":"Not Besieged"));
+		status.setBounds(0,140,400,100);
+		status.setFont(new Font("Forte", Font.BOLD, 22));
+		turnsUnderSeige=new JLabel("   Turns Under Seige :  "+c.getTurnsUnderSiege());
+		turnsUnderSeige.setFont(new Font("Forte", Font.BOLD, 22));
+		turnsUnderSeige.setBounds(0,240,400,100);
 		//--------------
 		initiateArmy = new JButton("Initiate Army");
 		initiateArmy.setFont(new Font("Forte", Font.BOLD, 19));
-		initiateArmy.setBounds(380,625,170,50);
+		initiateArmy.setBounds(380,725,170,50);
 		defending = new JLabel("   Units ");
-		defending.setFont(new Font("Forte", Font.BOLD, 19));
-		defending.setBounds(0,600,180,100);
+		defending.setFont(new Font("Forte", Font.BOLD, 22));
+		defending.setBounds(0,700,180,100);
 		String [] c3box= new String[c.getDefendingArmy().getUnits().size()];
 		int x = 0 ;
 		for (Unit u : c.getDefendingArmy().getUnits()) {
-			if(u instanceof Archer )c3box[x]= "Archer";
-			if (u instanceof Cavalry)c3box[x]="Cavalry";
-			if (u instanceof Infantry) c3box[x]= "Infantry";
+			if(u instanceof Archer )c3box[x]= "Archer "+u.getLevel();
+			if (u instanceof Cavalry)c3box[x]="Cavalry "+u.getLevel();
+			if (u instanceof Infantry) c3box[x]= "Infantry "+u.getLevel();
+			x++;
 		}
 		units = new JComboBox(c3box);
-		units.setFont(new Font("Forte", Font.BOLD, 19));
-		units.setBounds(190,625,180,50);
+		units.setFont(new Font("Forte", Font.BOLD, 22));
+		units.setBounds(190,725,180,50);
 		
 		
 		//------------------
-		back = new JButton();
+		back = new JButton("Back");
+		back.setFont(new Font("Forte", Font.BOLD, 14));
 		back.setIcon(new ImageIcon("C://back.PNG"));
-		back.setBounds(10,10,50,50);
+		back.setBounds(10,10,70,50);
+		//------------------
+		DefendingArmy =new JButton("Defending Army");
+		DefendingArmy.setFont(new Font("Forte", Font.BOLD, 22));
+		DefendingArmy.setBounds(50,350,450,100);
 		//------------- add
+		add(DefendingArmy);
 		this.add(units);
 		this.add(defending);
 		this.add(buildcost);
@@ -140,6 +151,14 @@ public class CityView extends JPanel {
 		this.revalidate();
 		this.repaint();
 		
+	}
+	
+	public void addListener(ActionListener f) {
+		openBuilding.addActionListener(f);
+		back.addActionListener(f);
+		initiateArmy.addActionListener(f);
+		build.addActionListener(f);
+		DefendingArmy.addActionListener(f);
 	}
 	
 	public void setName(JLabel name) {
@@ -183,6 +202,22 @@ public class CityView extends JPanel {
 		x.add(d);
 		x.setVisible(true);
 		x.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	}
+
+	public City getC() {
+		return c;
+	}
+
+	public void setC(City c) {
+		this.c = c;
+	}
+
+	public JButton getDefendingArmy() {
+		return DefendingArmy;
+	}
+
+	public void setDefendingArmy(JButton defendingArmy) {
+		DefendingArmy = defendingArmy;
 	}
 
 }

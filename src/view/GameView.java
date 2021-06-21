@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Currency;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,8 +26,16 @@ public class GameView extends JFrame {
 	private JButton endTurn=new JButton("End Turn");
 	private JLabel playerName=new JLabel("Player's Name");
 	private JLabel gold=new JLabel("Gold");
+	private JLabel food=new JLabel("Food");
 	private JLabel turnsLeft=new JLabel("Turns Left");
 	private int turncount;
+	private JPanel currPanel=new JPanel();
+	public JPanel getCurrPanel() {
+		return currPanel;
+	}
+	public void setCurrPanel(JPanel currPanel) {
+		this.currPanel = currPanel;
+	}
 	public GameView(Player player,int turncount){
 		this.setTurncount(turncount);
 		this.setPlayer(player);
@@ -40,8 +50,12 @@ public class GameView extends JFrame {
 		turnsLeft.setText(turnsLeft.getText()+":  "+turncount+"            ");
 		turnsLeft.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
 		
+		food.setText(food.getText()+":  "+this.player.getFood()+"            ");
+		food.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+		
 		playerBar.add(playerName);
 		playerBar.add(gold);
+		playerBar.add(food);
 		playerBar.add(turnsLeft);
 		
 		o=new ArrayList<Object>();
@@ -53,13 +67,10 @@ public class GameView extends JFrame {
 		map=new Map();
 		endTurn.setPreferredSize(new Dimension(this.getWidth(),100));
 		add(map,BorderLayout.CENTER);
-		JPanel t=new JPanel();
-		t.setLayout(new GridLayout(3,3));
-		t.setPreferredSize(new Dimension(500,this.getHeight()-100));
-		for(int i=0;i<9;i++)t.add(new JButton());
-		add(t,BorderLayout.EAST);
+		
 		add(endTurn,BorderLayout.SOUTH);
 		add(playerBar,BorderLayout.NORTH);
+		draw();
 		setVisible(true);
 		revalidate();
 		repaint();
@@ -67,6 +78,27 @@ public class GameView extends JFrame {
 //	public static void main(String[] args) {
 //		new GameView();
 //	}
+	public void addListener(ActionListener f) {
+		endTurn.addActionListener(f);
+		map.getCairo().addActionListener(f);
+		map.getSparta().addActionListener(f);
+		map.getRome().addActionListener(f);
+		if(panels.size()!=0) {
+			for(JPanel p:panels) {
+				if(p instanceof CityView)((CityView)p).addListener(f);
+				if(p instanceof Armyview)((Armyview)p).addListener(f);
+			}
+		}
+			
+	}
+	
+	public void draw() {
+		if(panels.size()!=0) {
+			currPanel=panels.get(panels.size()-1);
+			add(currPanel,BorderLayout.EAST);
+		}
+	}
+	
 	public Map getMap() {
 		return map;
 	}
