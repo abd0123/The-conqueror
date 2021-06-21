@@ -1,6 +1,7 @@
-	package controller;
+package controller;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -46,7 +47,12 @@ public class Controller implements ActionListener {
 	private ArmyFrame armyFrame;
 	private Map map;
 	private City selectedCity;
-	
+	private JComboBox Buildings;
+	private JComboBox buildcost;
+	private JComboBox units;
+	private JComboBox openUnits;
+	private JComboBox targets;
+	private Army selectedArmy;
 	public Controller() {
 		start=new StartWindow();
 		start.getStart().addActionListener(this);
@@ -55,6 +61,7 @@ public class Controller implements ActionListener {
 		map.getCairo().addActionListener(this);
 		map.getSparta().addActionListener(this);
 		map.getRome().addActionListener(this);
+		map.getAr().addActionListener(this);
 	}
 	
 	
@@ -87,6 +94,7 @@ public class Controller implements ActionListener {
 		
 		view.add(playerBar,BorderLayout.NORTH);
 	}
+	
 	public void drawMap() {
 		drawPlayerBar();
 		JButton endTurn=new JButton("End Turn");
@@ -105,15 +113,15 @@ public class Controller implements ActionListener {
 		JLabel name;
 		JButton openBuilding;
 		JLabel lbuildings;
-		JComboBox Buildings;
-		JComboBox buildcost;
+		
+		
 		JButton build;
 		JLabel status;
 		JLabel turnsUnderSeige;
 		JButton initiateArmy;
 		JButton back;
 		JLabel defending;
-		JComboBox units;
+		
 		JButton DefendingArmy;
 		
 		JPanel city=new JPanel();
@@ -221,8 +229,7 @@ public class Controller implements ActionListener {
 	
 	public void drawArmy(Army a) {
 		drawPlayerBar();
-		
-		 JButton Units = new JButton("Units");
+		 JButton openUnit = new JButton("Open Unit");
 		 JButton setTarget = new JButton("Set target");
 		 JButton relocateUnit = new JButton("Relocate unit");
 		 JLabel currentStatus = new JLabel("Current status:  "+a.getCurrentStatus());
@@ -232,9 +239,31 @@ public class Controller implements ActionListener {
 		 String[][] grid;
 		 JPanel panel = new JPanel();
 		 JButton back;
-		 Units.addActionListener(this);
+		 openUnit.addActionListener(this);
 		 setTarget.addActionListener(this);
 		 relocateUnit.addActionListener(this);
+		 
+		 
+		 String[]openun=new String[a.getUnits().size()];
+		 for (int i = 0; i < openun.length; i++) {
+			Unit u=a.getUnits().get(i);
+			if(u instanceof Archer)openun[i]="Archer "+u.getLevel();
+			else if(u instanceof Cavalry)openun[i]="Cavalry "+u.getLevel();
+			else openun[i]="Infantry "+u.getLevel();
+		} 
+		 openUnits=new JComboBox(openun);
+		 openUnits.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22) );
+		 
+		 String[]targetss=new String[g.getAvailableCities().size()-g.getPlayer().getControlledCities().size()];
+		 int s=0;
+		 for (int i = 0; i < g.getAvailableCities().size();i++) {
+			City c= g.getAvailableCities().get(i);
+			if(!g.getPlayer().getControlledCities().contains(c)) {
+				targetss[s++]=c.getName();
+			}
+		}
+		 targets=new JComboBox(targetss);
+		 targets.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22) );
 		 
 		 JPanel army =new JPanel();
 		army.setLayout(new BorderLayout());
@@ -246,7 +275,7 @@ public class Controller implements ActionListener {
 		back.addActionListener(this);
 		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		army.setVisible(true);
-		Units.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		openUnit.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		setTarget.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		relocateUnit.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		currentStatus.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
@@ -260,11 +289,25 @@ public class Controller implements ActionListener {
 		panel.setLayout(new GridLayout(0, 3));
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (grid[i][j].equals("Units"))
-					panel.add(Units);
-				else if (grid[i][j].equals("Set target"))
-					panel.add(setTarget);
-				else if (grid[i][j].equals("Relocate unit"))
+				if (grid[i][j].equals("Units")) {
+					JPanel y=new JPanel();
+					y.setLayout(new FlowLayout());
+					openUnits.setPreferredSize(new Dimension(300,50));
+					y.add(openUnits);
+					y.add(openUnit);
+					panel.add(y);
+				}else if (grid[i][j].equals("Set target")) {
+					if(a.equals(selectedCity.getDefendingArmy())) {
+						panel.add(new JPanel());
+					}else {
+						JPanel y=new JPanel();
+						y.setLayout(new FlowLayout());
+						targets.setPreferredSize(new Dimension(300,50));
+						y.add(targets);
+						y.add(setTarget);
+						panel.add(y);
+					}
+				}else if (grid[i][j].equals("Relocate unit"))
 					panel.add(relocateUnit);
 				else if (grid[i][j].equals("Army status"))
 					panel.add(currentStatus);
@@ -295,6 +338,46 @@ public class Controller implements ActionListener {
 		view.revalidate();
 		view.repaint();
 	}
+	
+	public void drawUnit(Unit u) {
+		drawPlayerBar();
+		 
+		 JLabel leveLabel;
+		 JLabel Status;
+		 JLabel currntsoL;
+		 JButton back;
+		 JPanel Unit=new JPanel();
+		 Unit.setBounds(1350,100,550,800);
+		 Unit.setVisible(true);
+		 Unit.setLayout(null);
+		 Unit.setPreferredSize(new Dimension(550,800));
+		 Unit.setBorder(BorderFactory.createLineBorder(Color.black));
+		leveLabel = new JLabel("   Level :  "+u.getLevel());
+		leveLabel.setFont(new Font("Forte", Font.BOLD, 19));
+		leveLabel.setBounds(0,60,200,100);
+		Status = new JLabel("   Status :  "+u.getParentArmy().getCurrentStatus());
+		Status.setFont(new Font("Forte", Font.BOLD, 19));
+		Status.setBounds(0,160,100,100);
+		currntsoL = new JLabel("   CurrentSoldierCount :  "+u.getCurrentSoldierCount());
+		currntsoL.setFont(new Font("Forte", Font.BOLD, 19));
+		currntsoL.setBounds(0,260,300,100);
+		back = new JButton("Return to map");
+		back.setIcon(new ImageIcon("C://back.PNG"));
+		back.setBounds(10,10,50,50);
+		back.addActionListener(this);
+		Unit.add(leveLabel);
+		Unit.add(Status);
+		Unit.add(currntsoL);
+		Unit.add(back);
+		
+		Unit.revalidate();
+		Unit.repaint();
+		
+		view.add(Unit);
+		view.revalidate();
+		view.repaint();
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		String s=e.getActionCommand();
 		if(s!=null) {
@@ -306,7 +389,7 @@ public class Controller implements ActionListener {
 				}else {
 					try {
 						g=new Game(start.getPlayerNameTxt().getText(),start.getCities().getSelectedItem().toString());
-						playSound("sounds/Avengers.wav");
+//						playSound("sounds/Avengers.wav");
 					} catch (IOException e1) {
 					}
 					System.out.println("asa");
@@ -322,6 +405,7 @@ public class Controller implements ActionListener {
 					cairo = c;
 					flag = true;
 				}
+				System.out.println(flag);
 				if (flag){
 					drawCity(cairo);
 					selectedCity=cairo;
@@ -335,7 +419,7 @@ public class Controller implements ActionListener {
 			}else if(s.equals("Rome")){
 				City Rome =null;
 				boolean flag=false;
-				for(City c:g.getPlayer().getControlledCities()) {
+				for(City c:g.getAvailableCities()) {
 					if(c.getName().equals("Rome")) {
 						Rome = c;
 						flag=true;
@@ -366,7 +450,14 @@ public class Controller implements ActionListener {
 			}else if(s.equals("Return to map")) {
 				drawMap();
 			}else if(s.equals("Defending Army")) {
+				selectedArmy=selectedCity.getDefendingArmy();
 				drawArmy(selectedCity.getDefendingArmy());
+			}else if(s.equals("Army")) {
+				Army a=new Army("onRoad");
+				a.getUnits().add(new Archer(1,60,0.3,0.4,0.5));
+				drawArmy(a);
+			}else if(s.equals("Open Unit")) {
+				drawUnit(selectedArmy.getUnits().get(openUnits.getSelectedIndex()));
 			}
 		}
 	

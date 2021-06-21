@@ -10,7 +10,7 @@ public class Map extends JPanel {
 	private JButton rome=new JButton("Rome");
 	private JPanel p=new JPanel();
 	private String[][]grid;
-	
+	private JButton Ar;
 	public JButton getCairo() {
 		return cairo;
 	}
@@ -44,18 +44,20 @@ public class Map extends JPanel {
 		setLayout(new BorderLayout());
 		grid=new String[][] {{"","","","","","Cairo","","","","",""},
 						 	{"","","","","","","","","","",""},
-							 {"","","","","","","","","","",""}	,
+							 {"","","Army","","","","","","","",""}	,
 							 {"","","","","","","","","","",""},
 							 {"","Spart","","","","","","","","Rome",""}};			
 		p.setLayout(new GridLayout(0,11));		 	
 		cairo.setFont(new Font("Forte", Font.BOLD, 19));
 		sparta.setFont(new Font("Forte", Font.BOLD, 19));
 		rome.setFont(new Font("Forte", Font.BOLD, 19));
+		 Ar=new JButton("Army");
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < 11; j++) {
 				if(grid[i][j].equals("Cairo"))p.add(cairo);
 				else if(grid[i][j].equals("Spart"))p.add(sparta);
 				else if(grid[i][j].equals("Rome"))p.add(rome);
+				else if(grid[i][j].equals("Army"))p.add(Ar);
 				else {
 					JPanel x=new JPanel();
 //					x.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -69,6 +71,18 @@ public class Map extends JPanel {
 		add(title,BorderLayout.NORTH);
 		add(p,BorderLayout.CENTER);
 		setBorder(BorderFactory.createLineBorder(Color.black));
+	}
+	public String[][] getGrid() {
+		return grid;
+	}
+	public void setGrid(String[][] grid) {
+		this.grid = grid;
+	}
+	public JButton getAr() {
+		return Ar;
+	}
+	public void setAr(JButton ar) {
+		Ar = ar;
 	}
 	public static void main(String[] args) {
 		JFrame x=new JFrame();
