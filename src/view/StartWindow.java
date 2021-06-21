@@ -52,6 +52,7 @@ public class StartWindow extends JFrame {
 		p1.add(cities);
 		p.add(start,BorderLayout.CENTER);
 		p.add(new JPanel(),BorderLayout.SOUTH);
+		this.getRootPane().setDefaultButton(start);
 //		
 //		
 //		

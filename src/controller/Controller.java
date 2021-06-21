@@ -43,8 +43,6 @@ public class Controller implements ActionListener {
 	private StartWindow start;
 	private GameView view;
 	private Game g;
-	private CityFrame cityFrame;
-	private ArmyFrame armyFrame;
 	private Map map;
 	private City selectedCity;
 	private JComboBox Buildings;
@@ -130,7 +128,7 @@ public class Controller implements ActionListener {
 		city.setPreferredSize(new Dimension(550,800));
 		//buildings button -----------
 		lbuildings =new JLabel("   Buildings");
-		lbuildings.setFont(new Font("Forte", Font.BOLD, 22));
+		lbuildings.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		lbuildings.setBounds(0,500,180,100);
 		String[] cbox=new String[c.getEconomicalBuildings().size()+c.getMilitaryBuildings().size()];
 		int i=0;
@@ -147,34 +145,34 @@ public class Controller implements ActionListener {
 		}
 		Buildings=new JComboBox(cbox);
 		Buildings.setBounds(190,525,180,50);
-		Buildings.setFont(new Font("Forte", Font.BOLD, 22));
+		Buildings.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		openBuilding=new JButton("open Building");
 		openBuilding.setBounds(380,525,170,50);
-		openBuilding.setFont(new Font("Forte", Font.BOLD, 19));
+		openBuilding.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		
 		String[]ccbox= {"Market 1500 $","Farm 1000 $","Archery Range 1500 $","Barracks 2000 $","Stable 2500 $"};
 		buildcost = new JComboBox(ccbox);
-		buildcost.setFont(new Font("Forte", Font.BOLD, 22));
+		buildcost.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		buildcost.setBounds(10,625,360,50);
 		build = new JButton("Build");
 		build.setBounds(380,625,170,50);
-		build.setFont(new Font("Forte", Font.BOLD, 22));
+		build.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		//---------------
 		name = new JLabel("   city name :  "+c.getName());
 		name.setBounds(0,40,400,100);
-		name.setFont(new Font("Forte", Font.BOLD, 22));
+		name.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		status = new JLabel("   Status : "+(c.isUnderSiege()?"Besieged":"Not Besieged"));
 		status.setBounds(0,140,400,100);
-		status.setFont(new Font("Forte", Font.BOLD, 22));
+		status.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		turnsUnderSeige=new JLabel("   Turns Under Seige :  "+c.getTurnsUnderSiege());
-		turnsUnderSeige.setFont(new Font("Forte", Font.BOLD, 22));
+		turnsUnderSeige.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		turnsUnderSeige.setBounds(0,240,400,100);
 		//--------------
 		initiateArmy = new JButton("Initiate Army");
-		initiateArmy.setFont(new Font("Forte", Font.BOLD, 19));
+		initiateArmy.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		initiateArmy.setBounds(380,725,170,50);
 		defending = new JLabel("   Units ");
-		defending.setFont(new Font("Forte", Font.BOLD, 22));
+		defending.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		defending.setBounds(0,700,180,100);
 		String [] c3box= new String[c.getDefendingArmy().getUnits().size()];
 		int x = 0 ;
@@ -185,19 +183,19 @@ public class Controller implements ActionListener {
 			x++;
 		}
 		units = new JComboBox(c3box);
-		units.setFont(new Font("Forte", Font.BOLD, 22));
+		units.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		units.setBounds(190,725,180,50);
 		
 		
 		//------------------
 		back = new JButton("");
 		back.setText("Return to map");
-		back.setFont(new Font("Forte", Font.BOLD, 14));
+		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 //		back.setIcon(new ImageIcon("images/back.png"));
 		back.setBounds(10,10,200,50);
 		//------------------
 		DefendingArmy =new JButton("Defending Army");
-		DefendingArmy.setFont(new Font("Forte", Font.BOLD, 22));
+		DefendingArmy.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		DefendingArmy.setBounds(50,350,450,100);
 		//------------- add
 		city.add(DefendingArmy);
@@ -327,7 +325,7 @@ public class Controller implements ActionListener {
 			}
 		}
 		JLabel title = new JLabel("Army ");
-		title.setFont(new Font("Forte", Font.ROMAN_BASELINE, 25));
+		title.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		army.add(title, BorderLayout.NORTH);
 		army.add(panel, BorderLayout.CENTER);
@@ -341,7 +339,7 @@ public class Controller implements ActionListener {
 	
 	public void drawUnit(Unit u) {
 		drawPlayerBar();
-		 
+		 JLabel name;
 		 JLabel leveLabel;
 		 JLabel Status;
 		 JLabel currntsoL;
@@ -352,19 +350,27 @@ public class Controller implements ActionListener {
 		 Unit.setLayout(null);
 		 Unit.setPreferredSize(new Dimension(550,800));
 		 Unit.setBorder(BorderFactory.createLineBorder(Color.black));
+		 String s = "";
+		 if (u instanceof Archer)s="Archer";
+		 else if (u instanceof Cavalry)s= "Cavalry";
+		 else s= "Infantry";
+		name = new JLabel("   Type : " + s);
+		name.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		name.setBounds(0,60,300,100);
 		leveLabel = new JLabel("   Level :  "+u.getLevel());
-		leveLabel.setFont(new Font("Forte", Font.BOLD, 19));
-		leveLabel.setBounds(0,60,200,100);
+		leveLabel.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		leveLabel.setBounds(0,160,300,100);
 		Status = new JLabel("   Status :  "+u.getParentArmy().getCurrentStatus());
-		Status.setFont(new Font("Forte", Font.BOLD, 19));
-		Status.setBounds(0,160,100,100);
+		Status.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		Status.setBounds(0,260,300,100);
 		currntsoL = new JLabel("   CurrentSoldierCount :  "+u.getCurrentSoldierCount());
-		currntsoL.setFont(new Font("Forte", Font.BOLD, 19));
-		currntsoL.setBounds(0,260,300,100);
+		currntsoL.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		currntsoL.setBounds(0,360,300,100);
 		back = new JButton("Return to map");
-		back.setIcon(new ImageIcon("C://back.PNG"));
-		back.setBounds(10,10,50,50);
+		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));	
+		back.setBounds(10,10,200,50);
 		back.addActionListener(this);
+		Unit.add(name);
 		Unit.add(leveLabel);
 		Unit.add(Status);
 		Unit.add(currntsoL);
@@ -382,6 +388,7 @@ public class Controller implements ActionListener {
 		String s=e.getActionCommand();
 		if(s!=null) {
 			if(s.equals("Start")) {
+				playSound("sounds/Mouse.wav");
 				if(start.getPlayerNameTxt().getText().equals("")) {
 					playSound("sounds/Warning.wav");
 					JOptionPane.showMessageDialog(start, "write Player Name","Alert",JOptionPane.INFORMATION_MESSAGE);
@@ -389,23 +396,22 @@ public class Controller implements ActionListener {
 				}else {
 					try {
 						g=new Game(start.getPlayerNameTxt().getText(),start.getCities().getSelectedItem().toString());
-//						playSound("sounds/Avengers.wav");
+				playSound("sounds/Avengers.wav");
 					} catch (IOException e1) {
 					}
-					System.out.println("asa");
 					this.view=new GameView();
 //					view.addListener(this);
 					start.dispose();
 					this.drawMap();
 				}
 			}else if(s.equals("Cairo")) {
+				playSound("sounds/Mouse.wav");
 				City cairo =null;
 				boolean flag=false;
 				for(City c:g.getAvailableCities())if(c.getName().equals("Cairo")) {
 					cairo = c;
 					flag = true;
 				}
-				System.out.println(flag);
 				if (flag){
 					drawCity(cairo);
 					selectedCity=cairo;
@@ -417,6 +423,7 @@ public class Controller implements ActionListener {
 				
 			
 			}else if(s.equals("Rome")){
+				playSound("sounds/Mouse.wav");
 				City Rome =null;
 				boolean flag=false;
 				for(City c:g.getAvailableCities()) {
@@ -433,6 +440,7 @@ public class Controller implements ActionListener {
 				}
 			}
 			else if(s.equals("Sparta")){
+				playSound("sounds/Mouse.wav");
 				City Sparta =null;
 				boolean flag=false;
 				for(City c:g.getAvailableCities())if(c.getName().equals("Sparta")) {
@@ -448,23 +456,23 @@ public class Controller implements ActionListener {
 					JOptionPane.showMessageDialog(view, "Not controlled city","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}else if(s.equals("Return to map")) {
+				playSound("sounds/Mouse.wav");
 				drawMap();
 			}else if(s.equals("Defending Army")) {
+				playSound("sounds/Mouse.wav");
 				selectedArmy=selectedCity.getDefendingArmy();
 				drawArmy(selectedCity.getDefendingArmy());
 			}else if(s.equals("Army")) {
+				playSound("sounds/Mouse.wav");
 				Army a=new Army("onRoad");
 				a.getUnits().add(new Archer(1,60,0.3,0.4,0.5));
 				drawArmy(a);
 			}else if(s.equals("Open Unit")) {
+				playSound("sounds/Mouse.wav");
 				drawUnit(selectedArmy.getUnits().get(openUnits.getSelectedIndex()));
 			}
 		}
-	
-//			view.addListener(this);
-//			view.revalidate();
-//			view.repaint();
-			
+
 		}
 	
 	public void playSound (String filepath)  {
@@ -478,13 +486,6 @@ public class Controller implements ActionListener {
 			e.printStackTrace();
 	}
 	}
-//////	private void txt_playerName (java.awt.event.KeyEvent e) {
-//////		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-//////			start.dispose();
-//////			this.view=new GameView();
-//////			
-////		}
-//	}
 	public static void main(String[] args) {
 		new Controller();
 	}

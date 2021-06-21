@@ -48,9 +48,9 @@ public class Map extends JPanel {
 							 {"","","","","","","","","","",""},
 							 {"","Spart","","","","","","","","Rome",""}};			
 		p.setLayout(new GridLayout(0,11));		 	
-		cairo.setFont(new Font("Forte", Font.BOLD, 19));
-		sparta.setFont(new Font("Forte", Font.BOLD, 19));
-		rome.setFont(new Font("Forte", Font.BOLD, 19));
+		cairo.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		sparta.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		rome.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		 Ar=new JButton("Army");
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < 11; j++) {
@@ -66,7 +66,7 @@ public class Map extends JPanel {
 			}
 		}
 		JLabel title=new JLabel("Map");
-		title.setFont(new Font("Forte", Font.BOLD, 19));
+		title.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		title.setHorizontalAlignment(SwingConstants. CENTER);
 		add(title,BorderLayout.NORTH);
 		add(p,BorderLayout.CENTER);
