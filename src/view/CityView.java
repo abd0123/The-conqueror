@@ -125,10 +125,10 @@ public class CityView extends JPanel {
 		
 		
 		//------------------
-		back = new JButton("Back");
+		back = new JButton();
 		back.setFont(new Font("Forte", Font.BOLD, 14));
-		back.setIcon(new ImageIcon("C://back.PNG"));
-		back.setBounds(10,10,70,50);
+		back.setIcon(new ImageIcon("images/back.png"));
+		back.setBounds(10,10,50,50);
 		//------------------
 		DefendingArmy =new JButton("Defending Army");
 		DefendingArmy.setFont(new Font("Forte", Font.BOLD, 22));

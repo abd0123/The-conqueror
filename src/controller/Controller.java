@@ -3,8 +3,14 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 
 import engine.*;
@@ -30,6 +36,7 @@ public class Controller implements ActionListener {
 				}else {
 					try {
 						g=new Game(start.getPlayerNameTxt().getText(),start.getCities().getName());
+						playSound("sounds/Avengers.wav");
 					} catch (IOException e1) {
 						
 					}
@@ -54,6 +61,17 @@ public class Controller implements ActionListener {
 		}
 		
 		
+	}
+	public void playSound (String filepath)  {
+		try {
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filepath).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}
 	}
 //////	private void txt_playerName (java.awt.event.KeyEvent e) {
 //////		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
