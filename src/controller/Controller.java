@@ -20,6 +20,8 @@ public class Controller implements ActionListener {
 	private StartWindow start;
 	private GameView view;
 	private Game g;
+	private CityFrame cityFrame;
+	private ArmyFrame armyFrame;
 	
 	public Controller() {
 		start=new StartWindow();
@@ -47,21 +49,25 @@ public class Controller implements ActionListener {
 			}else if(s.equals("Cairo")) {
 				City cairo =null;
 				for(City c:g.getAvailableCities())if(c.getName().equals("Cairo"))cairo = c;
-				view.getPanels().add(new CityView(cairo));
-			}else if(s.equals("Defending Army")){
-				Armyview x=new Armyview();
-				view.getContentPane().remove(view.getCurrPanel());
-				view.setCurrPanel(x);
-				view.getPanels().add(x);
+				cityFrame = new CityFrame(cairo);
+			}else if(s.equals("Rome")){
+				City Rome =null;
+				for(City c:g.getAvailableCities())if(c.getName().equals("Rome"))Rome = c;
+				cityFrame = new CityFrame(Rome);	
 			}
+			else if(s.equals("Sparta")){
+				City Sparta =null;
+				for(City c:g.getAvailableCities())if(c.getName().equals("Sparta"))Sparta = c;
+				cityFrame = new CityFrame(Sparta);	
+			}
+		}
+	
 			view.addListener(this);
-			view.draw();
 			view.revalidate();
 			view.repaint();
+			
 		}
-		
-		
-	}
+	
 	public void playSound (String filepath)  {
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filepath).getAbsoluteFile());

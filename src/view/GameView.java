@@ -66,6 +66,7 @@ public class GameView extends JFrame {
 		setLayout(new BorderLayout());
 		map=new Map();
 		endTurn.setPreferredSize(new Dimension(this.getWidth(),100));
+		endTurn.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
 		add(map,BorderLayout.CENTER);
 		
 		add(endTurn,BorderLayout.SOUTH);
@@ -75,9 +76,17 @@ public class GameView extends JFrame {
 		revalidate();
 		repaint();
 	}
-//	public static void main(String[] args) {
-//		new GameView();
-//	}
+	public static void main(String[] args) {
+		GameView g = new GameView(new Player("AFASF"), 50);
+		g.panels.add(new CityView(new City("cairo")));
+		g.draw();
+		JPanel jP = g.currPanel;
+		g.remove(jP);
+		g.panels.add(new Armyview());
+		g.draw();
+		g.revalidate();
+		g.repaint();
+	}
 	public void addListener(ActionListener f) {
 		endTurn.addActionListener(f);
 		map.getCairo().addActionListener(f);
