@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -19,13 +20,9 @@ public class MilitaryBuildingView extends JPanel{
 	private JLabel CurrentRecruit = new JLabel("Current Recruit");
 	
 	public MilitaryBuildingView() {
-		setLayout(null);
-		setPreferredSize(new Dimension(550,800));
-		
-		this.setBounds(1350,100, 500,800);
+		setLayout(new BorderLayout());
 		this.setBackground(Color.orange);
 		this.setVisible(true);
-		Upgrade.setBounds(350, 150, 200, 100);	
 		
 	}
 

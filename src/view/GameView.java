@@ -1,31 +1,72 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import engine.City;
+import engine.Player;
 
 public class GameView extends JFrame {
 	private Map map;
 	private ArrayList<JPanel> panels;
 	private ArrayList<Object> o;
-	
-	public GameView(){
+	private Player player;
+	private JPanel playerBar=new JPanel();
+	private JButton endTurn=new JButton("End Turn");
+	private JLabel playerName=new JLabel("Player's Name");
+	private JLabel gold=new JLabel("Gold");
+	private JLabel turnsLeft=new JLabel("Turns Left");
+	private int turncount;
+	public GameView(Player player,int turncount){
+		this.setTurncount(turncount);
+		this.setPlayer(player);
+		playerBar.setLayout(new FlowLayout());
+		
+		playerName.setText(playerName.getText()+":  "+player.getName()+"            ");
+		playerName.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+		
+		gold.setText(gold.getText()+":  "+player.getTreasury()+"$            ");
+		gold.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+		
+		turnsLeft.setText(turnsLeft.getText()+":  "+turncount+"            ");
+		turnsLeft.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+		
+		playerBar.add(playerName);
+		playerBar.add(gold);
+		playerBar.add(turnsLeft);
+		
 		o=new ArrayList<Object>();
 		panels=new ArrayList<JPanel>();
 		setTitle("The Conqueror");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setLayout(null);
+		setLayout(new BorderLayout());
 		map=new Map();
-		add(map);
+		endTurn.setPreferredSize(new Dimension(this.getWidth(),100));
+		add(map,BorderLayout.CENTER);
+		JPanel t=new JPanel();
+		t.setLayout(new GridLayout(3,3));
+		t.setPreferredSize(new Dimension(500,this.getHeight()-100));
+		for(int i=0;i<9;i++)t.add(new JButton());
+		add(t,BorderLayout.EAST);
+		add(endTurn,BorderLayout.SOUTH);
+		add(playerBar,BorderLayout.NORTH);
 		setVisible(true);
 		revalidate();
 		repaint();
 	}
-	public static void main(String[] args) {
-		new GameView();
-	}
+//	public static void main(String[] args) {
+//		new GameView();
+//	}
 	public Map getMap() {
 		return map;
 	}
@@ -43,5 +84,29 @@ public class GameView extends JFrame {
 	}
 	public void setO(ArrayList<Object> o) {
 		this.o = o;
+	}
+	public Player getPlayer() {
+		return player;
+	}
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	public JLabel getGold() {
+		return gold;
+	}
+	public void setGold(JLabel gold) {
+		this.gold = gold;
+	}
+	public JLabel getTurnsLeft() {
+		return turnsLeft;
+	}
+	public void setTurnsLeft(JLabel turnsLeft) {
+		this.turnsLeft = turnsLeft;
+	}
+	public int getTurncount() {
+		return turncount;
+	}
+	public void setTurncount(int turncount) {
+		this.turncount = turncount;
 	}
 }

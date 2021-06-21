@@ -10,28 +10,51 @@ public class StartWindow extends JFrame {
 	private JLabel playerNameLbl=new JLabel("Player Name");
 	private JLabel PlayerCityLbl=new JLabel("Player City");
 	private JComboBox cities=new JComboBox(new String[] {"Cairo","Sparta","Rome"});
-//	private JLabel jp;
+	private JPanel p=new JPanel();
+	public JPanel getP() {
+		return p;
+	}
+	public void setP(JPanel p) {
+		this.p = p;
+	}
 	public StartWindow() {
 		setTitle("The Conqueror");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(500,500));
-		setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setLayout(new GridLayout(5,5));
+		for (int i = 0; i < 25; i++) {
+			if(i==12) {
+				add(p);
+			}else {
+				JPanel x=new JPanel();
+				add(x);
+			}
+		}
 		playerNameLbl.setFont(new Font("Player Name",Font.PLAIN,20));
 		PlayerNameTxt.setFont(new Font("",Font.PLAIN,20));
 		cities.setFont(new Font("",Font.PLAIN,20));
 		PlayerCityLbl.setFont(new Font("",Font.PLAIN,20));
-		playerNameLbl.setBounds(670,300,150,30);
-		PlayerNameTxt.setBounds(875, 300, 200,30);
-		start.setBounds(875, 470, 200,40);
-		PlayerCityLbl.setBounds(670,350,150,30);
-		cities.setBounds(875, 350, 200,30);
+//		playerNameLbl.setBounds(670,300,150,30);
+//		PlayerNameTxt.setBounds(875, 300, 200,30);
+//		start.setBounds(875, 470, 200,40);
+//		PlayerCityLbl.setBounds(670,350,150,30);
+//		cities.setBounds(875, 350, 200,30);
 		start.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
-		setLayout(null);
-		add(playerNameLbl);
-		add(start);
-		add(cities);
-		add(PlayerNameTxt);
-		add(PlayerCityLbl);
+//		setLayout(null);
+		JPanel p1=new JPanel();
+		p.setLayout(new BorderLayout());
+		p.add(p1,BorderLayout.NORTH);
+		p1.setLayout(new GridLayout(0,2));
+		p1.add(playerNameLbl);
+		p1.add(PlayerNameTxt);
+		p1.add(PlayerCityLbl);
+		p1.add(cities);
+		p.add(start,BorderLayout.CENTER);
+		p.add(new JPanel(),BorderLayout.SOUTH);
+//		
+//		
+//		
 		//A fail try to add background photo
 //		jp = new JLabel();
 //		jp.setIcon(new ImageIcon("C://StartWindow.JPG"));

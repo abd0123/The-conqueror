@@ -1,8 +1,10 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 
 import javax.swing.*;
 
@@ -11,53 +13,82 @@ public class Armyview extends JPanel {
 	private JButton Units = new JButton("Units");
 	private JButton setTarget = new JButton("Set target");
 	private JButton relocateUnit = new JButton("Relocate unit");
-	private JLabel currentStatus = new JLabel("Army status");
-	private JLabel distanceToTarget= new JLabel("Distance to target");
-	private JLabel target= new JLabel("Target");
-	private JLabel currentLocation= new JLabel("Army location");
-	
-	public Armyview() {
-		setLayout(null);
-		setPreferredSize(new Dimension(550,800));
-		this.setBounds(1350,100, 500,800);
-		this.setBackground(Color.orange);
-		this.setVisible(true);
-		Units.setBounds(350, 150, 200, 100);
-		Units.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
-		this.add(Units);
-		setTarget.setBounds(700, 150, 200, 100);
-		setTarget.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
-		this.add(setTarget);
-		relocateUnit.setBounds(1050, 150, 200, 100);
-		relocateUnit.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
-		this.add(relocateUnit);
-		currentStatus.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
-		currentLocation.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
-		target.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
-		distanceToTarget.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
-		currentStatus.setBounds(750, 250, 150, 50);
-		currentLocation.setBounds(750, 350, 150, 50);
-		target.setBounds(750, 450, 150, 50);
-		distanceToTarget.setBounds(750, 550, 200, 50);
-		this.add(currentStatus);
-		this.add(currentLocation);
-		this.add(target);
-		this.add(distanceToTarget);
+	private JLabel currentStatus = new JLabel("Current status: ");
+	private JLabel distanceToTarget = new JLabel("Distance to target: ");
+	private JLabel target = new JLabel("Target: ");
+	private JLabel currentLocation = new JLabel("Current location: ");
+	private String[][] grid;
+	private JPanel panel = new JPanel();
+	private JButton back;
 
+	public Armyview() {
+		setLayout(new BorderLayout());
+		this.setBackground(Color.lightGray);
+		setMinimumSize(new Dimension(500, 500));
+
+		back = new JButton(new ImageIcon("back.jpg"));
+//		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		this.setVisible(true);
+		Units.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		setTarget.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		relocateUnit.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		currentStatus.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		currentLocation.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		target.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		distanceToTarget.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+
+		grid = new String[][] { { "Units", "Set target", "Relocate unit" }, { "Army status", "", "" },
+				{ "Distance to target", "", "", "" }, { "Army location", "", "" }, { "Target", "", "" },
+				{ "back", "", "" } };
+		panel.setLayout(new GridLayout(0, 3));
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (grid[i][j].equals("Units"))
+					panel.add(Units);
+				else if (grid[i][j].equals("Set target"))
+					panel.add(setTarget);
+				else if (grid[i][j].equals("Relocate unit"))
+					panel.add(relocateUnit);
+				else if (grid[i][j].equals("Army status"))
+					panel.add(currentStatus);
+				else if (grid[i][j].equals("Distance to target"))
+					panel.add(distanceToTarget);
+				else if (grid[i][j].equals("Army location"))
+					panel.add(currentLocation);
+				else if (grid[i][j].equals("back"))
+					panel.add(back);
+				else if (grid[i][j].equals("Target"))
+					panel.add(target);
+
+				else {
+					JPanel x = new JPanel();
+					panel.add(x);
+				}
+			}
+		}
+		JLabel title = new JLabel("Army ");
+		title.setFont(new Font("Forte", Font.ROMAN_BASELINE, 25));
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		add(title, BorderLayout.NORTH);
+		add(panel, BorderLayout.CENTER);
 		setBorder(BorderFactory.createLineBorder(Color.black));
+
 	}
 
 	public static void main(String[] args) {
-		
-		JFrame x =new JFrame();
+
+		JFrame x = new JFrame();
 		x.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Armyview av = new Armyview();
+		x.setLayout(null);
+		av.setBounds(900, 100, 600, 700);
+		av.setBackground(Color.orange);
+		x.add(av);
 		x.setVisible(true);
 		x.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		Armyview a =new Armyview();
-		x.add(a);
+		x.revalidate();
+		x.repaint();
 
-
-		
 	}
 
 }
