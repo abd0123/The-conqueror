@@ -91,6 +91,7 @@ public class Controller implements ActionListener {
 		drawPlayerBar();
 		JButton endTurn=new JButton("End Turn");
 		endTurn.setPreferredSize(new Dimension(view.getWidth(),70));
+		endTurn.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
 		view.add(endTurn,BorderLayout.SOUTH);
 		view.add(map,BorderLayout.CENTER);
 		endTurn.addActionListener(this);
@@ -181,10 +182,11 @@ public class Controller implements ActionListener {
 		
 		
 		//------------------
-		back = new JButton("Back");
+		back = new JButton("");
+		back.setText("Return to map");
 		back.setFont(new Font("Forte", Font.BOLD, 14));
-		back.setIcon(new ImageIcon("images/back.png"));
-		back.setBounds(10,10,50,50);
+//		back.setIcon(new ImageIcon("images/back.png"));
+		back.setBounds(10,10,200,50);
 		//------------------
 		DefendingArmy =new JButton("Defending Army");
 		DefendingArmy.setFont(new Font("Forte", Font.BOLD, 22));
@@ -239,10 +241,10 @@ public class Controller implements ActionListener {
 		army.setBackground(Color.lightGray);
 		army.setMinimumSize(new Dimension(500, 500));
 		army.setPreferredSize(new Dimension(550,800));
-		back = new JButton(new ImageIcon("back.jpg"));
-		back.setText("Back");
+		back = new JButton();
+		back.setText("Return to map");
 		back.addActionListener(this);
-//		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		army.setVisible(true);
 		Units.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		setTarget.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
@@ -298,11 +300,13 @@ public class Controller implements ActionListener {
 		if(s!=null) {
 			if(s.equals("Start")) {
 				if(start.getPlayerNameTxt().getText().equals("")) {
+					playSound("sounds/Warning.wav");
 					JOptionPane.showMessageDialog(start, "write Player Name","Alert",JOptionPane.INFORMATION_MESSAGE);
+					
 				}else {
 					try {
 						g=new Game(start.getPlayerNameTxt().getText(),start.getCities().getSelectedItem().toString());
-//						playSound("sounds/Avengers.wav");
+						playSound("sounds/Avengers.wav");
 					} catch (IOException e1) {
 					}
 					System.out.println("asa");
@@ -337,7 +341,7 @@ public class Controller implements ActionListener {
 				for(City c:g.getAvailableCities())if(c.getName().equals("Sparta"))Sparta = c;
 				drawCity(Sparta);
 				selectedCity=Sparta;
-			}else if(s.equals("Back")) {
+			}else if(s.equals("Return to map")) {
 				drawMap();
 			}else if(s.equals("Defending Army")) {
 				drawArmy(selectedCity.getDefendingArmy());
