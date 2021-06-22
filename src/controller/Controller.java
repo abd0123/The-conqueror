@@ -1,5 +1,6 @@
 package controller;
 
+
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
@@ -10,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -20,10 +22,12 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.xml.soap.AttachmentPart;
 
 import buildings.ArcheryRange;
 import buildings.Barracks;
@@ -41,7 +45,8 @@ import view.*;
 
 public class Controller implements ActionListener {
 	private StartWindow start;
-	private Gafarghame g;
+	private GameView view;
+	private Game g;
 	private Map map;
 	private City selectedCity;
 	private JComboBox Buildings;
@@ -226,6 +231,8 @@ public class Controller implements ActionListener {
 	
 	public void drawArmy(Army a) {
 		drawPlayerBar();
+		JButton autoReslove= new JButton("Auto Resolve");
+		JButton manualAttack = new JButton("Manual Attack");
 		 JButton openUnit = new JButton("Open Unit");
 		 JButton setTarget = new JButton("Set target");
 		 JButton relocateUnit = new JButton("Relocate unit");
@@ -239,6 +246,8 @@ public class Controller implements ActionListener {
 		 openUnit.addActionListener(this);
 		 setTarget.addActionListener(this);
 		 relocateUnit.addActionListener(this);
+		 autoReslove.addActionListener(this);
+		 manualAttack.addActionListener(this);
 		 
 		 
 		 String[]openun=new String[a.getUnits().size()];
@@ -279,10 +288,14 @@ public class Controller implements ActionListener {
 		currentLocation.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		target.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		distanceToTarget.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		autoReslove.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		manualAttack.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		
+		
 
 		grid = new String[][] { { "Units", "Set target", "Relocate unit" }, { "Army status", "", "" },
 				{ "Distance to target", "", "", "" }, { "Army location", "", "" }, { "Target", "", "" },
-				{ "back", "", "" } };
+				{ "back", "autoResolve", "manualAttack" } };
 		panel.setLayout(new GridLayout(0, 3));
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -316,6 +329,10 @@ public class Controller implements ActionListener {
 					panel.add(back);
 				else if (grid[i][j].equals("Target"))
 					panel.add(target);
+				else if(grid[i][j].equals("autoResolve"))
+					panel.add(autoReslove);
+				else if(grid[i][j].equals("manualAttack"))
+					panel.add(manualAttack);
 
 				else {
 					JPanel x = new JPanel();
@@ -382,6 +399,95 @@ public class Controller implements ActionListener {
 		view.revalidate();
 		view.repaint();
 	}
+	public void drawBattleView(Army ar1,Army ar2){
+	 drawPlayerBar();
+	 JPanel army1Panel;
+	 JPanel army2Panel;
+	 JPanel logPanel;
+	 JPanel infoPanel;
+	 JPanel attackPanel;
+	 ArrayList<Unit> units1;
+	 ArrayList<Unit> units2;	
+	 JLabel level;
+	 JLabel soldierCount;
+     JButton endTurn=new JButton("End Turn");
+     JButton attack=new JButton("Attack");
+     endTurn.addActionListener(this);
+     attack.addActionListener(this);
+	 units1 = ar1.getUnits(); units2=ar2.getUnits();
+	 endTurn.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+	 attack.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		army1Panel =new JPanel();
+		army1Panel.setBackground(Color.red);
+		army1Panel.setPreferredSize(new Dimension(300,500));
+		army1Panel.setLayout(new FlowLayout());
+		view.add(BorderLayout.WEST,army1Panel);
+		view.revalidate();
+		view.repaint();
+		army2Panel =new JPanel();
+		army2Panel.setPreferredSize(new Dimension(300,200));
+		army2Panel.setLayout(new FlowLayout());
+		view.add(BorderLayout.EAST,army2Panel);
+		view.revalidate();
+		view.repaint();
+		JPanel midPanel = new JPanel();
+		midPanel.setLayout(new BorderLayout());
+		midPanel.setPreferredSize(new Dimension(500,view.getHeight()));
+		view .add(midPanel);
+		view.revalidate();
+		view.repaint();
+		
+		
+		logPanel =new JPanel();
+		logPanel.setBackground(Color.pink);
+		logPanel.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
+		logPanel.setLayout(new GridLayout());
+		midPanel.add(logPanel);
+		
+		attackPanel =new JPanel();
+		attackPanel.setBackground(Color.green);
+		attackPanel.setPreferredSize(new Dimension(midPanel.getWidth(),60));
+		attackPanel.setLayout(new GridLayout(1,2));
+		midPanel.add(attackPanel,BorderLayout.SOUTH);
+				
+		for(int i=0;i<units1.size();i++) {
+			Unit u = units1.get(i);
+			JButton b;
+			if(u instanceof Archer)
+			    b =new JButton("Archer ");
+			
+			else if(u instanceof Cavalry)
+			    b =new JButton("Cavalry");
+			else
+			    b =new JButton("Infantry");
+			b.setPreferredSize(new Dimension(95,50));
+			b.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15));
+			b.addActionListener(this);
+			army1Panel.add(b);
+		}
+		for(int i=0;i<units2.size();i++) {
+			Unit u = units2.get(i);
+			JButton b;
+			if(u instanceof Archer)
+			    b =new JButton("Archer");
+			else if(u instanceof Cavalry)
+			    b =new JButton("Cavalry");
+			else
+			    b =new JButton("Infantry");
+			b.setPreferredSize(new Dimension(95,50));
+			b.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15));
+			b.addActionListener(this);
+			army2Panel.add(b);
+		}
+		attack.setPreferredSize(new Dimension(460,50));
+		endTurn.setPreferredSize(new Dimension(460,50));
+		attackPanel.add(attack);
+		attackPanel.add(endTurn);		
+		view.revalidate();
+		view.repaint();
+		
+		
+	}
 	
 	public void actionPerformed(ActionEvent e) {
 		String s=e.getActionCommand();
@@ -395,7 +501,7 @@ public class Controller implements ActionListener {
 				}else {
 					try {
 						g=new Game(start.getPlayerNameTxt().getText(),start.getCities().getSelectedItem().toString());
-				playSound("sounds/Avengers.wav");
+			//	playSound("sounds/Avengers.wav");
 					} catch (IOException e1) {
 					}
 					this.view=new GameView();
@@ -470,6 +576,11 @@ public class Controller implements ActionListener {
 				playSound("sounds/Mouse.wav");
 				drawUnit(selectedArmy.getUnits().get(openUnits.getSelectedIndex()));
 			}
+			else if (s.equals("Manual Attack")) {
+				playSound("sounds/Mouse.wav");
+				drawBattleView(selectedArmy, new Army("gds"));
+			}
+		
 		}
 
 		}
