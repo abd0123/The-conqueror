@@ -2,7 +2,6 @@ package controller;
 
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -19,16 +18,14 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.xml.soap.AttachmentPart;
-
 import buildings.ArcheryRange;
 import buildings.Barracks;
 import buildings.Building;
@@ -36,6 +33,7 @@ import buildings.Farm;
 import buildings.Market;
 import buildings.Stable;
 import engine.*;
+import exceptions.FriendlyFireException;
 import units.Archer;
 import units.Army;
 import units.Cavalry;
@@ -55,6 +53,13 @@ public class Controller implements ActionListener {
 	private JComboBox openUnits;
 	private JComboBox targets;
 	private Army selectedArmy;
+	private Army attackedArmy;
+	private ArrayList<JButton> AvailableUnits;
+	private ArrayList<JButton> targetUnits;
+	private JButton selectedButton1;
+	private JButton selectedButton2;
+	private JTextArea textArea;
+	private String event;
 	public Controller() {
 		start=new StartWindow();
 		start.getStart().addActionListener(this);
@@ -64,6 +69,9 @@ public class Controller implements ActionListener {
 		map.getSparta().addActionListener(this);
 		map.getRome().addActionListener(this);
 		map.getAr().addActionListener(this);
+		AvailableUnits = new ArrayList<>();
+		targetUnits = new ArrayList<>();
+		event = "";
 	}
 	
 	
@@ -418,15 +426,18 @@ public class Controller implements ActionListener {
 	 endTurn.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 	 attack.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		army1Panel =new JPanel();
-		army1Panel.setBackground(Color.red);
+		army1Panel.setBackground(Color.green);
 		army1Panel.setPreferredSize(new Dimension(300,500));
 		army1Panel.setLayout(new FlowLayout());
+		army1Panel.setBorder(BorderFactory.createLineBorder(Color.black));
 		view.add(BorderLayout.WEST,army1Panel);
 		view.revalidate();
 		view.repaint();
 		army2Panel =new JPanel();
 		army2Panel.setPreferredSize(new Dimension(300,200));
 		army2Panel.setLayout(new FlowLayout());
+		army2Panel.setBackground(Color.red);
+		army2Panel.setBorder(BorderFactory.createLineBorder(Color.black));
 		view.add(BorderLayout.EAST,army2Panel);
 		view.revalidate();
 		view.repaint();
@@ -439,16 +450,29 @@ public class Controller implements ActionListener {
 		
 		
 		logPanel =new JPanel();
-		logPanel.setBackground(Color.pink);
 		logPanel.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
-		logPanel.setLayout(new GridLayout());
+		textArea=new JTextArea();
+		textArea.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60-400));
+		textArea.setBackground(Color.black);
+		event += "Battle Starts:\n";
+		event += "'''''\n";
+		textArea.setText(event);
+		textArea.setForeground(Color.white);
+		textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
+		textArea.setBounds(0,0,midPanel.getWidth(),midPanel.getHeight()-500);
+		logPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		logPanel.setLayout(null);
+		logPanel.add(textArea);
 		midPanel.add(logPanel);
+		
+		
 		
 		attackPanel =new JPanel();
 		attackPanel.setBackground(Color.green);
 		attackPanel.setPreferredSize(new Dimension(midPanel.getWidth(),60));
 		attackPanel.setLayout(new GridLayout(1,2));
 		midPanel.add(attackPanel,BorderLayout.SOUTH);
+		attackPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 				
 		for(int i=0;i<units1.size();i++) {
 			Unit u = units1.get(i);
@@ -460,9 +484,10 @@ public class Controller implements ActionListener {
 			    b =new JButton("Cavalry");
 			else
 			    b =new JButton("Infantry");
-			b.setPreferredSize(new Dimension(95,50));
+			b.setPreferredSize(new Dimension(90,50));
 			b.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15));
 			b.addActionListener(this);
+			AvailableUnits.add(b);
 			army1Panel.add(b);
 		}
 		for(int i=0;i<units2.size();i++) {
@@ -474,8 +499,9 @@ public class Controller implements ActionListener {
 			    b =new JButton("Cavalry");
 			else
 			    b =new JButton("Infantry");
-			b.setPreferredSize(new Dimension(95,50));
+			b.setPreferredSize(new Dimension(90,50));
 			b.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15));
+			targetUnits.add(b);
 			b.addActionListener(this);
 			army2Panel.add(b);
 		}
@@ -578,8 +604,42 @@ public class Controller implements ActionListener {
 			}
 			else if (s.equals("Manual Attack")) {
 				playSound("sounds/Mouse.wav");
-				drawBattleView(selectedArmy, new Army("gds"));
+			    attackedArmy = new Army("Masrt");
+			    Archer a = new Archer(3, 70, 0.5, 0.6, 0.7);
+			    attackedArmy.getUnits().add(a);
+				drawBattleView(selectedArmy, attackedArmy);
 			}
+			else {
+				JButton b = (JButton) e.getSource();
+				if (selectedArmy.getUnits().contains(attackedArmy.getUnits().get(0))) {
+					JOptionPane.showMessageDialog(view, "Friendly Unit","Alert",JOptionPane.INFORMATION_MESSAGE);
+					
+				}
+				if (b.getActionCommand().equals("Attack")) {
+					int r = AvailableUnits.indexOf(selectedButton1);
+					Unit u =selectedArmy.getUnits().get(r);
+					String w;
+					 if (u instanceof Archer)w="Archer";
+					 else if (u instanceof Cavalry)w= "Cavalry";
+					 else w= "Infantry";
+					Unit g =attackedArmy.getUnits().get(0);
+						String t;
+						 if (g instanceof Archer)t="Archer";
+						 else if (g instanceof Cavalry)t= "Cavalry";
+						 else t= "Infantry";
+					event += "-" + w +" "+"attacked"+"  "+ t + "\n" ;
+					textArea.setText(event);
+					textArea.setForeground(Color.white);
+					textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
+					selectedButton1 = null;
+				}
+				else {
+					if (!b.getActionCommand().equals("Attack"))
+					selectedButton1=b;
+				}
+				
+			}
+		
 		
 		}
 
