@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -60,6 +62,13 @@ public class Controller implements ActionListener {
 	private JButton selectedButton2;
 	private JTextArea textArea;
 	private String event;
+	private JLabel attackerLeveL ;
+	private JLabel attackedLeveL;
+	private JLabel attackersoldier;
+	private JLabel attackedsoldier;
+	private JLabel image1;
+	private JLabel image2;
+	
 	public Controller() {
 		start=new StartWindow();
 		start.getStart().addActionListener(this);
@@ -69,9 +78,15 @@ public class Controller implements ActionListener {
 		map.getSparta().addActionListener(this);
 		map.getRome().addActionListener(this);
 		map.getAr().addActionListener(this);
+		attackedLeveL = new JLabel();
+		attackerLeveL = new JLabel();
+		attackedsoldier = new JLabel();
+		attackersoldier = new JLabel();
 		AvailableUnits = new ArrayList<>();
 		targetUnits = new ArrayList<>();
 		event = "";
+		image1 = new JLabel();
+		image2 = new JLabel();
 	}
 	
 	
@@ -446,20 +461,38 @@ public class Controller implements ActionListener {
 		midPanel.setPreferredSize(new Dimension(500,view.getHeight()));
 		view .add(midPanel);
 		view.revalidate();
-		view.repaint();
-		
-		
+		view.repaint();		
 		logPanel =new JPanel();
 		logPanel.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
+		JPanel leftlog = new JPanel();
+		JPanel rightlog = new JPanel();
+		leftlog.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
+		leftlog.setBounds(0,0,midPanel.getWidth()/3,midPanel.getHeight());
+		leftlog.setLayout(null);
+		leftlog.setBorder(BorderFactory.createLineBorder(Color.black));
+		rightlog.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
+		rightlog.setBounds(midPanel.getWidth()*2/3,0,midPanel.getWidth()/3,midPanel.getHeight());
+		rightlog.setLayout(null);
+		rightlog.setBorder(BorderFactory.createLineBorder(Color.black));
+		logPanel.add(leftlog);
+		logPanel.add(rightlog);
+		image1.setPreferredSize(new Dimension(500,500));
+		image1.setBounds(20,300, 400, 400);
+		leftlog.add(image1);
+		image2.setPreferredSize(new Dimension(500,500));
+		image2.setBounds(20,300, 400, 400);
+		rightlog.add(image2);
+		
+		
 		textArea=new JTextArea();
-		textArea.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60-400));
+		textArea.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
 		textArea.setBackground(Color.black);
 		event += "Battle Starts:\n";
 		event += "'''''\n";
 		textArea.setText(event);
 		textArea.setForeground(Color.white);
 		textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
-		textArea.setBounds(0,0,midPanel.getWidth(),midPanel.getHeight()-500);
+		textArea.setBounds(midPanel.getWidth()/3,0,midPanel.getWidth()/3,midPanel.getHeight());
 		logPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		logPanel.setLayout(null);
 		logPanel.add(textArea);
@@ -478,7 +511,7 @@ public class Controller implements ActionListener {
 			Unit u = units1.get(i);
 			JButton b;
 			if(u instanceof Archer)
-			    b =new JButton("Archer ");
+			    b =new JButton("Archer");
 			
 			else if(u instanceof Cavalry)
 			    b =new JButton("Cavalry");
@@ -505,6 +538,14 @@ public class Controller implements ActionListener {
 			b.addActionListener(this);
 			army2Panel.add(b);
 		}
+		attackedLeveL.setBounds(20,20,200,50);
+		attackedsoldier.setBounds(20,90,200,50);
+		attackerLeveL.setBounds(20,20,200,50);
+		attackersoldier.setBounds(20,90,200,50);
+		leftlog.add(attackerLeveL);
+		leftlog.add(attackersoldier);
+        rightlog.add(attackedLeveL);
+		rightlog.add(attackedsoldier);
 		attack.setPreferredSize(new Dimension(460,50));
 		endTurn.setPreferredSize(new Dimension(460,50));
 		attackPanel.add(attack);
@@ -604,38 +645,81 @@ public class Controller implements ActionListener {
 			}
 			else if (s.equals("Manual Attack")) {
 				playSound("sounds/Mouse.wav");
-			    attackedArmy = new Army("Masrt");
-			    Archer a = new Archer(3, 70, 0.5, 0.6, 0.7);
-			    attackedArmy.getUnits().add(a);
+			   attackedArmy= g.getAvailableCities().get(1).getDefendingArmy();
 				drawBattleView(selectedArmy, attackedArmy);
 			}
 			else {
 				JButton b = (JButton) e.getSource();
-				if (selectedArmy.getUnits().contains(attackedArmy.getUnits().get(0))) {
-					JOptionPane.showMessageDialog(view, "Friendly Unit","Alert",JOptionPane.INFORMATION_MESSAGE);
-					
-				}
 				if (b.getActionCommand().equals("Attack")) {
-					int r = AvailableUnits.indexOf(selectedButton1);
-					Unit u =selectedArmy.getUnits().get(r);
+					playSound("sounds/Sword.wav");
+					if (selectedButton1==null) {
+						JOptionPane.showMessageDialog(view, "please select attacking unit","Alert",JOptionPane.INFORMATION_MESSAGE);
+						
+					}
+					if (selectedButton2==null) {
+						JOptionPane.showMessageDialog(view, "please select attacked unit","Alert",JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+					
+					int index1 = AvailableUnits.indexOf(selectedButton1);
+					int index2 = targetUnits.indexOf(selectedButton2);  
+					Unit u =selectedArmy.getUnits().get(index1);
 					String w;
 					 if (u instanceof Archer)w="Archer";
 					 else if (u instanceof Cavalry)w= "Cavalry";
 					 else w= "Infantry";
-					Unit g =attackedArmy.getUnits().get(0);
+					Unit g =attackedArmy.getUnits().get(index2);
 						String t;
 						 if (g instanceof Archer)t="Archer";
 						 else if (g instanceof Cavalry)t= "Cavalry";
 						 else t= "Infantry";
+					try {
+						u.attack(g);
+					} catch (FriendlyFireException e1) {
+						e1.printStackTrace();
+					}	 
 					event += "-" + w +" "+"attacked"+"  "+ t + "\n" ;
+					event += "Remaining soldiers : "+ " "+ u.getCurrentSoldierCount()+"\n";
 					textArea.setText(event);
 					textArea.setForeground(Color.white);
 					textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
 					selectedButton1 = null;
+					selectedButton2 = null;
+					
+					}
 				}
 				else {
-					if (!b.getActionCommand().equals("Attack"))
+					if (!b.getActionCommand().equals("Attack") && AvailableUnits.contains(b)) {
+						
 					selectedButton1=b;
+					attackerLeveL.setText("Level :"+"  " +selectedArmy.getUnits().get(AvailableUnits.indexOf(b)).getLevel()+"\n");
+					//-----
+					if (b.getActionCommand().equals("Archer")) image1.setIcon(new ImageIcon("images/Archer.jpg"));
+					else if (b.getActionCommand().equals("Cavalry")) {
+						image1.setIcon(new ImageIcon("images/Cavalry.jpg"));
+						
+					}
+					else image1.setIcon(new ImageIcon("images/Infantry.jpg"));
+					//-----------
+					attackersoldier.setText("Soldier count :"+"  " +selectedArmy.getUnits().get(AvailableUnits.indexOf(b)).getCurrentSoldierCount()+"\n");
+					attackerLeveL.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20));
+					attackersoldier.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20));
+					
+					
+					}
+					 if  (!b.getActionCommand().equals("Attack") && targetUnits.contains(b)) {
+					selectedButton2 = b;
+					//-----
+					if (b.getActionCommand().equals("Archer")) image2.setIcon(new ImageIcon("images/Archer.jpg"));
+					else if (b.getActionCommand().equals("Cavalry")) {
+						image1.setIcon(new ImageIcon("images/Cavalry.jpg"));
+					}
+					else image2.setIcon(new ImageIcon("images/Infantry.jpg"));
+					//-----------
+					attackedLeveL.setText("Level :"+"  " +attackedArmy.getUnits().get(targetUnits.indexOf(b)).getLevel()+"\n");
+					attackedsoldier.setText("Soldier count :"+"  " +attackedArmy.getUnits().get(targetUnits.indexOf(b)).getCurrentSoldierCount()+"\n");
+					attackedLeveL.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20));
+					attackedsoldier.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20));}
 				}
 				
 			}
