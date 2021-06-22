@@ -33,12 +33,15 @@ import javax.swing.SwingConstants;
 import buildings.ArcheryRange;
 import buildings.Barracks;
 import buildings.Building;
+import buildings.EconomicBuilding;
 import buildings.Farm;
 import buildings.Market;
 import buildings.MilitaryBuilding;
 import buildings.Stable;
 import engine.*;
+import exceptions.BuildingInCoolDownException;
 import exceptions.FriendlyFireException;
+import exceptions.MaxLevelException;
 import exceptions.NotEnoughGoldException;
 import units.Archer;
 import units.Army;
@@ -72,6 +75,7 @@ public class Controller implements ActionListener {
 	private JLabel attackedsoldier;
 	private JLabel image1;
 	private JLabel image2;
+	private Building selectedBuilding;
 	
 	public Controller() {
 		start=new StartWindow();
@@ -574,7 +578,7 @@ public class Controller implements ActionListener {
 	
 	public void drawMilitaryBuilding(MilitaryBuilding b ) {
 		drawPlayerBar();
-		
+		JButton back=new JButton("Return to map");
 		JButton Upgrade = new JButton("Upgrade");
 		JButton Recruit = new JButton("Recruit");
 		JLabel Cost = new JLabel("Cost:  "+b.getCost());
@@ -586,6 +590,10 @@ public class Controller implements ActionListener {
 		JPanel panel;
 		String[][] grid;
 		
+		back.addActionListener(this);
+		Upgrade.addActionListener(this);
+		Recruit.addActionListener(this);
+		
 		JPanel MBuilding =new JPanel();
 		
 		MBuilding.setLayout(new BorderLayout());
@@ -593,6 +601,7 @@ public class Controller implements ActionListener {
 		MBuilding.setMinimumSize(new Dimension(500, 500));
 		MBuilding.setPreferredSize(new Dimension(550,800));
 		
+		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		Upgrade.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		UpgradeCost.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		Cost.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
@@ -606,8 +615,8 @@ public class Controller implements ActionListener {
 //		Recruit.setPreferredSize(new Dimension(100,30));
 
 		
-		grid=new String[][] {{"Cost","","",""},{"UpgradeCost","","","Upgrade"},{"Level","","",""},{"Incooldown","","",""},
-			{"RecruitmentCost","","","Recruit"},{"CurrentRecruit","","",""}};
+		grid=new String[][] {{"Cost","","","Upgrade"},{"UpgradeCost","","",""},{"Level","","",""},{"Incooldown","","","Recruit"},
+			{"RecruitmentCost","","",""},{"CurrentRecruit","","","Return to map"}};
 		
 		panel=new JPanel(new GridLayout(6,4));
 		panel.setPreferredSize(new Dimension(1050,700));
@@ -629,6 +638,8 @@ public class Controller implements ActionListener {
 					panel.add(RecruitmentCost);
 				else if(grid[i][j].equals("CurrentRecruit"))
 					panel.add(CurrentRecruit);
+				else if(grid[i][j].equals("Return to map"))
+					panel.add(back);
 				else {
 					JPanel x =new JPanel();
 					panel.add(x);
@@ -652,6 +663,78 @@ public class Controller implements ActionListener {
 		
 	}
 	
+	public void drawEconomicBuilding(EconomicBuilding b) {
+		drawPlayerBar();
+		
+		JButton back=new JButton("Return to map");
+		JButton Upgrade = new JButton("Upgrade");
+		JButton harvest = new JButton("Harvest");
+		JLabel Cost = new JLabel("Cost:  "+b.getCost());
+		JLabel UpgradeCost = new JLabel("Upgrade cost:  "+b.getUpgradeCost());
+		JLabel Level = new JLabel("Level:  "+b.getLevel());
+		JLabel Incooldown = new JLabel("In cooldown:  "+b.isCoolDown());
+		JLabel title=new JLabel();
+		String[][] grid;
+		
+		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		Upgrade.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		harvest.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		Cost.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		UpgradeCost.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		Level.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		Incooldown.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		title.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		
+		back.addActionListener(this);
+		Upgrade.addActionListener(this);
+		harvest.addActionListener(this);
+		
+		if(b instanceof Market)title.setText("Market");
+		else title.setText("Farm");
+		
+		
+		JPanel Building=new JPanel();
+		Building.setLayout(new BorderLayout());
+		
+		Building.add(title,BorderLayout.NORTH);
+		
+		JPanel panel=new JPanel();
+		panel.setLayout(new GridLayout(6,3));
+		panel.setPreferredSize(new Dimension(950,700));
+		
+		grid=new String[][] {{"Cost","","Upgrade"},{"UpgradeCost","",""},{"Level","",""},{"Incooldown","",""},
+			{"harvest","","Return to map"},{"","",""}};
+			
+			for(int i=0;i<grid.length;i++) {
+				for(int j=0;j<3;j++) {
+					if(grid[i][j].equals("Cost"))
+						panel.add(Cost);
+					else if(grid[i][j].equals("Upgrade"))
+						panel.add(Upgrade);
+					else if(grid[i][j].equals("harvest"))
+						panel.add(harvest);
+					else if(grid[i][j].equals("UpgradeCost"))
+						panel.add(UpgradeCost);
+					else if(grid[i][j].equals("Level"))
+						panel.add(Level);
+					else if(grid[i][j].equals("Incooldown"))
+						panel.add(Incooldown);
+					else if(grid[i][j].equals("Return to map"))
+						panel.add(back);
+					else {
+						JPanel x =new JPanel();
+						panel.add(x);
+					}
+				}
+			}
+			Building.add(panel,BorderLayout.CENTER);
+			view.add(Building,BorderLayout.WEST);
+			
+			view.revalidate();
+			view.repaint();
+		
+		
+	}
 	
 	public void actionPerformed(ActionEvent e) {
 		String s=e.getActionCommand();
@@ -725,69 +808,72 @@ public class Controller implements ActionListener {
 					JOptionPane.showMessageDialog(view, "Not controlled city","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}else if(s.equals("Return to map")) {
+				
 				playSound("sounds/Mouse.wav");
 				drawMap();
 			}else if(s.equals("Defending Army")) {
+				
 				playSound("sounds/Mouse.wav");
 				selectedArmy=selectedCity.getDefendingArmy();
 				drawArmy(selectedCity.getDefendingArmy());
 			}else if(s.equals("Army")) {
+				
 				playSound("sounds/Mouse.wav");
 				Army a=new Army("onRoad");
 				a.getUnits().add(new Archer(1,60,0.3,0.4,0.5));
 				drawArmy(a);
 			}else if(s.equals("Open Unit")) {
+				
 				playSound("sounds/Mouse.wav");
 				drawUnit(selectedArmy.getUnits().get(openUnits.getSelectedIndex()));
-			}
-			else if (s.equals("Build")) {	int i=Buildings.getSelectedIndex();
-			int j = buildcost.getSelectedIndex();
-			if (j>-1) {
-				if (buildcost.getSelectedItem().toString().charAt(0)=='M')
-					try {
-						g.getPlayer().build("Market", selectedCity.getName());
+			}else if (s.equals("Build")) {	
+				int i=Buildings.getSelectedIndex();
+				int j = buildcost.getSelectedIndex();
+				if (j>-1) {
+					if (buildcost.getSelectedItem().toString().charAt(0)=='M')
+						try {
+							g.getPlayer().build("Market", selectedCity.getName());
+							drawCity(selectedCity);
+						} catch (NotEnoughGoldException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+						}
+					else if (buildcost.getSelectedItem().toString().charAt(0)=='F')
+						try {
+							g.getPlayer().build("Farm", selectedCity.getName());
+							drawCity(selectedCity);
+						} catch (NotEnoughGoldException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+						}
+					
+					else if (buildcost.getSelectedItem().toString().charAt(0)=='A')
+						try {
+							g.getPlayer().build("archeryrange", selectedCity.getName());
+							drawCity(selectedCity);
+						} catch (NotEnoughGoldException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+						}
+					else if (buildcost.getSelectedItem().toString().charAt(0)=='B')
+						try {
+							g.getPlayer().build("barracks", selectedCity.getName());
+							drawCity(selectedCity);
+						} catch (NotEnoughGoldException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+						}
+					else if (buildcost.getSelectedItem().toString().charAt(0)=='S')
+						try {
+						g.getPlayer().build("stable", selectedCity.getName());
 						drawCity(selectedCity);
-					} catch (NotEnoughGoldException e1) {
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
-					}
-				else if (buildcost.getSelectedItem().toString().charAt(0)=='F')
-					try {
-						g.getPlayer().build("Farm", selectedCity.getName());
-						drawCity(selectedCity);
-					} catch (NotEnoughGoldException e1) {
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
-					}
-				
-			else if (buildcost.getSelectedItem().toString().charAt(0)=='A')
-				try {
-					g.getPlayer().build("archeryrange", selectedCity.getName());
-					drawCity(selectedCity);
-				} catch (NotEnoughGoldException e1) {
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+						} catch (NotEnoughGoldException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+						}
+				}else {
+					JOptionPane.showMessageDialog(view, "There is no Buildings","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
-			else if (buildcost.getSelectedItem().toString().charAt(0)=='B')
-				try {
-					g.getPlayer().build("barracks", selectedCity.getName());
-					drawCity(selectedCity);
-				} catch (NotEnoughGoldException e1) {
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
-				}
-			else if (buildcost.getSelectedItem().toString().charAt(0)=='S')
-				try {
-					g.getPlayer().build("stable", selectedCity.getName());
-					drawCity(selectedCity);
-				} catch (NotEnoughGoldException e1) {
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
-				}
-			}
-			else {
-				JOptionPane.showMessageDialog(view, "There is no Buildings","Alert",JOptionPane.INFORMATION_MESSAGE);
-			}
 				
 			}
 			else if (s.equals("Manual Attack")) {
@@ -796,11 +882,35 @@ public class Controller implements ActionListener {
 				drawBattleView(selectedArmy, attackedArmy);
 			}else if (s.equals("open Building")){
 				int i=Buildings.getSelectedIndex();
-				if (Buildings.getSelectedIndex()>-1)
-				drawMilitaryBuilding(selectedCity.getMilitaryBuildings().get(i));
-				else {
+				if (Buildings.getSelectedIndex()>-1) {
+					
+					if(i<selectedCity.getMilitaryBuildings().size()) {
+						drawMilitaryBuilding(selectedCity.getMilitaryBuildings().get(i));
+						selectedBuilding=selectedCity.getMilitaryBuildings().get(i);
+					}
+					else {
+						i=i-selectedCity.getMilitaryBuildings().size();
+						drawEconomicBuilding(selectedCity.getEconomicalBuildings().get(i));	
+						selectedBuilding=selectedCity.getEconomicalBuildings().get(i);
+					}
+				}else {
 					JOptionPane.showMessageDialog(view, "There is no Buildings","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
+			}else if(s.equals("Upgrade")){
+				try {
+					g.getPlayer().upgradeBuilding(selectedBuilding);
+					if(selectedBuilding instanceof MilitaryBuilding) {
+						drawMilitaryBuilding((MilitaryBuilding)selectedBuilding);
+					}else {
+						drawEconomicBuilding((EconomicBuilding)selectedBuilding);
+					}
+				} catch (NotEnoughGoldException | BuildingInCoolDownException | MaxLevelException e1) {
+					JOptionPane.showMessageDialog(view, e1.getMessage(),"Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			}else if(s.equals("End Turn")){
+				g.endTurn();
+				drawMap();
 			}else {
 				JButton b = (JButton) e.getSource();
 				if (b.getActionCommand().equals("Attack")) {

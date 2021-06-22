@@ -160,7 +160,7 @@ public class Player {
 
 	public void upgradeBuilding(Building b) throws NotEnoughGoldException,BuildingInCoolDownException, MaxLevelException{
 		if(treasury-b.getUpgradeCost()<0) {
-			throw new NotEnoughGoldException();
+			throw new NotEnoughGoldException("Not Enough Gold");
 		}
 		int x=b.getUpgradeCost();
 		b.upgrade();

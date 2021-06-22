@@ -44,9 +44,9 @@ abstract public class Building {
 	
 	 public void upgrade() throws BuildingInCoolDownException, MaxLevelException{
 		 if(coolDown) {
-			 throw new BuildingInCoolDownException();
+			 throw new BuildingInCoolDownException("Building in CoolDown for the rest of this turn");
 		 }else if(level==3) {
-			 throw new MaxLevelException();
+			 throw new MaxLevelException("Max Level");
 		 }else {
 			 level++;
 			 coolDown=true;
