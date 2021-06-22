@@ -581,7 +581,7 @@ public class Controller implements ActionListener {
 				}else {
 					try {
 						g=new Game(start.getPlayerNameTxt().getText(),start.getCities().getSelectedItem().toString());
-			//	playSound("sounds/Avengers.wav");
+				playSound("sounds/Avengers.wav");
 					} catch (IOException e1) {
 					}
 					this.view=new GameView();
