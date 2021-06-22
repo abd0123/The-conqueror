@@ -35,6 +35,7 @@ import buildings.Barracks;
 import buildings.Building;
 import buildings.Farm;
 import buildings.Market;
+import buildings.MilitaryBuilding;
 import buildings.Stable;
 import engine.*;
 import exceptions.FriendlyFireException;
@@ -177,7 +178,7 @@ public class Controller implements ActionListener {
 		Buildings.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		openBuilding=new JButton("open Building");
 		openBuilding.setBounds(380,525,170,50);
-		openBuilding.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		openBuilding.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20));
 		
 		String[]ccbox= {"Market 1500 $","Farm 1000 $","Archery Range 1500 $","Barracks 2000 $","Stable 2500 $"};
 		buildcost = new JComboBox(ccbox);
@@ -569,6 +570,88 @@ public class Controller implements ActionListener {
 		
 	}
 	
+	
+	public void drawMilitaryBuilding(MilitaryBuilding b ) {
+		drawPlayerBar();
+		
+		JButton Upgrade = new JButton("Upgrade");
+		JButton Recruit = new JButton("Recruit");
+		JLabel Cost = new JLabel("Cost:  "+b.getCost());
+		JLabel UpgradeCost = new JLabel("Upgrade cost:  "+b.getUpgradeCost());
+		JLabel Level = new JLabel("Level:  "+b.getLevel());
+		JLabel Incooldown = new JLabel("In cooldown:  "+b.isCoolDown());
+		JLabel RecruitmentCost = new JLabel("Recruitment Cost:  "+b.getRecruitmentCost());
+		JLabel CurrentRecruit = new JLabel("Current Recruit:  "+b.getCurrentRecruit());
+		JPanel panel;
+		String[][] grid;
+		
+		JPanel MBuilding =new JPanel();
+		
+		MBuilding.setLayout(new BorderLayout());
+//		MBuilding.setBackground(Color.lightGray);
+		MBuilding.setMinimumSize(new Dimension(500, 500));
+		MBuilding.setPreferredSize(new Dimension(550,800));
+		
+		Upgrade.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		UpgradeCost.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		Cost.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		Level.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		Incooldown.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		RecruitmentCost.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		Recruit.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		CurrentRecruit.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		
+//		Upgrade.setPreferredSize(new Dimension(100,30));
+//		Recruit.setPreferredSize(new Dimension(100,30));
+
+		
+		grid=new String[][] {{"Cost","","",""},{"UpgradeCost","","","Upgrade"},{"Level","","",""},{"Incooldown","","",""},
+			{"RecruitmentCost","","","Recruit"},{"CurrentRecruit","","",""}};
+		
+		panel=new JPanel(new GridLayout(6,4));
+		panel.setPreferredSize(new Dimension(1050,700));
+		for(int i=0;i<grid.length;i++) {
+			for(int j=0;j<4;j++) {
+				if(grid[i][j].equals("Cost"))
+					panel.add(Cost);
+				else if(grid[i][j].equals("Upgrade"))
+					panel.add(Upgrade);
+				else if(grid[i][j].equals("Recruit"))
+					panel.add(Recruit);
+				else if(grid[i][j].equals("UpgradeCost"))
+					panel.add(UpgradeCost);
+				else if(grid[i][j].equals("Level"))
+					panel.add(Level);
+				else if(grid[i][j].equals("Incooldown"))
+					panel.add(Incooldown);
+				else if(grid[i][j].equals("RecruitmentCost"))
+					panel.add(RecruitmentCost);
+				else if(grid[i][j].equals("CurrentRecruit"))
+					panel.add(CurrentRecruit);
+				else {
+					JPanel x =new JPanel();
+					panel.add(x);
+				}
+			}
+		}
+//		public void addListener(ActionListener f) {
+//			Upgrade.addActionListener(f);
+//			Recruit.addActionListener(f);
+//		}
+		JLabel gj=new JLabel(b instanceof ArcheryRange? "Archery Range":b instanceof Stable? "Stable":"Baracks");
+		gj.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		MBuilding.add(gj,BorderLayout.NORTH);
+		MBuilding.add(panel, BorderLayout.WEST);
+		MBuilding.revalidate();
+		MBuilding.repaint();
+		
+		view .add(MBuilding);
+		view.repaint();
+		view.revalidate();
+		
+	}
+	
+	
 	public void actionPerformed(ActionEvent e) {
 		String s=e.getActionCommand();
 		if(s!=null) {
@@ -660,6 +743,9 @@ public class Controller implements ActionListener {
 				playSound("sounds/Mouse.wav");
 			   attackedArmy= g.getAvailableCities().get(1).getDefendingArmy();
 				drawBattleView(selectedArmy, attackedArmy);
+			}else if (s.equals("open Building")){
+				int i=Buildings.getSelectedIndex();
+				drawMilitaryBuilding(selectedCity.getMilitaryBuildings().get(i));
 			}else {
 				JButton b = (JButton) e.getSource();
 				if (b.getActionCommand().equals("Attack")) {

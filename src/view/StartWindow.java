@@ -50,8 +50,11 @@ public class StartWindow extends JFrame {
 		p1.add(PlayerNameTxt);
 		p1.add(PlayerCityLbl);
 		p1.add(cities);
-		p.add(start,BorderLayout.CENTER);
-		p.add(new JPanel(),BorderLayout.SOUTH);
+		JPanel p2 =new JPanel();
+		p2.setLayout(new GridLayout(0,1));
+		p2.add(new JPanel());
+		p2.add(start);
+		p.add(p2,BorderLayout.SOUTH);
 		this.getRootPane().setDefaultButton(start);
 //		
 //		
