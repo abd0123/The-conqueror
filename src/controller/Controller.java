@@ -41,8 +41,7 @@ import view.*;
 
 public class Controller implements ActionListener {
 	private StartWindow start;
-	private GameView view;
-	private Game g;
+	private Gafarghame g;
 	private Map map;
 	private City selectedCity;
 	private JComboBox Buildings;

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -27,11 +28,14 @@ public class BattleView extends JFrame {
 	private Game game;
 	private JPanel army1Panel;
 	private JPanel army2Panel;
-	private ImagePanel logPanel;
+	private JPanel logPanel;
 	private JPanel infoPanel;
 	private JPanel attackPanel;
 	private ArrayList<Unit> units1;
 	private ArrayList<Unit> units2;
+	
+	private JLabel level;
+	private JLabel soldierCount;
 	
 	private JButton endTurn=new JButton("End Turn");
 	private JLabel playerName=new JLabel("Player's Name:");
@@ -57,32 +61,53 @@ public class BattleView extends JFrame {
 		
 		army1Panel =new JPanel();
 		army1Panel.setBackground(Color.red);
-		army1Panel.setPreferredSize(new Dimension(300,200));
+		army1Panel.setPreferredSize(new Dimension(300,500));
 		army1Panel.setLayout(new FlowLayout());
+//		JPanel upper = new JPanel();
+//		upper.setBackground(Color.orange);
+//		upper.setLayout(new FlowLayout());
 		add(BorderLayout.WEST,army1Panel);
+//		army1Panel.add(upper);
+//		JPanel lower =new JPanel();
+//		lower.setBackground(Color.lightGray);
+//		lower.setLayout(new FlowLayout());
+//		army1Panel.add(lower);
 		
 		army2Panel =new JPanel();
-		army2Panel.setBackground(Color.yellow);
 		army2Panel.setPreferredSize(new Dimension(300,200));
 		army2Panel.setLayout(new FlowLayout());
+//		JPanel upper2 = new JPanel();
+//		upper2.setBackground(Color.orange);
+//		upper2.setLayout(new FlowLayout());
 		add(BorderLayout.EAST,army2Panel);
+//		army2Panel.add(upper2);
+//		JPanel lower2 =new JPanel();
+//		lower2.setBackground(Color.lightGray);
+//		lower2.setLayout(new FlowLayout());
+//		army2Panel.add(lower2);
 		
-		logPanel =new ImagePanel("sa.jpg");
+		JPanel midPanel = new JPanel();
+		midPanel.setLayout(new BorderLayout());
+		midPanel.setPreferredSize(new Dimension(500,this.getHeight()-50));
+		add(midPanel);
+		
+		logPanel =new JPanel();
 		logPanel.setBackground(Color.pink);
-		logPanel.setPreferredSize(new Dimension(500,this.getHeight()-200));
-		add(BorderLayout.CENTER,logPanel);
+		logPanel.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
+		logPanel.setLayout(new GridLayout());
+		midPanel.add(logPanel);
 		
 		attackPanel =new JPanel();
 		attackPanel.setBackground(Color.green);
-		attackPanel.setPreferredSize(new Dimension(this.getWidth(),60));
-		attackPanel.setLayout(new FlowLayout());
-		add(BorderLayout.SOUTH,attackPanel);
-		
+		attackPanel.setPreferredSize(new Dimension(midPanel.getWidth(),60));
+		attackPanel.setLayout(new GridLayout(1,2));
+		midPanel.add(attackPanel,BorderLayout.SOUTH);
+				
 		for(int i=0;i<units1.size();i++) {
 			Unit u = units1.get(i);
 			JButton b;
 			if(u instanceof Archer)
-			    b =new JButton("Archer");
+			    b =new JButton("Archer ");
 			else if(u instanceof Cavalry)
 			    b =new JButton("Cavalry");
 			else
@@ -102,8 +127,8 @@ public class BattleView extends JFrame {
 			b.setPreferredSize(new Dimension(95,50));
 			army2Panel.add(b);
 		}
-		attack.setPreferredSize(new Dimension(650,50));
-		endTurn.setPreferredSize(new Dimension(650,50));
+		attack.setPreferredSize(new Dimension(460,50));
+		endTurn.setPreferredSize(new Dimension(460,50));
 		attackPanel.add(attack);
 		attackPanel.add(endTurn);
 		
@@ -111,7 +136,23 @@ public class BattleView extends JFrame {
 		gold.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		turnsLeft.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		infoPanel.add(playerName);  infoPanel.add(gold);  infoPanel.add(turnsLeft);
-
+		
+//		JButton b = new JButton("djfnd");
+//		upper2.add(b);
+//		JButton c = new JButton("djfnd");
+//		upper2.add(c);
+//		JButton d = new JButton("djfnd");
+//		upper2.add(d);
+//		JButton e = new JButton("djfnd");
+//		upper2.add(e);
+//		JButton f = new JButton("djfnd");
+//		upper2.add(f);
+//		JButton h = new JButton("djfnd");
+//		upper2.add(h);
+//		JButton j = new JButton("djfnd");
+//		upper2.add(j);
+//		JButton k = new JButton("djfnd");
+//		upper2.add(k);
 		
 		setVisible(true);
 		revalidate();
