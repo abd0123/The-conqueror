@@ -39,6 +39,7 @@ import buildings.MilitaryBuilding;
 import buildings.Stable;
 import engine.*;
 import exceptions.FriendlyFireException;
+import exceptions.NotEnoughGoldException;
 import units.Archer;
 import units.Army;
 import units.Cavalry;
@@ -739,13 +740,67 @@ public class Controller implements ActionListener {
 				playSound("sounds/Mouse.wav");
 				drawUnit(selectedArmy.getUnits().get(openUnits.getSelectedIndex()));
 			}
+			else if (s.equals("Build")) {	int i=Buildings.getSelectedIndex();
+			int j = buildcost.getSelectedIndex();
+			if (j>-1) {
+				if (buildcost.getSelectedItem().toString().charAt(0)=='M')
+					try {
+						g.getPlayer().build("Market", selectedCity.getName());
+						drawCity(selectedCity);
+					} catch (NotEnoughGoldException e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+					}
+				else if (buildcost.getSelectedItem().toString().charAt(0)=='F')
+					try {
+						g.getPlayer().build("Farm", selectedCity.getName());
+						drawCity(selectedCity);
+					} catch (NotEnoughGoldException e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+					}
+				
+			else if (buildcost.getSelectedItem().toString().charAt(0)=='A')
+				try {
+					g.getPlayer().build("archeryrange", selectedCity.getName());
+					drawCity(selectedCity);
+				} catch (NotEnoughGoldException e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
+			else if (buildcost.getSelectedItem().toString().charAt(0)=='B')
+				try {
+					g.getPlayer().build("barracks", selectedCity.getName());
+					drawCity(selectedCity);
+				} catch (NotEnoughGoldException e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
+			else if (buildcost.getSelectedItem().toString().charAt(0)=='S')
+				try {
+					g.getPlayer().build("stable", selectedCity.getName());
+					drawCity(selectedCity);
+				} catch (NotEnoughGoldException e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(view, "Not Enough Gold","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(view, "There is no Buildings","Alert",JOptionPane.INFORMATION_MESSAGE);
+			}
+				
+			}
 			else if (s.equals("Manual Attack")) {
 				playSound("sounds/Mouse.wav");
 			   attackedArmy= g.getAvailableCities().get(1).getDefendingArmy();
 				drawBattleView(selectedArmy, attackedArmy);
 			}else if (s.equals("open Building")){
 				int i=Buildings.getSelectedIndex();
+				if (Buildings.getSelectedIndex()>-1)
 				drawMilitaryBuilding(selectedCity.getMilitaryBuildings().get(i));
+				else {
+					JOptionPane.showMessageDialog(view, "There is no Buildings","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
 			}else {
 				JButton b = (JButton) e.getSource();
 				if (b.getActionCommand().equals("Attack")) {
@@ -773,7 +828,7 @@ public class Controller implements ActionListener {
 						 else t= "Infantry";
 					try {
 						u.attack(gg);
-						event += "-" + w +" "+"attacked"+"  "+ t + "\n" ;
+						event += g.getPlayer().getName()+"\n"+"-" + w +" "+"attacked"+"  "+ t + "\n" ;
 						event += "Remaining soldiers : "+ " "+ gg.getCurrentSoldierCount()+"\n";
 						textArea.setText(event);
 						textArea.setForeground(Color.white);
@@ -797,7 +852,7 @@ public class Controller implements ActionListener {
 								 if (gg instanceof Archer)t="Archer";
 								 else if (gg instanceof Cavalry)t= "Cavalry";
 								 else t= "Infantry";
-							event += "-" + w +" "+"attacked"+"  "+ t + "\n" ;
+							event += "PC"+"\n"+"-" + w +" "+"attacked"+"  "+ t + "\n" ;
 							event += "Remaining soldiers : "+ " "+ gg.getCurrentSoldierCount()+"\n";
 							textArea.setText(event);
 							textArea.setForeground(Color.white);
