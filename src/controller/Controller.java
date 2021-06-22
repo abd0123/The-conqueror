@@ -12,6 +12,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -27,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import buildings.ArcheryRange;
 import buildings.Barracks;
@@ -422,6 +424,7 @@ public class Controller implements ActionListener {
 		view.revalidate();
 		view.repaint();
 	}
+	
 	public void drawBattleView(Army ar1,Army ar2){
 	 drawPlayerBar();
 	 JPanel army1Panel;
@@ -437,6 +440,8 @@ public class Controller implements ActionListener {
      JButton attack=new JButton("Attack");
      endTurn.addActionListener(this);
      attack.addActionListener(this);
+     AvailableUnits.clear();
+     targetUnits.clear();
 	 units1 = ar1.getUnits(); units2=ar2.getUnits();
 	 endTurn.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 	 attack.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
@@ -492,10 +497,18 @@ public class Controller implements ActionListener {
 		textArea.setText(event);
 		textArea.setForeground(Color.white);
 		textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
-		textArea.setBounds(midPanel.getWidth()/3,0,midPanel.getWidth()/3,midPanel.getHeight());
+//		textArea.setBounds(midPanel.getWidth()/3,0,midPanel.getWidth()/3,midPanel.getHeight());
+		JScrollPane pa=new JScrollPane(textArea);
+		pa.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+		pa.setAutoscrolls(true);
+		textArea.setLineWrap(true);
+	    textArea.setEditable(false);
+	    textArea.setVisible(true);
+//		pa.VERTICAL_SCROLLBAR_AS_NEEDED
+		pa.setBounds(midPanel.getWidth()/3,0,midPanel.getWidth()/3,midPanel.getHeight());
 		logPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		logPanel.setLayout(null);
-		logPanel.add(textArea);
+		logPanel.add(pa);
 		midPanel.add(logPanel);
 		
 		
@@ -647,8 +660,7 @@ public class Controller implements ActionListener {
 				playSound("sounds/Mouse.wav");
 			   attackedArmy= g.getAvailableCities().get(1).getDefendingArmy();
 				drawBattleView(selectedArmy, attackedArmy);
-			}
-			else {
+			}else {
 				JButton b = (JButton) e.getSource();
 				if (b.getActionCommand().equals("Attack")) {
 					playSound("sounds/Sword.wav");
@@ -675,16 +687,43 @@ public class Controller implements ActionListener {
 						 else t= "Infantry";
 					try {
 						u.attack(g);
+						event += "-" + w +" "+"attacked"+"  "+ t + "\n" ;
+						event += "Remaining soldiers : "+ " "+ g.getCurrentSoldierCount()+"\n";
+						textArea.setText(event);
+						textArea.setForeground(Color.white);
+						textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
+						selectedButton1 = null;
+						selectedButton2 = null;
+						if(attackedArmy.getUnits().size()==0) {
+							JOptionPane.showMessageDialog(view, "You Win","Alert",JOptionPane.INFORMATION_MESSAGE);
+							drawMap();
+						}else {
+							drawBattleView(selectedArmy, attackedArmy);
+							int rn1= new Random().nextInt(attackedArmy.getUnits().size());
+							int rn2=new Random().nextInt(selectedArmy.getUnits().size());
+							u=attackedArmy.getUnits().get(rn1);
+							g=selectedArmy.getUnits().get(rn2);
+							u.attack(g);
+							if (u instanceof Archer)w="Archer";
+							 else if (u instanceof Cavalry)w= "Cavalry";
+							 else w= "Infantry";
+								 if (g instanceof Archer)t="Archer";
+								 else if (g instanceof Cavalry)t= "Cavalry";
+								 else t= "Infantry";
+							event += "-" + w +" "+"attacked"+"  "+ t + "\n" ;
+							event += "Remaining soldiers : "+ " "+ g.getCurrentSoldierCount()+"\n";
+							textArea.setText(event);
+							textArea.setForeground(Color.white);
+							textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
+							if(selectedArmy.getUnits().size()==0) {
+								JOptionPane.showMessageDialog(view, "You Lose","Alert",JOptionPane.INFORMATION_MESSAGE);
+								drawMap();
+							}else
+								drawBattleView(selectedArmy, attackedArmy);
+						}	
 					} catch (FriendlyFireException e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(view, "Friendly Unit","Alert",JOptionPane.INFORMATION_MESSAGE);
 					}	 
-					event += "-" + w +" "+"attacked"+"  "+ t + "\n" ;
-					event += "Remaining soldiers : "+ " "+ u.getCurrentSoldierCount()+"\n";
-					textArea.setText(event);
-					textArea.setForeground(Color.white);
-					textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
-					selectedButton1 = null;
-					selectedButton2 = null;
 					
 					}
 				}
@@ -712,7 +751,7 @@ public class Controller implements ActionListener {
 					//-----
 					if (b.getActionCommand().equals("Archer")) image2.setIcon(new ImageIcon("images/Archer.jpg"));
 					else if (b.getActionCommand().equals("Cavalry")) {
-						image1.setIcon(new ImageIcon("images/Cavalry.jpg"));
+						image2.setIcon(new ImageIcon("images/Cavalry.jpg"));
 					}
 					else image2.setIcon(new ImageIcon("images/Infantry.jpg"));
 					//-----------
