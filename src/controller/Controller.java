@@ -680,15 +680,15 @@ public class Controller implements ActionListener {
 					 if (u instanceof Archer)w="Archer";
 					 else if (u instanceof Cavalry)w= "Cavalry";
 					 else w= "Infantry";
-					Unit g =attackedArmy.getUnits().get(index2);
+					Unit gg =attackedArmy.getUnits().get(index2);
 						String t;
-						 if (g instanceof Archer)t="Archer";
-						 else if (g instanceof Cavalry)t= "Cavalry";
+						 if (gg instanceof Archer)t="Archer";
+						 else if (gg instanceof Cavalry)t= "Cavalry";
 						 else t= "Infantry";
 					try {
-						u.attack(g);
+						u.attack(gg);
 						event += "-" + w +" "+"attacked"+"  "+ t + "\n" ;
-						event += "Remaining soldiers : "+ " "+ g.getCurrentSoldierCount()+"\n";
+						event += "Remaining soldiers : "+ " "+ gg.getCurrentSoldierCount()+"\n";
 						textArea.setText(event);
 						textArea.setForeground(Color.white);
 						textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
@@ -696,22 +696,23 @@ public class Controller implements ActionListener {
 						selectedButton2 = null;
 						if(attackedArmy.getUnits().size()==0) {
 							JOptionPane.showMessageDialog(view, "You Win","Alert",JOptionPane.INFORMATION_MESSAGE);
+							g.occupy(selectedArmy,attackedArmy.getCurrentLocation());
 							drawMap();
 						}else {
 							drawBattleView(selectedArmy, attackedArmy);
 							int rn1= new Random().nextInt(attackedArmy.getUnits().size());
 							int rn2=new Random().nextInt(selectedArmy.getUnits().size());
 							u=attackedArmy.getUnits().get(rn1);
-							g=selectedArmy.getUnits().get(rn2);
-							u.attack(g);
+							gg=selectedArmy.getUnits().get(rn2);
+							u.attack(gg);
 							if (u instanceof Archer)w="Archer";
 							 else if (u instanceof Cavalry)w= "Cavalry";
 							 else w= "Infantry";
-								 if (g instanceof Archer)t="Archer";
-								 else if (g instanceof Cavalry)t= "Cavalry";
+								 if (gg instanceof Archer)t="Archer";
+								 else if (gg instanceof Cavalry)t= "Cavalry";
 								 else t= "Infantry";
 							event += "-" + w +" "+"attacked"+"  "+ t + "\n" ;
-							event += "Remaining soldiers : "+ " "+ g.getCurrentSoldierCount()+"\n";
+							event += "Remaining soldiers : "+ " "+ gg.getCurrentSoldierCount()+"\n";
 							textArea.setText(event);
 							textArea.setForeground(Color.white);
 							textArea.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15)) ;
@@ -723,6 +724,7 @@ public class Controller implements ActionListener {
 						}	
 					} catch (FriendlyFireException e1) {
 						JOptionPane.showMessageDialog(view, "Friendly Unit","Alert",JOptionPane.INFORMATION_MESSAGE);
+						drawMap();
 					}	 
 					
 					}
