@@ -75,6 +75,7 @@ public class Controller implements ActionListener {
 	private JLabel attackedsoldier;
 	private JLabel image1;
 	private JLabel image2;
+	private JPanel images;
 	private Building selectedBuilding;
 	
 	public Controller() {
@@ -95,6 +96,7 @@ public class Controller implements ActionListener {
 		event = "";
 		image1 = new JLabel();
 		image2 = new JLabel();
+		images = new JPanel();
 	}
 	
 	
@@ -156,6 +158,10 @@ public class Controller implements ActionListener {
 		JLabel defending;
 		
 		JButton DefendingArmy;
+		images.setVisible(true);
+		images.setLayout(new GridLayout(2,4));
+		images.setPreferredSize(new Dimension(1000,800));
+		view.add(images);
 		
 		JPanel city=new JPanel();
 		city.setVisible(true);
@@ -835,6 +841,9 @@ public class Controller implements ActionListener {
 				if (j>-1) {
 					if (buildcost.getSelectedItem().toString().charAt(0)=='M')
 						try {
+							JLabel test =new JLabel();
+							test.setIcon(new ImageIcon("images/Market.png"));
+							images.add(test);
 							g.getPlayer().build("Market", selectedCity.getName());
 							drawCity(selectedCity);
 						} catch (NotEnoughGoldException e1) {
@@ -843,6 +852,9 @@ public class Controller implements ActionListener {
 						}
 					else if (buildcost.getSelectedItem().toString().charAt(0)=='F')
 						try {
+							JLabel test =new JLabel();
+							test.setIcon(new ImageIcon("images/Farm.png"));
+							images.add(test);
 							g.getPlayer().build("Farm", selectedCity.getName());
 							drawCity(selectedCity);
 						} catch (NotEnoughGoldException e1) {
@@ -852,6 +864,9 @@ public class Controller implements ActionListener {
 					
 					else if (buildcost.getSelectedItem().toString().charAt(0)=='A')
 						try {
+							JLabel test =new JLabel();
+							test.setIcon(new ImageIcon("images/Archery2.png"));
+							images.add(test);
 							g.getPlayer().build("archeryrange", selectedCity.getName());
 							drawCity(selectedCity);
 						} catch (NotEnoughGoldException e1) {
@@ -860,6 +875,9 @@ public class Controller implements ActionListener {
 						}
 					else if (buildcost.getSelectedItem().toString().charAt(0)=='B')
 						try {
+							JLabel test =new JLabel();
+							test.setIcon(new ImageIcon("images/Barracks2.jpg"));
+							images.add(test);
 							g.getPlayer().build("barracks", selectedCity.getName());
 							drawCity(selectedCity);
 						} catch (NotEnoughGoldException e1) {
@@ -868,6 +886,9 @@ public class Controller implements ActionListener {
 						}
 					else if (buildcost.getSelectedItem().toString().charAt(0)=='S')
 						try {
+					    JLabel test =new JLabel();
+					    test.setIcon(new ImageIcon("images/Stable.png"));
+					    images.add(test);
 						g.getPlayer().build("stable", selectedCity.getName());
 						drawCity(selectedCity);
 						} catch (NotEnoughGoldException e1) {
