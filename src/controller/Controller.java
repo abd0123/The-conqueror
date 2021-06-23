@@ -829,6 +829,7 @@ public class Controller implements ActionListener {
 				playSound("sounds/Mouse.wav");
 				drawUnit(selectedArmy.getUnits().get(openUnits.getSelectedIndex()));
 			}else if (s.equals("Build")) {	
+				playSound("sounds/Mouse.wav");
 				int i=Buildings.getSelectedIndex();
 				int j = buildcost.getSelectedIndex();
 				if (j>-1) {
@@ -884,6 +885,7 @@ public class Controller implements ActionListener {
 				drawBattleView(selectedArmy, attackedArmy);
 			}else if (s.equals("open Building")){
 				int i=Buildings.getSelectedIndex();
+				playSound("sounds/Mouse.wav");
 				if (Buildings.getSelectedIndex()>-1) {
 					
 					if(i<selectedCity.getMilitaryBuildings().size()) {
@@ -899,6 +901,7 @@ public class Controller implements ActionListener {
 					JOptionPane.showMessageDialog(view, "There is no Buildings","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}else if(s.equals("Upgrade")){
+				playSound("sounds/Mouse.wav");
 				try {
 					g.getPlayer().upgradeBuilding(selectedBuilding);
 					if(selectedBuilding instanceof MilitaryBuilding) {
