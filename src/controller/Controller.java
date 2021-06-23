@@ -69,6 +69,7 @@ public class Controller implements ActionListener {
 	private JButton selectedButton2;
 	private JTextArea textArea;
 	private String event;
+	private String autoevent;
 	private JLabel attackerLeveL ;
 	private JLabel attackedLeveL;
 	private JLabel attackersoldier;
@@ -78,6 +79,7 @@ public class Controller implements ActionListener {
 	private JPanel images;
 	private JPanel imagesinArmy;
 	private Building selectedBuilding;
+	private JTextArea autoLOG;
 	private Clip clip;
 	private AudioInputStream audioInputStream;
 	
@@ -96,7 +98,9 @@ public class Controller implements ActionListener {
 		attackersoldier = new JLabel();
 		AvailableUnits = new ArrayList<>();
 		targetUnits = new ArrayList<>();
+		autoLOG = new JTextArea();
 		event = "";
+		autoevent = "";
 		image1 = new JLabel();
 		image2 = new JLabel();
 		images = new JPanel();
@@ -439,6 +443,19 @@ public class Controller implements ActionListener {
 		view.add(Unit);
 		view.revalidate();
 		view.repaint();
+	}
+	public void drawAutoReslove() {
+		drawPlayerBar();
+		autoevent += "Inforamtions of the Battle"+"\n";
+		autoevent += "'''''\n";
+		autoLOG.setText(autoevent);
+		autoLOG.setBackground(Color.black);
+		autoLOG.setForeground(Color.white);
+		autoLOG.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20)) ;
+		view.add(autoLOG);
+		view.revalidate();
+		view.repaint();
+		
 	}
 	
 	public void drawBattleView(Army ar1,Army ar2){
@@ -934,7 +951,17 @@ public class Controller implements ActionListener {
 				}else {
 					JOptionPane.showMessageDialog(view, "There is no Buildings","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
-			}else if(s.equals("Upgrade")){
+			}else if (s.equals("Auto Resolve")) {
+				playSound("sounds/Mouse.wav");
+//				try {
+//					g.autoResolve(selectedArmy, attackedArmy);
+//				} catch (FriendlyFireException e1) {
+//					JOptionPane.showMessageDialog(view,e1.getMessage(),"Alert",JOptionPane.INFORMATION_MESSAGE);
+//					e1.printStackTrace();
+//				}
+				drawAutoReslove();
+			}
+			else if(s.equals("Upgrade")){
 				playSound("sounds/Mouse.wav");
 				try {
 					g.getPlayer().upgradeBuilding(selectedBuilding);
