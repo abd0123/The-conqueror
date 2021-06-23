@@ -1073,7 +1073,6 @@ public class Controller implements ActionListener {
 			}else if (s.equals("open Building")){
 				playSound("sounds/Mouse.wav");
 				int i=Buildings.getSelectedIndex();
-				playSound("sounds/Mouse.wav");
 				if (Buildings.getSelectedIndex()>-1) {
 					
 					if(i<selectedCity.getMilitaryBuildings().size()) {
