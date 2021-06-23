@@ -76,7 +76,10 @@ public class Controller implements ActionListener {
 	private JLabel image1;
 	private JLabel image2;
 	private JPanel images;
+	private JPanel imagesinArmy;
 	private Building selectedBuilding;
+	private Clip clip;
+	private AudioInputStream audioInputStream;
 	
 	public Controller() {
 		start=new StartWindow();
@@ -97,6 +100,7 @@ public class Controller implements ActionListener {
 		image1 = new JLabel();
 		image2 = new JLabel();
 		images = new JPanel();
+		imagesinArmy = new JPanel();
 	}
 	
 	
@@ -584,6 +588,11 @@ public class Controller implements ActionListener {
 	
 	public void drawMilitaryBuilding(MilitaryBuilding b ) {
 		drawPlayerBar();
+		imagesinArmy.setVisible(true);
+		imagesinArmy.setLayout(null);
+		imagesinArmy.setLayout(new GridLayout());
+		imagesinArmy.setPreferredSize(new Dimension(1000,800));
+		view.add(imagesinArmy);
 		JButton back=new JButton("Return to map");
 		JButton Upgrade = new JButton("Upgrade");
 		JButton Recruit = new JButton("Recruit");
@@ -672,7 +681,11 @@ public class Controller implements ActionListener {
 	
 	public void drawEconomicBuilding(EconomicBuilding b) {
 		drawPlayerBar();
-		
+		imagesinArmy.setVisible(true);
+		imagesinArmy.setLayout(null);
+		imagesinArmy.setLayout(new GridLayout());
+		imagesinArmy.setPreferredSize(new Dimension(1000,800));
+		view.add(imagesinArmy);
 		JButton back=new JButton("Return to map");
 		JButton Upgrade = new JButton("Upgrade");
 		JButton harvest = new JButton("Harvest");
@@ -1049,8 +1062,8 @@ public class Controller implements ActionListener {
 	
 	public void playSound (String filepath)  {
 		try {
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filepath).getAbsoluteFile());
-			Clip clip = AudioSystem.getClip();
+			audioInputStream = AudioSystem.getAudioInputStream(new File(filepath).getAbsoluteFile());
+			clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
 			clip.start();
 		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
