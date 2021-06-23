@@ -60,7 +60,7 @@ public class Player {
 			}
 			if(type.toLowerCase().equals(btype)) {	
 				if(treasury-b.getRecruitmentCost()<0) {
-					throw new NotEnoughGoldException();
+					throw new NotEnoughGoldException("Not Enough Gold");
 				}else {
 					Unit u=b.recruit();
 					u.setParentArmy(c.getDefendingArmy());

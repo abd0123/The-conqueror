@@ -15,8 +15,9 @@ public class Game {
 	private ArrayList<Distance> distances;
 	private final int maxTurnCount = 50;
 	private int currentTurnCount ;
-
+	private String autoevent;
 	public Game(String playerName, String playerCity) throws IOException {
+		autoevent="";
 		player = new Player(playerName);
 		player.setTreasury(5000);
 		availableCities = new ArrayList<City>();
@@ -244,11 +245,23 @@ public class Game {
 		int randomB = rn.nextInt(defender.getUnits().size());
 		Unit a = attacker.getUnits().get(randomA);
 		Unit b = defender.getUnits().get(randomB);
+		String w;
+		String t;
+		if (a instanceof Archer)w="Archer";
+		 else if (a instanceof Cavalry)w= "Cavalry";
+		 else w= "Infantry";
+			 if (b instanceof Archer)t="Archer";
+			 else if (b instanceof Cavalry)t= "Cavalry";
+			 else t= "Infantry";
 		if (turn %2==0) {
-			a.attack(b);	
+			a.attack(b);
+			autoevent += this.getPlayer().getName()+"\n"+"-" + w +" "+"attacked"+"  "+ t + "\n" ;
+			autoevent += "Remaining soldiers : "+ " "+ b.getCurrentSoldierCount()+"\n";
 		}
 		else {
 			b.attack(a);
+			autoevent += "PC"+"\n"+"-" + t +" "+"attacked"+"  "+ w + "\n" ;
+			autoevent += "Remaining soldiers : "+ " "+ a.getCurrentSoldierCount()+"\n";
 			
 		}
 		turn++;
@@ -289,5 +302,21 @@ public class Game {
 
 	public int getMaxTurnCount() {
 		return maxTurnCount;
+	}
+
+
+
+
+
+	public String getAutoevent() {
+		return autoevent;
+	}
+
+
+
+
+
+	public void setAutoevent(String autoevent) {
+		this.autoevent = autoevent;
 	}
 }

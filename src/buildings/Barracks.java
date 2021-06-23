@@ -20,10 +20,10 @@ public class Barracks extends MilitaryBuilding {
 
 	public Unit recruit() throws BuildingInCoolDownException, MaxRecruitedException {
 		if(isCoolDown()) {
-			throw new BuildingInCoolDownException();
+			throw new BuildingInCoolDownException("Building in CoolDown for the rest of this turn");
 		}
 		if(getCurrentRecruit()==getMaxRecruit()) {
-			throw new MaxRecruitedException();
+			throw new MaxRecruitedException("You can't recruit more units in this turn");
 		}
 		setCurrentRecruit(getCurrentRecruit()+1);
 		if(getLevel()==1) {
