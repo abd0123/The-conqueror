@@ -652,6 +652,7 @@ public class Controller implements ActionListener {
 //		}
 		JLabel gj=new JLabel(b instanceof ArcheryRange? "Archery Range":b instanceof Stable? "Stable":"Baracks");
 		gj.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		MBuilding.setBorder(BorderFactory.createLineBorder(Color.black));
 		MBuilding.add(gj,BorderLayout.NORTH);
 		MBuilding.add(panel, BorderLayout.WEST);
 		MBuilding.revalidate();
@@ -728,6 +729,7 @@ public class Controller implements ActionListener {
 				}
 			}
 			Building.add(panel,BorderLayout.CENTER);
+			Building.setBorder(BorderFactory.createLineBorder(Color.black));
 			view.add(Building,BorderLayout.WEST);
 			
 			view.revalidate();
