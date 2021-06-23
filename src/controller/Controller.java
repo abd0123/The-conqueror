@@ -83,6 +83,7 @@ public class Controller implements ActionListener {
 	private Clip clip;
 	private AudioInputStream audioInputStream;
 	private JComboBox armies;
+	private JLabel testimage;
 	
 	public Controller() {
 		start=new StartWindow();
@@ -104,6 +105,7 @@ public class Controller implements ActionListener {
 		image2 = new JLabel();
 		images = new JPanel();
 		imagesinArmy = new JPanel();
+		testimage = new JLabel();
 	}
 	
 	
@@ -676,6 +678,7 @@ public class Controller implements ActionListener {
 		imagesinArmy.setVisible(true);
 		imagesinArmy.setLayout(null);
 		imagesinArmy.setLayout(new GridLayout());
+		imagesinArmy.add(testimage);
 		imagesinArmy.setPreferredSize(new Dimension(800,800));
 		view.add(imagesinArmy,BorderLayout.EAST);
 		JButton back=new JButton("Return to map");
@@ -768,6 +771,7 @@ public class Controller implements ActionListener {
 		drawPlayerBar();
 		imagesinArmy.setVisible(true);
 		imagesinArmy.setLayout(null);
+		imagesinArmy.add(testimage);
 		imagesinArmy.setLayout(new GridLayout());
 		imagesinArmy.setPreferredSize(new Dimension(800,800));
 		view.add(imagesinArmy,BorderLayout.EAST);
@@ -958,7 +962,6 @@ public class Controller implements ActionListener {
 				else
 					JOptionPane.showMessageDialog(view, "No units to show","Alert",JOptionPane.INFORMATION_MESSAGE);
 			}else if (s.equals("Build")) {	
-				playSound("sounds/Coins.wav");
 				int j = buildcost.getSelectedIndex();
 				if (j>-1) {
 					if (buildcost.getSelectedItem().toString().charAt(0)=='M') {
@@ -966,6 +969,7 @@ public class Controller implements ActionListener {
 							boolean f=false;
 							for (EconomicBuilding b:selectedCity.getEconomicalBuildings()) if(b instanceof Market)f=true;
 							if(!f) {
+								playSound("sounds/Coins.wav");
 								JLabel test =new JLabel();
 								test.setIcon(new ImageIcon("images/Market.png"));
 								images.add(test);
@@ -983,6 +987,7 @@ public class Controller implements ActionListener {
 							boolean f=false;
 							for (EconomicBuilding b:selectedCity.getEconomicalBuildings()) if(b instanceof Farm)f=true;
 							if(!f) {
+								playSound("sounds/Coins.wav");
 								JLabel test =new JLabel();
 								test.setIcon(new ImageIcon("images/Farm.png"));
 								images.add(test);
@@ -1000,6 +1005,7 @@ public class Controller implements ActionListener {
 							boolean f=false;
 							for (MilitaryBuilding b:selectedCity.getMilitaryBuildings()) if(b instanceof ArcheryRange)f=true;
 							if(!f) {
+								playSound("sounds/Coins.wav");
 								JLabel test =new JLabel();
 								test.setIcon(new ImageIcon("images/Archery2.png"));
 								images.add(test);
@@ -1016,6 +1022,7 @@ public class Controller implements ActionListener {
 							boolean f=false;
 							for (MilitaryBuilding b:selectedCity.getMilitaryBuildings()) if(b instanceof Barracks)f=true;
 							if(!f) {
+								playSound("sounds/Coins.wav");
 								JLabel test =new JLabel();
 								test.setIcon(new ImageIcon("images/Barracks2.jpg"));
 								images.add(test);
@@ -1032,6 +1039,7 @@ public class Controller implements ActionListener {
 							boolean f=false;
 							for (MilitaryBuilding b:selectedCity.getMilitaryBuildings()) if(b instanceof Stable)f=true;
 							if(!f) {
+								playSound("sounds/Coins.wav");
 								JLabel test =new JLabel();
 								test.setIcon(new ImageIcon("images/Stable.png"));
 								images.add(test);
@@ -1063,16 +1071,38 @@ public class Controller implements ActionListener {
 					drawBattleView(selectedArmy, attackedArmy);
 				}
 			}else if (s.equals("open Building")){
+				playSound("sounds/Mouse.wav");
 				int i=Buildings.getSelectedIndex();
 				playSound("sounds/Mouse.wav");
 				if (Buildings.getSelectedIndex()>-1) {
 					
 					if(i<selectedCity.getMilitaryBuildings().size()) {
+						 if (Buildings.getSelectedItem().toString().charAt(0)=='B') {
+							 testimage.setIcon(new ImageIcon("images/Barracks2.jpg"));
+							 
+						 }
+						 else  if (Buildings.getSelectedItem().toString().charAt(0)=='A') {
+							 testimage.setIcon(new ImageIcon("images/Archery2.png"));
+							 
+						 }
+						 else  if (Buildings.getSelectedItem().toString().charAt(0)=='s') {
+							 testimage.setIcon(new ImageIcon("images/Stable.png"));
+							 
+						 }
+						 
 						drawMilitaryBuilding(selectedCity.getMilitaryBuildings().get(i));
 						selectedBuilding=selectedCity.getMilitaryBuildings().get(i);
 					}
 					else {
 						i=i-selectedCity.getMilitaryBuildings().size();
+						 if (Buildings.getSelectedItem().toString().charAt(0)=='M') {
+							 testimage.setIcon(new ImageIcon("images/Market.png"));
+							
+						 }
+						 else  if (Buildings.getSelectedItem().toString().charAt(0)=='F') {
+							 testimage.setIcon(new ImageIcon("images/Farm.png"));
+							 
+						 }
 						drawEconomicBuilding(selectedCity.getEconomicalBuildings().get(i));	
 						selectedBuilding=selectedCity.getEconomicalBuildings().get(i);
 					}
@@ -1094,7 +1124,7 @@ public class Controller implements ActionListener {
 					drawAutoReslove();
 				}
 			}else if(s.equals("Upgrade")){
-				playSound("sounds/Mouse.wav");
+				playSound("sounds/upgrade.wav");
 				try {
 					g.getPlayer().upgradeBuilding(selectedBuilding);
 					JOptionPane.showMessageDialog(view, "Building has been succesfully upgraded","Alert",JOptionPane.INFORMATION_MESSAGE);
@@ -1108,6 +1138,7 @@ public class Controller implements ActionListener {
 				}
 				
 			}else if(s.equals("End Turn")){
+				playSound("sounds/Mouse.wav");
 				g.endTurn();
 				if(g.isGameOver()) {
 					JOptionPane.showMessageDialog(view, "The game is Over ÑæÍ Úáì ÏÇÑßã íáÇ","Alert",JOptionPane.INFORMATION_MESSAGE);
@@ -1115,6 +1146,7 @@ public class Controller implements ActionListener {
 				}else
 					drawMap();
 			}else if(s.equals("Recruit")) {
+				playSound("sounds/Mouse.wav");
 				MilitaryBuilding b=(MilitaryBuilding)selectedBuilding;
 				try {
 					String btype="";
@@ -1132,6 +1164,7 @@ public class Controller implements ActionListener {
 					JOptionPane.showMessageDialog(view, e1.getMessage(),"Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}else if(s.equals("Initiate Army")){
+				playSound("sounds/Mouse.wav");
 				int i=units.getSelectedIndex();
 				if(i>-1) {
 					g.getPlayer().initiateArmy(selectedCity, selectedCity.getDefendingArmy().getUnits().get(i));
@@ -1140,9 +1173,11 @@ public class Controller implements ActionListener {
 				}else
 					JOptionPane.showMessageDialog(view, "No units to recruit","Alert",JOptionPane.INFORMATION_MESSAGE);
 			}else if (s.equals("Play Again")){
+				playSound("sounds/Mouse.wav");
 				view.dispose();
 				new Controller();
 			}else if(s.equals("Show Army")){
+				playSound("sounds/Mouse.wav");
 				int i=armies.getSelectedIndex();
 				if(i>-1) {
 					drawArmy(g.getPlayer().getControlledArmies().get(i));
@@ -1151,6 +1186,7 @@ public class Controller implements ActionListener {
 					JOptionPane.showMessageDialog(view, "No Controlled Armies yet","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}else if(s.equals("Set target")){
+				playSound("sounds/Mouse.wav");
 				int i=targets.getSelectedIndex();
 				if(i>-1) {
 					g.targetCity(selectedArmy, targets.getSelectedItem().toString());
