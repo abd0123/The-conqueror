@@ -829,7 +829,7 @@ public class Controller implements ActionListener {
 				playSound("sounds/Mouse.wav");
 				drawUnit(selectedArmy.getUnits().get(openUnits.getSelectedIndex()));
 			}else if (s.equals("Build")) {	
-				playSound("sounds/Mouse.wav");
+				playSound("sounds/Coins.wav");
 				int i=Buildings.getSelectedIndex();
 				int j = buildcost.getSelectedIndex();
 				if (j>-1) {
