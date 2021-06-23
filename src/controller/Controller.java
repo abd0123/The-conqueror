@@ -952,7 +952,8 @@ public class Controller implements ActionListener {
 					JOptionPane.showMessageDialog(view, "There is no Buildings","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}else if (s.equals("Auto Resolve")) {
-				playSound("sounds/Mouse.wav");
+				playSound("sounds/Mouse"
+						+ ".wav");
 //				try {
 //					g.autoResolve(selectedArmy, attackedArmy);
 //				} catch (FriendlyFireException e1) {
