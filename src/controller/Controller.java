@@ -1232,7 +1232,7 @@ public class Controller implements ActionListener {
 						btype="cavalry";
 					}
 					g.getPlayer().recruitUnit(btype, selectedCity.getName());
-					JOptionPane.showMessageDialog(view, "A unit has been recruited","Alert",JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(view, btype+" has been recruited","Alert",JOptionPane.INFORMATION_MESSAGE);
 					drawMilitaryBuilding(b);
 				} catch (BuildingInCoolDownException | MaxRecruitedException | NotEnoughGoldException e1) {
 					JOptionPane.showMessageDialog(view, e1.getMessage(),"Alert",JOptionPane.INFORMATION_MESSAGE);
@@ -1289,6 +1289,8 @@ public class Controller implements ActionListener {
 					}
 				}
 			}else if(s.equals("Select Army")){
+				int i=sorroundingArmy.getSelectedIndex();
+				if(i>-1) {
 				doneselect=true;
 				relocateUnit.setEnabled(true);
 				String v=sorroundingArmy.getSelectedItem().toString();
@@ -1309,6 +1311,10 @@ public class Controller implements ActionListener {
 				}
 				sorroundingUnits=new JComboBox(su);
 				drawArmy(selectedArmy);
+				}
+				else {
+					JOptionPane.showMessageDialog(view, "No selected Army","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
 			}else if(s.equals("Relocate unit")){
 				if(!doneselect) {
 					
