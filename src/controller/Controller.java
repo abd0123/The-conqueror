@@ -42,6 +42,7 @@ import engine.*;
 import exceptions.BuildingInCoolDownException;
 import exceptions.FriendlyCityException;
 import exceptions.FriendlyFireException;
+import exceptions.MaxCapacityException;
 import exceptions.MaxLevelException;
 import exceptions.MaxRecruitedException;
 import exceptions.NotEnoughGoldException;
@@ -86,7 +87,10 @@ public class Controller implements ActionListener {
 	private AudioInputStream audioInputStream;
 	private JComboBox armies;
 	private JLabel testimage;
-	private ArrayList<Army>allButSelected;
+	private ArrayList<Army>sameplaceArmeis;
+	private JComboBox sorroundingArmy;
+	private JComboBox sorroundingUnits=new JComboBox();
+	private Army toBeOpen;
 	
 	public Controller() {
 		start=new StartWindow();
@@ -347,6 +351,7 @@ public class Controller implements ActionListener {
 		JButton openUnit = new JButton("Open Unit");
 		JButton setTarget = new JButton("Set target");
 		JButton relocateUnit = new JButton("Relocate unit");
+		JButton selectArmy =new JButton("Select Army");
 		JButton LaySiege=new JButton("Lay Siege");
 		JLabel currentStatus = new JLabel("Current status:  "+a.getCurrentStatus());
 		JLabel distanceToTarget = new JLabel("Distance to target:  "+a.getDistancetoTarget());
@@ -361,7 +366,32 @@ public class Controller implements ActionListener {
 		autoReslove.addActionListener(this);
 		manualAttack.addActionListener(this);
 		LaySiege.addActionListener(this);
-		 
+		selectArmy.addActionListener(this);
+		
+		
+		String cl=selectedArmy.getCurrentLocation();
+		if(!cl.equals("onRoad")) {
+			City c=null;
+			for(City x:g.getAvailableCities())if(x.getName().equals(cl))c=x;
+			int m=0;
+			if(!selectedArmy.equals(c.getDefendingArmy()))m++;
+			for(Army f:g.getPlayer().getControlledArmies())if(f.getCurrentLocation().equals(selectedArmy.getCurrentLocation())&&(!f.equals(selectedArmy)))m++;
+			String[] ca=new String[m];
+			m=0;
+			if(!selectedArmy.equals(c.getDefendingArmy()))ca[m++]=selectedArmy.getCurrentLocation()+ " Army";
+			for(Army f:g.getPlayer().getControlledArmies()) {
+				if(f.getCurrentLocation().equals(selectedArmy.getCurrentLocation())&&(!f.equals(selectedArmy))) {
+					ca[m++]="Army "+(g.getPlayer().getControlledArmies().indexOf(f)+1);
+				}
+			}
+			sorroundingArmy=new JComboBox(ca);
+		}
+		
+		
+		
+		
+		
+		
 		String[]openun=new String[a.getUnits().size()];
 			for (int i = 0; i < openun.length; i++) {
 			Unit u=a.getUnits().get(i);
@@ -403,7 +433,9 @@ public class Controller implements ActionListener {
 		distanceToTarget.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		autoReslove.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		manualAttack.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
-		
+		selectArmy.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		sorroundingArmy.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		sorroundingUnits.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		
 
 		grid = new String[][] { { "Units", "Set target", "Relocate unit" }, { "Army status", "", "" },
@@ -430,14 +462,30 @@ public class Controller implements ActionListener {
 						y.add(setTarget);
 						panel.add(y);
 					}
-				}else if (grid[i][j].equals("Relocate unit"))
-					panel.add(relocateUnit);
-				else if (grid[i][j].equals("Army status"))
+				}else if (grid[i][j].equals("Relocate unit")) {
+					JPanel p=new JPanel();
+					p.setLayout(new GridLayout(0,3));
+					JLabel l=new JLabel("Sorrounding Armies");
+					l.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+					p.add(l);
+					p.add(sorroundingArmy);
+					p.add(selectArmy);
+					p.add(new JPanel());
+					p.add(new JPanel());
+					p.add(new JPanel());
+					JLabel l2=new JLabel("units of selected army");
+					l2.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20));
+					p.add(l2);
+					p.add(sorroundingUnits);
+					p.add(relocateUnit);
+					panel.add(p);
+				}else if (grid[i][j].equals("Army status"))
 					panel.add(currentStatus);
 				else if (grid[i][j].equals("Distance to target"))
 					panel.add(distanceToTarget);
 				else if(grid[i][j].equals("Lay Siege"))
-					panel.add(LaySiege);
+					if(g.getPlayer().getControlledArmies().contains(a))panel.add(LaySiege);
+					else panel.add(new JPanel());
 				else if (grid[i][j].equals("Army location"))
 					panel.add(currentLocation);
 				else if (grid[i][j].equals("back"))
@@ -1191,8 +1239,9 @@ public class Controller implements ActionListener {
 				playSound("sounds/Mouse.wav");
 				int i=armies.getSelectedIndex();
 				if(i>-1) {
-					drawArmy(g.getPlayer().getControlledArmies().get(i));
 					selectedArmy=g.getPlayer().getControlledArmies().get(i);
+					drawArmy(g.getPlayer().getControlledArmies().get(i));
+					
 				}else {
 					JOptionPane.showMessageDialog(view, "No Controlled Armies yet","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
@@ -1223,6 +1272,33 @@ public class Controller implements ActionListener {
 					} catch (TargetNotReachedException | FriendlyCityException e1) {
 						JOptionPane.showMessageDialog(view, e1.getMessage(),"Alert",JOptionPane.INFORMATION_MESSAGE);
 					}
+				}
+			}else if(s.equals("Select Army")){
+				String v=sorroundingArmy.getSelectedItem().toString();
+				toBeOpen=null;
+				if(v.charAt(v.length()-1)=='y') {
+					for(City c:g.getAvailableCities()) {
+						if(v.charAt(0)==c.getName().charAt(0))toBeOpen=c.getDefendingArmy();
+					}
+				}else {
+					toBeOpen=g.getPlayer().getControlledArmies().get(Integer.parseInt(v.charAt(v.length()-1)+"")-1);
+				}
+				String[]su=new String[toBeOpen.getUnits().size()];
+				int m=0;
+				for(Unit u:toBeOpen.getUnits()) {
+					if(u instanceof Archer)su[m++]="Archer lv."+u.getLevel();
+					if(u instanceof Cavalry)su[m++]="Cavalry lv."+u.getLevel();
+					if(u instanceof Infantry)su[m++]="Infantry lv."+u.getLevel();
+				}
+				sorroundingUnits=new JComboBox(su);
+				drawArmy(selectedArmy);
+			}else if(s.equals("Relocate unit")){
+				try {
+					selectedArmy.relocateUnit(toBeOpen.getUnits().get(sorroundingUnits.getSelectedIndex()));
+					drawArmy(selectedArmy);
+					JOptionPane.showMessageDialog(view, "Relocate done correctly","Alert",JOptionPane.INFORMATION_MESSAGE);
+				} catch (MaxCapacityException e1) {
+					JOptionPane.showMessageDialog(view, "MaxCapacity","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}else {
 				JButton b = (JButton) e.getSource();
