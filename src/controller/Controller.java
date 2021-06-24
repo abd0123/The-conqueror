@@ -115,6 +115,8 @@ public class Controller implements ActionListener {
 		images = new JPanel();
 		imagesinArmy = new JPanel();
 		testimage = new JLabel();
+		relocateUnit = new JButton("Relocate unit");
+		relocateUnit.setEnabled(false);
 	}
 	
 	
@@ -352,7 +354,6 @@ public class Controller implements ActionListener {
 		JButton manualAttack = new JButton("Manual Attack");
 		JButton openUnit = new JButton("Open Unit");
 		JButton setTarget = new JButton("Set target");
-		relocateUnit = new JButton("Relocate unit");
 		JButton selectArmy =new JButton("Select Army");
 		JButton LaySiege=new JButton("Lay Siege");
 		JLabel currentStatus = new JLabel("Current status:  "+a.getCurrentStatus());
@@ -1319,15 +1320,22 @@ public class Controller implements ActionListener {
 				if(!doneselect) {
 					
 				}else {
-					try {
-						selectedArmy.relocateUnit(toBeOpen.getUnits().get(sorroundingUnits.getSelectedIndex()));
-						drawArmy(selectedArmy);
-						JOptionPane.showMessageDialog(view, "Relocate done correctly","Alert",JOptionPane.INFORMATION_MESSAGE);
-					} catch (MaxCapacityException e1) {
-						JOptionPane.showMessageDialog(view, "MaxCapacity","Alert",JOptionPane.INFORMATION_MESSAGE);
+					int i = sorroundingUnits.getSelectedIndex();
+					if (i>-1) {
+						try {
+							selectedArmy.relocateUnit(toBeOpen.getUnits().get(sorroundingUnits.getSelectedIndex()));
+							drawArmy(selectedArmy);
+							JOptionPane.showMessageDialog(view, "Relocate done correctly","Alert",JOptionPane.INFORMATION_MESSAGE);
+						} catch (MaxCapacityException e1) {
+							JOptionPane.showMessageDialog(view, "MaxCapacity","Alert",JOptionPane.INFORMATION_MESSAGE);
+						}
+						doneselect=false;
+						relocateUnit.setEnabled(false);
 					}
-					doneselect=false;
-					relocateUnit.setEnabled(false);
+					else {
+						relocateUnit.setEnabled(false);
+					}
+				
 				}
 			}else {
 				JButton b = (JButton) e.getSource();
