@@ -191,12 +191,13 @@ public class Game {
 				curr.setCurrentStatus(Status.MARCHING);
 				curr.setCurrentLocation("onRoad");
 			}
-			if(curr.getDistancetoTarget()>0 &&!curr.getTarget().equals(""))
-			curr.setDistancetoTarget(curr.getDistancetoTarget() - 1);
-			if (curr.getDistancetoTarget() == 0) {
-				curr.setCurrentLocation(curr.getTarget());
-				curr.setTarget("");
-				curr.setCurrentStatus(Status.IDLE);
+			if(curr.getDistancetoTarget()>0 &&!curr.getTarget().equals("")) {
+				curr.setDistancetoTarget(curr.getDistancetoTarget() - 1);
+				if (curr.getDistancetoTarget() == 0) {
+					curr.setCurrentLocation(curr.getTarget());
+					curr.setTarget("");
+					curr.setCurrentStatus(Status.IDLE);
+				}
 			}
 			foodNeeded+=curr.foodNeeded();
 		}

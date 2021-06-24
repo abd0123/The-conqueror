@@ -91,6 +91,8 @@ public class Controller implements ActionListener {
 	private JComboBox sorroundingArmy;
 	private JComboBox sorroundingUnits=new JComboBox();
 	private Army toBeOpen;
+	private boolean doneselect;
+	private JButton relocateUnit;
 	
 	public Controller() {
 		start=new StartWindow();
@@ -350,7 +352,7 @@ public class Controller implements ActionListener {
 		JButton manualAttack = new JButton("Manual Attack");
 		JButton openUnit = new JButton("Open Unit");
 		JButton setTarget = new JButton("Set target");
-		JButton relocateUnit = new JButton("Relocate unit");
+		relocateUnit = new JButton("Relocate unit");
 		JButton selectArmy =new JButton("Select Army");
 		JButton LaySiege=new JButton("Lay Siege");
 		JLabel currentStatus = new JLabel("Current status:  "+a.getCurrentStatus());
@@ -1198,12 +1200,25 @@ public class Controller implements ActionListener {
 				
 			}else if(s.equals("End Turn")){
 				playSound("sounds/Mouse.wav");
-				g.endTurn();
-				if(g.isGameOver()) {
-					JOptionPane.showMessageDialog(view, "The game is Over —ÊÕ ⁄·Ï œ«—ﬂ„ Ì·«","Alert",JOptionPane.INFORMATION_MESSAGE);
-					drawGameOver();
-				}else
-					drawMap();
+				boolean f=false;
+				City c=null;
+				for(City x:g.getAvailableCities()) {
+					if(x.getTurnsUnderSiege()==3) {
+						f=true;
+						c=x;
+						break;
+					}
+				}
+				if(f) {
+					JOptionPane.showMessageDialog(view, c.getName()+" has been sieged for 3 turns you have to Auto or Manual resolve it","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					g.endTurn();
+					if(g.isGameOver()) {
+						JOptionPane.showMessageDialog(view, "The game is Over —ÊÕ ⁄·Ï œ«—ﬂ„ Ì·«","Alert",JOptionPane.INFORMATION_MESSAGE);
+						drawGameOver();
+					}else
+						drawMap();
+				}
 			}else if(s.equals("Recruit")) {
 				playSound("sounds/Mouse.wav");
 				MilitaryBuilding b=(MilitaryBuilding)selectedBuilding;
@@ -1274,6 +1289,8 @@ public class Controller implements ActionListener {
 					}
 				}
 			}else if(s.equals("Select Army")){
+				doneselect=true;
+				relocateUnit.setEnabled(true);
 				String v=sorroundingArmy.getSelectedItem().toString();
 				toBeOpen=null;
 				if(v.charAt(v.length()-1)=='y') {
@@ -1293,12 +1310,18 @@ public class Controller implements ActionListener {
 				sorroundingUnits=new JComboBox(su);
 				drawArmy(selectedArmy);
 			}else if(s.equals("Relocate unit")){
-				try {
-					selectedArmy.relocateUnit(toBeOpen.getUnits().get(sorroundingUnits.getSelectedIndex()));
-					drawArmy(selectedArmy);
-					JOptionPane.showMessageDialog(view, "Relocate done correctly","Alert",JOptionPane.INFORMATION_MESSAGE);
-				} catch (MaxCapacityException e1) {
-					JOptionPane.showMessageDialog(view, "MaxCapacity","Alert",JOptionPane.INFORMATION_MESSAGE);
+				if(!doneselect) {
+					
+				}else {
+					try {
+						selectedArmy.relocateUnit(toBeOpen.getUnits().get(sorroundingUnits.getSelectedIndex()));
+						drawArmy(selectedArmy);
+						JOptionPane.showMessageDialog(view, "Relocate done correctly","Alert",JOptionPane.INFORMATION_MESSAGE);
+					} catch (MaxCapacityException e1) {
+						JOptionPane.showMessageDialog(view, "MaxCapacity","Alert",JOptionPane.INFORMATION_MESSAGE);
+					}
+					doneselect=false;
+					relocateUnit.setEnabled(false);
 				}
 			}else {
 				JButton b = (JButton) e.getSource();
