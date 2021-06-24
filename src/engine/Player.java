@@ -181,7 +181,7 @@ public class Player {
 			throw new TargetNotReachedException();
 		}
 		if(controlledCities.contains(city)) {
-			throw new FriendlyCityException();
+			throw new FriendlyCityException("You Can't Attack Freindly City");
 		}
 		army.setCurrentStatus(Status.BESIEGING);
 		city.setUnderSiege(true);

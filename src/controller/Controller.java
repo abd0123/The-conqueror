@@ -40,10 +40,12 @@ import buildings.MilitaryBuilding;
 import buildings.Stable;
 import engine.*;
 import exceptions.BuildingInCoolDownException;
+import exceptions.FriendlyCityException;
 import exceptions.FriendlyFireException;
 import exceptions.MaxLevelException;
 import exceptions.MaxRecruitedException;
 import exceptions.NotEnoughGoldException;
+import exceptions.TargetNotReachedException;
 import units.Archer;
 import units.Army;
 import units.Cavalry;
@@ -84,6 +86,7 @@ public class Controller implements ActionListener {
 	private AudioInputStream audioInputStream;
 	private JComboBox armies;
 	private JLabel testimage;
+	private ArrayList<Army>allButSelected;
 	
 	public Controller() {
 		start=new StartWindow();
@@ -341,54 +344,56 @@ public class Controller implements ActionListener {
 		drawPlayerBar();
 		JButton autoReslove= new JButton("Auto Resolve");
 		JButton manualAttack = new JButton("Manual Attack");
-		 JButton openUnit = new JButton("Open Unit");
-		 JButton setTarget = new JButton("Set target");
-		 JButton relocateUnit = new JButton("Relocate unit");
-		 JLabel currentStatus = new JLabel("Current status:  "+a.getCurrentStatus());
-		 JLabel distanceToTarget = new JLabel("Distance to target:  "+a.getDistancetoTarget());
-		 JLabel target = new JLabel("Target:  " +(a.getTarget().equals("")?"No Target Assigned":a.getTarget()));
-		 JLabel currentLocation = new JLabel("Current location:  "+a.getCurrentLocation());
-		 String[][] grid;
-		 JPanel panel = new JPanel();
-		 JButton back;
-		 openUnit.addActionListener(this);
-		 setTarget.addActionListener(this);
-		 relocateUnit.addActionListener(this);
-		 autoReslove.addActionListener(this);
-		 manualAttack.addActionListener(this);
+		JButton openUnit = new JButton("Open Unit");
+		JButton setTarget = new JButton("Set target");
+		JButton relocateUnit = new JButton("Relocate unit");
+		JButton LaySiege=new JButton("Lay Siege");
+		JLabel currentStatus = new JLabel("Current status:  "+a.getCurrentStatus());
+		JLabel distanceToTarget = new JLabel("Distance to target:  "+a.getDistancetoTarget());
+		JLabel target = new JLabel("Target:  " +(a.getTarget().equals("")?"No Target Assigned":a.getTarget()));
+		JLabel currentLocation = new JLabel("Current location:  "+a.getCurrentLocation());
+		String[][] grid;
+		JPanel panel = new JPanel();
+		JButton back;
+		openUnit.addActionListener(this);
+		setTarget.addActionListener(this);
+		relocateUnit.addActionListener(this);
+		autoReslove.addActionListener(this);
+		manualAttack.addActionListener(this);
+		LaySiege.addActionListener(this);
 		 
-		 
-		 String[]openun=new String[a.getUnits().size()];
-		 for (int i = 0; i < openun.length; i++) {
+		String[]openun=new String[a.getUnits().size()];
+			for (int i = 0; i < openun.length; i++) {
 			Unit u=a.getUnits().get(i);
 			if(u instanceof Archer)openun[i]="Archer "+u.getLevel();
 			else if(u instanceof Cavalry)openun[i]="Cavalry "+u.getLevel();
 			else openun[i]="Infantry "+u.getLevel();
 		} 
-		 openUnits=new JComboBox(openun);
-		 openUnits.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22) );
+		openUnits=new JComboBox(openun);
+		openUnits.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22) );
 		 
-		 String[]targetss=new String[g.getAvailableCities().size()-g.getPlayer().getControlledCities().size()];
-		 int s=0;
-		 for (int i = 0; i < g.getAvailableCities().size();i++) {
+		String[]targetss=new String[g.getAvailableCities().size()-g.getPlayer().getControlledCities().size()];
+		int s=0;
+		for (int i = 0; i < g.getAvailableCities().size();i++) {
 			City c= g.getAvailableCities().get(i);
 			if(!g.getPlayer().getControlledCities().contains(c)) {
 				targetss[s++]=c.getName();
 			}
 		}
-		 targets=new JComboBox(targetss);
-		 targets.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22) );
+		targets=new JComboBox(targetss);
+		targets.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22) );
 		 
-		 JPanel army =new JPanel();
+		JPanel army =new JPanel();
 		army.setLayout(new BorderLayout());
 		army.setBackground(Color.lightGray);
 		army.setMinimumSize(new Dimension(500, 500));
 		army.setPreferredSize(new Dimension(550,800));
+		army.setVisible(true);
 		back = new JButton();
 		back.setText("Return to map");
 		back.addActionListener(this);
 		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
-		army.setVisible(true);
+		LaySiege.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		openUnit.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		setTarget.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		relocateUnit.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
@@ -402,7 +407,7 @@ public class Controller implements ActionListener {
 		
 
 		grid = new String[][] { { "Units", "Set target", "Relocate unit" }, { "Army status", "", "" },
-				{ "Distance to target", "", "", "" }, { "Army location", "", "" }, { "Target", "", "" },
+				{ "Distance to target", "", "", "" }, { "Army location", "", "Lay Siege" }, { "Target", "", "" },
 				{ "back", "autoResolve", "manualAttack" } };
 		panel.setLayout(new GridLayout(0, 3));
 		for (int i = 0; i < grid.length; i++) {
@@ -431,6 +436,8 @@ public class Controller implements ActionListener {
 					panel.add(currentStatus);
 				else if (grid[i][j].equals("Distance to target"))
 					panel.add(distanceToTarget);
+				else if(grid[i][j].equals("Lay Siege"))
+					panel.add(LaySiege);
 				else if (grid[i][j].equals("Army location"))
 					panel.add(currentLocation);
 				else if (grid[i][j].equals("back"))
@@ -508,8 +515,12 @@ public class Controller implements ActionListener {
 		view.revalidate();
 		view.repaint();
 	}
+	
 	public void drawAutoReslove() {
 		drawPlayerBar();
+		JButton back=new JButton("Return to map");
+		back.setPreferredSize(new Dimension(view.getWidth(),70));
+		back.addActionListener(this);
 		g.setAutoevent(g.getAutoevent() + ("Inforamtions of the Battle"+"\n"));
 		g.setAutoevent(g.getAutoevent() + "'''''\n");
 		try {
@@ -522,6 +533,8 @@ public class Controller implements ActionListener {
 		autoLOG.setBackground(Color.black);
 		autoLOG.setForeground(Color.white);
 		autoLOG.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20)) ;
+		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20)) ;
+		view.add(back,BorderLayout.SOUTH);
 		view.add(autoLOG);
 		view.revalidate();
 		view.repaint();
@@ -671,8 +684,7 @@ public class Controller implements ActionListener {
 		
 		
 	}
-	
-	
+
 	public void drawMilitaryBuilding(MilitaryBuilding b ) {
 		drawPlayerBar();
 		imagesinArmy.setVisible(true);
@@ -1193,6 +1205,24 @@ public class Controller implements ActionListener {
 					drawArmy(selectedArmy);
 				}else {
 					JOptionPane.showMessageDialog(view, "No Targets Availabel","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}else if(s.equals("Lay Siege")){
+				playSound("sounds/Mouse.wav");
+				City city=null;
+				for (City c:g.getAvailableCities()) {
+					if(selectedArmy.getCurrentLocation().equals(c.getName())) {
+						city=c;
+					}
+				}
+				if(selectedArmy.getCurrentLocation().equals("onRoad")||city==null) {
+					JOptionPane.showMessageDialog(view, "Target Not reached yet","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					try {
+						g.getPlayer().laySiege(selectedArmy, city);
+						drawArmy(selectedArmy);
+					} catch (TargetNotReachedException | FriendlyCityException e1) {
+						JOptionPane.showMessageDialog(view, e1.getMessage(),"Alert",JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 			}else {
 				JButton b = (JButton) e.getSource();
