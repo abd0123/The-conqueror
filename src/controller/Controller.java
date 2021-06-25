@@ -580,13 +580,20 @@ public class Controller implements ActionListener {
 			JOptionPane.showMessageDialog(view,"Friendly Army","Alert",JOptionPane.INFORMATION_MESSAGE);
 			drawMap();
 		}
+		
 		autoLOG.setText(g.getAutoevent());
 		autoLOG.setBackground(Color.black);
 		autoLOG.setForeground(Color.white);
 		autoLOG.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20)) ;
 		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 20)) ;
 		view.add(back,BorderLayout.SOUTH);
-		view.add(autoLOG);
+		JScrollPane pa=new JScrollPane(autoLOG);
+		view.add(pa);
+		if(selectedArmy.getUnits().size()==0) {
+			JOptionPane.showMessageDialog(view,"You Lost","Alert",JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(view,"You Win","Alert",JOptionPane.INFORMATION_MESSAGE);
+		}
 		view.revalidate();
 		view.repaint();
 		
