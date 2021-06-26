@@ -1354,7 +1354,7 @@ public class Controller implements ActionListener {
 						JOptionPane.showMessageDialog(view, "please select attacking unit","Alert",JOptionPane.INFORMATION_MESSAGE);
 						
 					}
-					if (selectedButton2==null) {
+					else if (selectedButton2==null) {
 						JOptionPane.showMessageDialog(view, "please select attacked unit","Alert",JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
