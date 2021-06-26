@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.TextArea;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +72,7 @@ public class Controller implements ActionListener {
 	private ArrayList<JButton> targetUnits;
 	private JButton selectedButton1;
 	private JButton selectedButton2;
-	private JTextArea textArea;
+	private TextArea textArea;
 	private String event;
 	private JLabel attackerLeveL ;
 	private JLabel attackedLeveL;
@@ -377,11 +378,11 @@ public class Controller implements ActionListener {
 			City c=null;
 			for(City x:g.getAvailableCities())if(x.getName().equals(cl))c=x;
 			int m=0;
-			if(!selectedArmy.equals(c.getDefendingArmy()))m++;
+			if(!selectedArmy.equals(c.getDefendingArmy())&&g.getPlayer().getControlledCities().contains(c))m++;
 			for(Army f:g.getPlayer().getControlledArmies())if(f.getCurrentLocation().equals(selectedArmy.getCurrentLocation())&&(!f.equals(selectedArmy)))m++;
 			String[] ca=new String[m];
 			m=0;
-			if(!selectedArmy.equals(c.getDefendingArmy()))ca[m++]=selectedArmy.getCurrentLocation()+ " Army";
+			if(!selectedArmy.equals(c.getDefendingArmy())&&g.getPlayer().getControlledCities().contains(c))ca[m++]=selectedArmy.getCurrentLocation()+ " Army";
 			for(Army f:g.getPlayer().getControlledArmies()) {
 				if(f.getCurrentLocation().equals(selectedArmy.getCurrentLocation())&&(!f.equals(selectedArmy))) {
 					ca[m++]="Army "+(g.getPlayer().getControlledArmies().indexOf(f)+1);
@@ -663,7 +664,7 @@ public class Controller implements ActionListener {
 		rightlog.add(image2);
 		
 		
-		textArea=new JTextArea();
+		textArea=new TextArea();
 		textArea.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
 		textArea.setBackground(Color.black);
 		event += "Battle Starts:\n";
@@ -675,7 +676,7 @@ public class Controller implements ActionListener {
 		JScrollPane pa=new JScrollPane(textArea);
 		pa.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
 		pa.setAutoscrolls(true);
-		textArea.setLineWrap(true);
+//		textArea.setLineWrap(true);
 	    textArea.setEditable(false);
 	    textArea.setVisible(true);
 //		pa.VERTICAL_SCROLLBAR_AS_NEEDED
