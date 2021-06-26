@@ -573,7 +573,7 @@ public class Controller implements ActionListener {
 		JButton back=new JButton("Return to map");
 		back.setPreferredSize(new Dimension(view.getWidth(),70));
 		back.addActionListener(this);
-		g.setAutoevent(g.getAutoevent() + ("Inforamtions of the Battle"+"\n"));
+		g.setAutoevent(("Inforamtions of the Battle"+"\n"));
 		g.setAutoevent(g.getAutoevent() + "'''''\n");
 		try {
 			g.autoResolve(selectedArmy,attackedArmy );
@@ -676,10 +676,6 @@ public class Controller implements ActionListener {
 		JScrollPane pa=new JScrollPane(textArea);
 		pa.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
 		pa.setAutoscrolls(true);
-//		textArea.setLineWrap(true);
-	    textArea.setEditable(false);
-	    textArea.setVisible(true);
-//		pa.VERTICAL_SCROLLBAR_AS_NEEDED
 		pa.setBounds(midPanel.getWidth()/3,0,midPanel.getWidth()/3,midPanel.getHeight());
 		logPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		logPanel.setLayout(null);
