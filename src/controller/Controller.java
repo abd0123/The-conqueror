@@ -72,7 +72,7 @@ public class Controller implements ActionListener {
 	private ArrayList<JButton> targetUnits;
 	private JButton selectedButton1;
 	private JButton selectedButton2;
-	private TextArea textArea;
+	private JTextArea textArea;
 	private String event;
 	private JLabel attackerLeveL ;
 	private JLabel attackedLeveL;
@@ -110,10 +110,11 @@ public class Controller implements ActionListener {
 		AvailableUnits = new ArrayList<>();
 		targetUnits = new ArrayList<>();
 		autoLOG = new JTextArea();
+		autoLOG.setEditable(false);
 		event = "";
 		image1 = new JLabel();
 		image2 = new JLabel();
-		images = new JPanel();
+		
 		imagesinArmy = new JPanel();
 		testimage = new JLabel();
 		relocateUnit = new JButton("Relocate unit");
@@ -239,11 +240,26 @@ public class Controller implements ActionListener {
 		JButton initiateArmy;
 		JButton back;
 		JLabel defending;
-		
+		images = new JPanel();
 		JButton DefendingArmy;
 		images.setVisible(true);
 		images.setLayout(new GridLayout(2,4));
 		images.setPreferredSize(new Dimension(1000,800));
+		
+		for (MilitaryBuilding b:c.getMilitaryBuildings()) {
+			JLabel test=new JLabel();
+			if(b instanceof ArcheryRange)test.setIcon(new ImageIcon("images/Archery2.png"));
+			if(b instanceof Barracks)test.setIcon(new ImageIcon("images/Barracks2.jpg"));
+			if(b instanceof Stable)test.setIcon(new ImageIcon("images/Stable.png"));
+			images.add(test);
+		}
+		for(EconomicBuilding b : c.getEconomicalBuildings()) {
+			JLabel test=new JLabel();
+			if(b instanceof Farm)test.setIcon(new ImageIcon("images/Farm.png"));
+			if(b instanceof Market)test.setIcon(new ImageIcon("images/Market.png"));
+			images.add(test);
+		}
+		
 		view.add(images);
 		
 		JPanel city=new JPanel();
@@ -664,7 +680,8 @@ public class Controller implements ActionListener {
 		rightlog.add(image2);
 		
 		
-		textArea=new TextArea();
+		textArea=new JTextArea();
+		textArea.setEditable(false);
 		textArea.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
 		textArea.setBackground(Color.black);
 		event += "Battle Starts:\n";
@@ -1037,10 +1054,8 @@ public class Controller implements ActionListener {
 							for (EconomicBuilding b:selectedCity.getEconomicalBuildings()) if(b instanceof Market)f=true;
 							if(!f) {
 								playSound("sounds/Coins.wav");
-								JLabel test =new JLabel();
-								test.setIcon(new ImageIcon("images/Market.png"));
-								images.add(test);
 								g.getPlayer().build("Market", selectedCity.getName());
+								
 							drawCity(selectedCity);
 							}else {
 								JOptionPane.showMessageDialog(view, "Already Exist","Alert",JOptionPane.INFORMATION_MESSAGE);
@@ -1055,10 +1070,8 @@ public class Controller implements ActionListener {
 							for (EconomicBuilding b:selectedCity.getEconomicalBuildings()) if(b instanceof Farm)f=true;
 							if(!f) {
 								playSound("sounds/Coins.wav");
-								JLabel test =new JLabel();
-								test.setIcon(new ImageIcon("images/Farm.png"));
-								images.add(test);
 								g.getPlayer().build("Farm", selectedCity.getName());
+								
 							drawCity(selectedCity);
 							}else {
 								JOptionPane.showMessageDialog(view, "Already Exist","Alert",JOptionPane.INFORMATION_MESSAGE);
@@ -1073,9 +1086,6 @@ public class Controller implements ActionListener {
 							for (MilitaryBuilding b:selectedCity.getMilitaryBuildings()) if(b instanceof ArcheryRange)f=true;
 							if(!f) {
 								playSound("sounds/Coins.wav");
-								JLabel test =new JLabel();
-								test.setIcon(new ImageIcon("images/Archery2.png"));
-								images.add(test);
 								g.getPlayer().build("ArcheryRange", selectedCity.getName());
 							drawCity(selectedCity);
 							}else {
@@ -1090,10 +1100,8 @@ public class Controller implements ActionListener {
 							for (MilitaryBuilding b:selectedCity.getMilitaryBuildings()) if(b instanceof Barracks)f=true;
 							if(!f) {
 								playSound("sounds/Coins.wav");
-								JLabel test =new JLabel();
-								test.setIcon(new ImageIcon("images/Barracks2.jpg"));
-								images.add(test);
 								g.getPlayer().build("Barracks", selectedCity.getName());
+								
 							drawCity(selectedCity);
 							}else {
 								JOptionPane.showMessageDialog(view, "Already Exist","Alert",JOptionPane.INFORMATION_MESSAGE);
@@ -1107,11 +1115,8 @@ public class Controller implements ActionListener {
 							for (MilitaryBuilding b:selectedCity.getMilitaryBuildings()) if(b instanceof Stable)f=true;
 							if(!f) {
 								playSound("sounds/Coins.wav");
-								JLabel test =new JLabel();
-								test.setIcon(new ImageIcon("images/Stable.png"));
-								images.add(test);
 								g.getPlayer().build("Stable", selectedCity.getName());
-							drawCity(selectedCity);
+								drawCity(selectedCity);
 							}else {
 								JOptionPane.showMessageDialog(view, "Already Exist","Alert",JOptionPane.INFORMATION_MESSAGE);
 							}
@@ -1219,7 +1224,7 @@ public class Controller implements ActionListener {
 				}else {
 					g.endTurn();
 					if(g.isGameOver()) {
-						JOptionPane.showMessageDialog(view, "The game is Over —ÊÕ ⁄·Ï œ«—ﬂ„ Ì·«","Alert",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(view, "The game is Over","Alert",JOptionPane.INFORMATION_MESSAGE);
 						drawGameOver();
 					}else
 						drawMap();
