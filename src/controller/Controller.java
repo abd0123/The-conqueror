@@ -405,6 +405,8 @@ public class Controller implements ActionListener {
 				}
 			}
 			sorroundingArmy=new JComboBox(ca);
+		}else {
+			sorroundingArmy=new JComboBox();
 		}
 		
 		
@@ -566,7 +568,7 @@ public class Controller implements ActionListener {
 		currntsoL = new JLabel("   CurrentSoldierCount :  "+u.getCurrentSoldierCount());
 		currntsoL.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		currntsoL.setBounds(0,360,300,100);
-		back = new JButton("Return to map");
+		back = new JButton("Return to Army");
 		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));	
 		back.setBounds(10,10,200,50);
 		back.addActionListener(this);
@@ -627,14 +629,14 @@ public class Controller implements ActionListener {
 	 ArrayList<Unit> units2;	
 	 JLabel level;
 	 JLabel soldierCount;
-     JButton endTurn=new JButton("End Turn");
+//     JButton endTurn=new JButton("End Turn");
      JButton attack=new JButton("Attack");
-     endTurn.addActionListener(this);
+//     endTurn.addActionListener(this);
      attack.addActionListener(this);
      AvailableUnits.clear();
      targetUnits.clear();
 	 units1 = ar1.getUnits(); units2=ar2.getUnits();
-	 endTurn.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+//	 endTurn.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 	 attack.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		army1Panel =new JPanel();
 		army1Panel.setBackground(Color.green);
@@ -704,7 +706,7 @@ public class Controller implements ActionListener {
 		attackPanel =new JPanel();
 		attackPanel.setBackground(Color.green);
 		attackPanel.setPreferredSize(new Dimension(midPanel.getWidth(),60));
-		attackPanel.setLayout(new GridLayout(1,2));
+		attackPanel.setLayout(new GridLayout(0,1));
 		midPanel.add(attackPanel,BorderLayout.SOUTH);
 		attackPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 				
@@ -748,9 +750,9 @@ public class Controller implements ActionListener {
         rightlog.add(attackedLeveL);
 		rightlog.add(attackedsoldier);
 		attack.setPreferredSize(new Dimension(460,50));
-		endTurn.setPreferredSize(new Dimension(460,50));
+//		endTurn.setPreferredSize(new Dimension(460,50));
 		attackPanel.add(attack);
-		attackPanel.add(endTurn);		
+//		attackPanel.add(endTurn);		
 		view.revalidate();
 		view.repaint();
 		
@@ -765,7 +767,7 @@ public class Controller implements ActionListener {
 		imagesinArmy.add(testimage);
 		imagesinArmy.setPreferredSize(new Dimension(800,800));
 		view.add(imagesinArmy,BorderLayout.EAST);
-		JButton back=new JButton("Return to map");
+		JButton back=new JButton("Return to City");
 		JButton Upgrade = new JButton("Upgrade");
 		JButton Recruit = new JButton("Recruit");
 		JLabel Cost = new JLabel("Cost:  "+b.getCost());
@@ -859,7 +861,7 @@ public class Controller implements ActionListener {
 		imagesinArmy.setLayout(new GridLayout());
 		imagesinArmy.setPreferredSize(new Dimension(800,800));
 		view.add(imagesinArmy,BorderLayout.EAST);
-		JButton back=new JButton("Return to map");
+		JButton back=new JButton("Return to City");
 		JButton Upgrade = new JButton("Upgrade");
 		JLabel Cost = new JLabel("Cost:  "+b.getCost());
 		JLabel UpgradeCost = new JLabel("Upgrade cost:  "+b.getUpgradeCost());
@@ -1346,6 +1348,10 @@ public class Controller implements ActionListener {
 					}
 				
 				}
+			}else if(s.equals("Return to City")){
+				drawCity(selectedCity);
+			}else if(s.equals("Return to Army")){
+				drawArmy(selectedArmy);
 			}else {
 				JButton b = (JButton) e.getSource();
 				if (b.getActionCommand().equals("Attack")) {
