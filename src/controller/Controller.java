@@ -72,7 +72,7 @@ public class Controller implements ActionListener {
 	private ArrayList<JButton> targetUnits;
 	private JButton selectedButton1;
 	private JButton selectedButton2;
-	private JTextArea textArea;
+	private TextArea textArea;
 	private String event;
 	private JLabel attackerLeveL ;
 	private JLabel attackedLeveL;
@@ -682,7 +682,7 @@ public class Controller implements ActionListener {
 		rightlog.add(image2);
 		
 		
-		textArea=new JTextArea();
+		textArea=new TextArea();
 		textArea.setEditable(false);
 		textArea.setPreferredSize(new Dimension(midPanel.getWidth(),midPanel.getHeight()-60));
 		textArea.setBackground(Color.black);
@@ -1140,6 +1140,8 @@ public class Controller implements ActionListener {
 				}
 				if(selectedArmy.getCurrentLocation().equals("onRoad")||city==null) {
 					JOptionPane.showMessageDialog(view, "Target Not reached yet","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}else if(selectedArmy.getUnits().size()==0){
+					JOptionPane.showMessageDialog(view, "Army is Empty","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}else {
 					attackedArmy=city.getDefendingArmy();
 					drawBattleView(selectedArmy, attackedArmy);
@@ -1192,6 +1194,8 @@ public class Controller implements ActionListener {
 				}
 				if(selectedArmy.getCurrentLocation().equals("onRoad")||city==null) {
 					JOptionPane.showMessageDialog(view, "Target Not reached yet","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}else if(selectedArmy.getUnits().size()==0){
+					JOptionPane.showMessageDialog(view, "Army is Empty","Alert",JOptionPane.INFORMATION_MESSAGE);
 				}else {
 					attackedArmy=city.getDefendingArmy();
 					drawAutoReslove();

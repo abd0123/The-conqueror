@@ -183,6 +183,9 @@ public class Player {
 		if(controlledCities.contains(city)) {
 			throw new FriendlyCityException("You Can't Attack Freindly City");
 		}
+		if(army.getUnits().size()==0) {
+			throw new FriendlyCityException("The Army is Empty");
+		}
 		army.setCurrentStatus(Status.BESIEGING);
 		city.setUnderSiege(true);
 		city.setTurnsUnderSiege(0);
