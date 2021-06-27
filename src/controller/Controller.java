@@ -52,6 +52,7 @@ import units.Archer;
 import units.Army;
 import units.Cavalry;
 import units.Infantry;
+import units.Status;
 import units.Unit;
 import view.*;
 
@@ -94,6 +95,7 @@ public class Controller implements ActionListener {
 	private Army toBeOpen;
 	private boolean doneselect;
 	private JButton relocateUnit;
+	private JComboBox aroundCity;
 	
 	public Controller() {
 		start=new StartWindow();
@@ -163,7 +165,14 @@ public class Controller implements ActionListener {
 		JButton endTurn=new JButton("End Turn");
 		
 		JPanel map=new JPanel();
-		
+		City ca=null;
+		City sp=null;
+		City ro=null;
+		for (City c:g.getAvailableCities()) {
+			if(c.getName().equals("Cairo"))ca=c;
+			else if(c.getName().equals("Rome"))ro=c;
+			else sp=c;
+		}
 		String[]cbox=new String[g.getPlayer().getControlledArmies().size()];
 		for (int i = 0; i <g.getPlayer().getControlledArmies().size(); i++) {
 			cbox[i]="Army "+(i+1);
@@ -184,9 +193,33 @@ public class Controller implements ActionListener {
 		rome.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < 11; j++) {
-				if(grid[i][j].equals("Cairo"))p.add(cairo);
-				else if(grid[i][j].equals("Spart"))p.add(sparta);
-				else if(grid[i][j].equals("Rome"))p.add(rome);
+				if(grid[i][j].equals("Cairo")) {
+					if(!g.getPlayer().getControlledCities().contains(ca)) {
+						cairo.setText("<html>"+"Cairo"+"<br>"+(ca.isUnderSiege()?"Besiged":"Not Besieged")+"<br>"+"turns underSiege "+ca.getTurnsUnderSiege()+"</html>");
+						cairo.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15));
+						cairo.setActionCommand("Cairo");
+					}
+					
+					p.add(cairo);
+				}
+				else if(grid[i][j].equals("Spart")) {
+					if(!g.getPlayer().getControlledCities().contains(sp)) {
+						sparta.setText("<html>"+"Sparta"+"<br>"+(sp.isUnderSiege()?"Besiged":"Not Besieged")+"<br>"+"turns underSiege "+sp.getTurnsUnderSiege()+"</html>");
+						sparta.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15));
+						sparta.setActionCommand("Sparta");
+					}
+					
+					p.add(sparta);
+				}
+				else if(grid[i][j].equals("Rome")) {
+					if(!g.getPlayer().getControlledCities().contains(ro)) {
+						rome.setText("<html>"+"Rome"+"<br>"+(ro.isUnderSiege()?"Besiged":"Not Besieged")+"<br>"+"turns underSiege "+ro.getTurnsUnderSiege()+"</html>");
+						rome.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 15));
+						rome.setActionCommand("Rome");
+					}
+					
+					p.add(rome);
+				}
 				else if(grid[i][j].equals("Armies")) {
 					JPanel x=new JPanel();
 					x.setLayout(new GridLayout(0,1));
@@ -242,6 +275,26 @@ public class Controller implements ActionListener {
 		JLabel defending;
 		images = new JPanel();
 		JButton DefendingArmy;
+		JButton openArmy=new JButton("Open Army");
+		int l=0;
+		for (Army cu:g.getPlayer().getControlledArmies()) {
+			if(cu.getCurrentLocation().equals(c.getName()))l++;
+		}
+		if(l!=0) {
+			String[] arc=new String[l];
+			for (int i = 0; i < arc.length; i++) {
+				if(g.getPlayer().getControlledArmies().get(i).getCurrentLocation().equals(c.getName()))arc[i]="Army "+(i+1);
+			}
+			aroundCity=new JComboBox(arc);
+			aroundCity.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 18));
+			aroundCity.setBounds(20,383,170,30);
+			
+		}else {
+			aroundCity=new JComboBox();
+			aroundCity.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 18));
+			aroundCity.setBounds(20,383,170,30);
+		}
+		
 		images.setVisible(true);
 		images.setLayout(new GridLayout(2,4));
 		images.setPreferredSize(new Dimension(1000,800));
@@ -261,6 +314,7 @@ public class Controller implements ActionListener {
 		}
 		
 		view.add(images);
+		openArmy.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 18));
 		
 		JPanel city=new JPanel();
 		city.setVisible(true);
@@ -336,8 +390,19 @@ public class Controller implements ActionListener {
 		//------------------
 		DefendingArmy =new JButton("Defending Army");
 		DefendingArmy.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
-		DefendingArmy.setBounds(50,350,450,100);
+		DefendingArmy.setBounds(200,350,340,100);
+		//---------------
+		JLabel d=new JLabel("Armies around");
+		d.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		d.setBounds(20,350,170,30);
+
+		openArmy.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		openArmy.addActionListener(this);
+		openArmy.setBounds(20,416,170,30);
 		//------------- add
+		city.add(openArmy);
+		city.add(aroundCity);
+		city.add(d);
 		city.add(DefendingArmy);
 		city.add(units);
 		city.add(defending);
@@ -545,6 +610,7 @@ public class Controller implements ActionListener {
 		 JLabel leveLabel;
 		 JLabel Status;
 		 JLabel currntsoL;
+		 JLabel maxsol;
 		 JButton back;
 		 JPanel Unit=new JPanel();
 		 Unit.setBounds(1350,100,550,800);
@@ -565,9 +631,12 @@ public class Controller implements ActionListener {
 		Status = new JLabel("   Status :  "+u.getParentArmy().getCurrentStatus());
 		Status.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		Status.setBounds(0,260,300,100);
-		currntsoL = new JLabel("   CurrentSoldierCount :  "+u.getCurrentSoldierCount());
+		currntsoL = new JLabel("   Current Soldier Count :  "+u.getCurrentSoldierCount());
 		currntsoL.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		currntsoL.setBounds(0,360,300,100);
+		maxsol = new JLabel("   Max Soldier Count :  "+u.getMaxSoldierCount());
+		maxsol.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		maxsol.setBounds(0,460,300,100);
 		back = new JButton("Return to Army");
 		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));	
 		back.setBounds(10,10,200,50);
@@ -576,6 +645,7 @@ public class Controller implements ActionListener {
 		Unit.add(leveLabel);
 		Unit.add(Status);
 		Unit.add(currntsoL);
+		Unit.add(maxsol);
 		Unit.add(back);
 		
 		Unit.revalidate();
@@ -967,7 +1037,7 @@ public class Controller implements ActionListener {
 				}else {
 					try {
 						g=new Game(start.getPlayerNameTxt().getText(),start.getCities().getSelectedItem().toString());
-				playSound("sounds/Avengers.wav");
+//				playSound("sounds/Avengers.wav");
 					} catch (IOException e1) {
 					}
 					this.view=new GameView();
@@ -1145,6 +1215,9 @@ public class Controller implements ActionListener {
 				}else {
 					attackedArmy=city.getDefendingArmy();
 					drawBattleView(selectedArmy, attackedArmy);
+					city.setUnderSiege(false);
+					city.setTurnsUnderSiege(-1);
+					selectedArmy.setCurrentStatus(Status.IDLE);
 				}
 			}else if (s.equals("open Building")){
 				playSound("sounds/Mouse.wav");
@@ -1199,6 +1272,9 @@ public class Controller implements ActionListener {
 				}else {
 					attackedArmy=city.getDefendingArmy();
 					drawAutoReslove();
+					city.setUnderSiege(false);
+					city.setTurnsUnderSiege(-1);
+					selectedArmy.setCurrentStatus(Status.IDLE);
 				}
 			}else if(s.equals("Upgrade")){
 				playSound("sounds/upgrade.wav");
@@ -1356,6 +1432,14 @@ public class Controller implements ActionListener {
 				drawCity(selectedCity);
 			}else if(s.equals("Return to Army")){
 				drawArmy(selectedArmy);
+			}else if(s.equals("Open Army")){
+				if(aroundCity.getSelectedIndex()>-1) {
+					String x=aroundCity.getSelectedItem().toString();
+					selectedArmy=g.getPlayer().getControlledArmies().get(Integer.parseInt(x.charAt(x.length()-1)+"")-1);
+					drawArmy(selectedArmy);
+				}else {
+					JOptionPane.showMessageDialog(view, "No Armies Around","Alert",JOptionPane.INFORMATION_MESSAGE);
+				}
 			}else {
 				JButton b = (JButton) e.getSource();
 				if (b.getActionCommand().equals("Attack")) {
