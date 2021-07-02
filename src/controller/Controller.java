@@ -51,6 +51,7 @@ import exceptions.MaxLevelException;
 import exceptions.MaxRecruitedException;
 import exceptions.NotEnoughGoldException;
 import exceptions.TargetNotReachedException;
+import javafx.scene.layout.Border;
 import units.Archer;
 import units.Army;
 import units.Cavalry;
@@ -139,21 +140,25 @@ public class Controller implements ActionListener {
 		
 		playerName.setText(playerName.getText()+":  "+g.getPlayer().getName()+"            ");
 		playerName.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+		playerName.setForeground(Color.white);
 		
 		gold.setText(gold.getText()+":  "+g.getPlayer().getTreasury()+"$            ");
 		gold.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+		gold.setForeground(Color.white);
 		
 		turnsLeft.setText(turnsLeft.getText()+":  "+turncount+"            ");
 		turnsLeft.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+		turnsLeft.setForeground(Color.white);
 		
 		food.setText(food.getText()+":  "+g.getPlayer().getFood()+"            ");
 		food.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+		food.setForeground(Color.white);
 		
 		playerBar.add(playerName);
 		playerBar.add(gold);
 		playerBar.add(food);
 		playerBar.add(turnsLeft);
-		
+		playerBar.setBackground(Color.BLACK);
 		view.add(playerBar,BorderLayout.NORTH);
 	}
 	
@@ -285,11 +290,14 @@ public class Controller implements ActionListener {
 		JLabel title=new JLabel("Map");
 		title.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		title.setHorizontalAlignment(SwingConstants. CENTER);
+		title.setForeground(Color.white);
+		map.setBackground(Color.black);
 		map.add(title,BorderLayout.NORTH);
 		map.add(p,BorderLayout.CENTER);
 		map.setBorder(BorderFactory.createLineBorder(Color.black));
 		endTurn.setPreferredSize(new Dimension(view.getWidth(),70));
 		endTurn.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 22));
+		
 		map.revalidate();
 		map.repaint();
 		view.add(endTurn,BorderLayout.SOUTH);
@@ -377,6 +385,7 @@ public class Controller implements ActionListener {
 		lbuildings =new JLabel("   Buildings");
 		lbuildings.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		lbuildings.setBounds(0,500,180,100);
+		lbuildings.setForeground(Color.WHITE);
 		String[] cbox=new String[c.getEconomicalBuildings().size()+c.getMilitaryBuildings().size()];
 		int i=0;
 		for (Building b:c.getMilitaryBuildings()) {
@@ -408,12 +417,15 @@ public class Controller implements ActionListener {
 		name = new JLabel("   city name :  "+c.getName());
 		name.setBounds(0,40,400,100);
 		name.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		name.setForeground(Color.WHITE);
 		status = new JLabel("   Status : "+(c.isUnderSiege()?"Besieged":"Not Besieged"));
 		status.setBounds(0,140,400,100);
 		status.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
+		status.setForeground(Color.WHITE);
 		turnsUnderSeige=new JLabel("   Turns Under Seige :  "+c.getTurnsUnderSiege());
 		turnsUnderSeige.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		turnsUnderSeige.setBounds(0,240,400,100);
+		turnsUnderSeige.setForeground(Color.WHITE);
 		//--------------
 		initiateArmy = new JButton("Initiate Army");
 		initiateArmy.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
@@ -421,6 +433,7 @@ public class Controller implements ActionListener {
 		defending = new JLabel("   Units ");
 		defending.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		defending.setBounds(0,700,180,100);
+		defending.setForeground(Color.WHITE);
 		String [] c3box= new String[c.getDefendingArmy().getUnits().size()];
 		int x = 0 ;
 		for (Unit u : c.getDefendingArmy().getUnits()) {
@@ -448,7 +461,7 @@ public class Controller implements ActionListener {
 		JLabel d=new JLabel("Armies around");
 		d.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		d.setBounds(20,350,170,30);
-
+		d.setForeground(Color.WHITE);
 		openArmy.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		openArmy.addActionListener(this);
 		openArmy.setBounds(20,416,170,30);
@@ -492,9 +505,13 @@ public class Controller implements ActionListener {
 		JButton selectArmy =new JButton("Select Army");
 		JButton LaySiege=new JButton("Lay Siege");
 		JLabel currentStatus = new JLabel("Current status:  "+a.getCurrentStatus());
+		currentStatus.setForeground(Color.WHITE);
 		JLabel distanceToTarget = new JLabel("Distance to target:  "+a.getDistancetoTarget());
+		distanceToTarget.setForeground(Color.WHITE);
 		JLabel target = new JLabel("Target:  " +(a.getTarget().equals("")?"No Target Assigned":a.getTarget()));
+		target.setForeground(Color.WHITE);
 		JLabel currentLocation = new JLabel("Current location:  "+a.getCurrentLocation());
+		currentLocation.setForeground(Color.WHITE);
 		String[][] grid;
 		JLabel panel = new JLabel();
 		panel.setIcon(new ImageIcon(new ImageIcon("images/Army1.jpg").getImage().getScaledInstance(1900, 1300, Image.SCALE_SMOOTH)));
@@ -690,31 +707,45 @@ public class Controller implements ActionListener {
 		 JLabel currntsoL;
 		 JLabel maxsol;
 		 JButton back;
-		 JPanel Unit=new JPanel();
+		 JLabel Unit=new JLabel();
 		 Unit.setBounds(1350,100,550,800);
 		 Unit.setVisible(true);
 		 Unit.setLayout(null);
 		 Unit.setPreferredSize(new Dimension(550,800));
 		 Unit.setBorder(BorderFactory.createLineBorder(Color.black));
 		 String s = "";
-		 if (u instanceof Archer)s="Archer";
-		 else if (u instanceof Cavalry)s= "Cavalry";
-		 else s= "Infantry";
+		 if (u instanceof Archer) {
+			 s="Archer";
+			 Unit.setIcon(new ImageIcon(new ImageIcon("images/Archer.jpg").getImage().getScaledInstance(1980, 1000, Image.SCALE_SMOOTH)));
+		 }
+		 else if (u instanceof Cavalry) {
+			 s= "Cavalry";
+			 Unit.setIcon(new ImageIcon(new ImageIcon("images/Cavalry.jpg").getImage().getScaledInstance(1980, 1000, Image.SCALE_SMOOTH)));
+		 }
+		 else {
+			 s= "Infantry";
+			 Unit.setIcon(new ImageIcon(new ImageIcon("images/Infantry.jpg").getImage().getScaledInstance(1980, 1000, Image.SCALE_SMOOTH)));
+		 }
 		name = new JLabel("   Type : " + s);
 		name.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		name.setBounds(0,60,300,100);
+		name.setForeground(Color.WHITE);
 		leveLabel = new JLabel("   Level :  "+u.getLevel());
 		leveLabel.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		leveLabel.setBounds(0,160,300,100);
+		leveLabel.setForeground(Color.WHITE);
 		Status = new JLabel("   Status :  "+u.getParentArmy().getCurrentStatus());
 		Status.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		Status.setBounds(0,260,300,100);
+		Status.setForeground(Color.WHITE);
 		currntsoL = new JLabel("   Current Soldier Count :  "+u.getCurrentSoldierCount());
 		currntsoL.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		currntsoL.setBounds(0,360,300,100);
+		currntsoL.setForeground(Color.WHITE);
 		maxsol = new JLabel("   Max Soldier Count :  "+u.getMaxSoldierCount());
 		maxsol.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));
 		maxsol.setBounds(0,460,300,100);
+		maxsol.setForeground(Color.WHITE);
 		back = new JButton("Return to Army");
 		back.setFont(new Font("Berlin Sans FB Demi", Font.ITALIC, 22));	
 		back.setBounds(10,10,200,50);
@@ -924,7 +955,7 @@ public class Controller implements ActionListener {
 		JLabel Incooldown = new JLabel("In cooldown:  "+b.isCoolDown());
 		JLabel RecruitmentCost = new JLabel("Recruitment Cost:  "+b.getRecruitmentCost());
 		JLabel CurrentRecruit = new JLabel("Current Recruit:  "+b.getCurrentRecruit());
-		JPanel panel;
+		JLabel panel;
 		String[][] grid;
 		
 		back.addActionListener(this);
@@ -955,7 +986,15 @@ public class Controller implements ActionListener {
 		grid=new String[][] {{"Cost","","","Upgrade"},{"UpgradeCost","","",""},{"Level","","",""},{"Incooldown","","","Recruit"},
 			{"RecruitmentCost","","",""},{"CurrentRecruit","","","Return to map"}};
 		
-		panel=new JPanel(new GridLayout(6,4));
+		panel=new JLabel();
+		panel.setLayout(new GridLayout(6,4));
+		if(b instanceof ArcheryRange)panel.setIcon(new ImageIcon(new ImageIcon("images/ArcherIcon.png").getImage().getScaledInstance(900, 1000, Image.SCALE_SMOOTH)));
+		else if(b instanceof Barracks)panel.setIcon(new ImageIcon(new ImageIcon("images/InfantryIcon.png").getImage().getScaledInstance(900, 1000, Image.SCALE_SMOOTH)));
+		else {
+			panel.setIcon(new ImageIcon(new ImageIcon("images/CavalryIcon.png").getImage().getScaledInstance(900, 900, Image.SCALE_SMOOTH)));
+			panel.setVerticalAlignment(SwingConstants.NORTH);
+		}
+		panel.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel.setPreferredSize(new Dimension(1050,700));
 		for(int i=0;i<grid.length;i++) {
 			for(int j=0;j<4;j++) {
@@ -979,6 +1018,7 @@ public class Controller implements ActionListener {
 					panel.add(back);
 				else {
 					JPanel x =new JPanel();
+					x.setBackground(new Color(0,0,0,0));
 					panel.add(x);
 				}
 			}
@@ -1038,7 +1078,12 @@ public class Controller implements ActionListener {
 		
 		Building.add(title,BorderLayout.NORTH);
 		
-		JPanel panel=new JPanel();
+		JLabel panel=new JLabel();
+		if(b instanceof Market)panel.setIcon(new ImageIcon(new ImageIcon("images/gold.jpg").getImage().getScaledInstance(1120, 1000, Image.SCALE_SMOOTH)));
+		else {
+			panel.setIcon(new ImageIcon(new ImageIcon("images/food.jpg").getImage().getScaledInstance(1120, 900, Image.SCALE_SMOOTH)));
+			panel.setVerticalAlignment(SwingConstants.BOTTOM);
+		}
 		panel.setLayout(new GridLayout(6,3));
 		panel.setPreferredSize(new Dimension(950,700));
 		
@@ -1061,6 +1106,7 @@ public class Controller implements ActionListener {
 						panel.add(back);
 					else {
 						JPanel x =new JPanel();
+						x.setBackground(new Color(0,0,0,0));
 						panel.add(x);
 					}
 				}
@@ -1304,16 +1350,31 @@ public class Controller implements ActionListener {
 					
 					if(i<selectedCity.getMilitaryBuildings().size()) {
 						 if (Buildings.getSelectedItem().toString().charAt(0)=='B') {
-							 testimage.setIcon(new ImageIcon("images/Barracks2.jpg"));
+							JLabel x=new JLabel();
+							 x.setIcon(new ImageIcon("images/Barracks2.jpg"));
+							 testimage.removeAll();
+							 testimage.setIcon(new ImageIcon("images/grass.jpg"));
+							 testimage.setLayout(new GridLayout(0,1));
+							 testimage.add(x);
+							 
 							 
 						 }
 						 else  if (Buildings.getSelectedItem().toString().charAt(0)=='A') {
-							 testimage.setIcon(new ImageIcon("images/Archery2.png"));
+							 JLabel x=new JLabel();
+							 x.setIcon(new ImageIcon("images/Archery2.png"));
+							 testimage.removeAll();
+							 testimage.setIcon(new ImageIcon("images/grass.jpg"));
+							 testimage.setLayout(new GridLayout(0,1));
+							 testimage.add(x);
 							 
 						 }
 						 else  if (Buildings.getSelectedItem().toString().charAt(0)=='s') {
-							 testimage.setIcon(new ImageIcon("images/Stable.png"));
-							 
+							 JLabel x=new JLabel();
+							 x.setIcon(new ImageIcon("images/Stable.png"));
+							 testimage.removeAll();
+							 testimage.setIcon(new ImageIcon("images/grass.jpg"));
+							 testimage.setLayout(new GridLayout(0,1));
+							 testimage.add(x);
 						 }
 						 
 						drawMilitaryBuilding(selectedCity.getMilitaryBuildings().get(i));
@@ -1322,12 +1383,21 @@ public class Controller implements ActionListener {
 					else {
 						i=i-selectedCity.getMilitaryBuildings().size();
 						 if (Buildings.getSelectedItem().toString().charAt(0)=='M') {
-							 testimage.setIcon(new ImageIcon("images/Market.png"));
+							 JLabel x=new JLabel();
+							 x.setIcon(new ImageIcon("images/Market.png"));
+							 testimage.removeAll();
+							 testimage.setIcon(new ImageIcon("images/grass.jpg"));
+							 testimage.setLayout(new GridLayout(0,1));
+							 testimage.add(x);
 							
 						 }
 						 else  if (Buildings.getSelectedItem().toString().charAt(0)=='F') {
-							 testimage.setIcon(new ImageIcon("images/Farm.png"));
-							 
+							 JLabel x=new JLabel();
+							 x.setIcon(new ImageIcon("images/Farm.png"));
+							 testimage.removeAll();
+							 testimage.setIcon(new ImageIcon("images/grass.jpg"));
+							 testimage.setLayout(new GridLayout(0,1));
+							 testimage.add(x);
 						 }
 						drawEconomicBuilding(selectedCity.getEconomicalBuildings().get(i));	
 						selectedBuilding=selectedCity.getEconomicalBuildings().get(i);

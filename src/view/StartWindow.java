@@ -22,19 +22,26 @@ public class StartWindow extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(500,500));
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setLayout(new GridLayout(5,5));
+		JLabel ss=new JLabel();
+		ss.setIcon(new ImageIcon(new ImageIcon("images/Start.jpg").getImage().getScaledInstance(1980, 1300, Image.SCALE_SMOOTH)));
+		ss.setLayout(new GridLayout(5,5));
+		
 		for (int i = 0; i < 25; i++) {
 			if(i==12) {
-				add(p);
+				p.setBackground(new Color(0,0,0,0));
+				ss.add(p);
 			}else {
 				JPanel x=new JPanel();
-				add(x);
+				x.setBackground(new Color(0,0,0,0));
+				ss.add(x);
 			}
 		}
-		playerNameLbl.setFont(new Font("Player Name",Font.PLAIN,20));
-		PlayerNameTxt.setFont(new Font("",Font.PLAIN,20));
-		cities.setFont(new Font("",Font.PLAIN,20));
-		PlayerCityLbl.setFont(new Font("",Font.PLAIN,20));
+		playerNameLbl.setFont(new Font("Player Name",Font.BOLD,20));
+		PlayerNameTxt.setFont(new Font("",Font.BOLD,20));
+		cities.setFont(new Font("",Font.BOLD,20));
+		PlayerCityLbl.setFont(new Font("",Font.BOLD,20));
+		playerNameLbl.setForeground(Color.green);
+		PlayerCityLbl.setForeground(Color.green);
 //		playerNameLbl.setBounds(670,300,150,30);
 //		PlayerNameTxt.setBounds(875, 300, 200,30);
 //		start.setBounds(875, 470, 200,40);
@@ -43,6 +50,7 @@ public class StartWindow extends JFrame {
 		start.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 19));
 //		setLayout(null);
 		JPanel p1=new JPanel();
+		p1.setBackground(new Color(0,0,0,0));
 		p.setLayout(new BorderLayout());
 		p.add(p1,BorderLayout.NORTH);
 		p1.setLayout(new GridLayout(0,2));
@@ -51,10 +59,14 @@ public class StartWindow extends JFrame {
 		p1.add(PlayerCityLbl);
 		p1.add(cities);
 		JPanel p2 =new JPanel();
+		p2.setBackground(new Color(0,0,0,0));
 		p2.setLayout(new GridLayout(0,1));
-		p2.add(new JPanel());
+		JPanel tmp=new JPanel();
+		tmp.setBackground(new Color(0,0,0,0));
+		p2.add(tmp);
 		p2.add(start);
 		p.add(p2,BorderLayout.SOUTH);
+		add(ss,BorderLayout.CENTER);
 		this.getRootPane().setDefaultButton(start);
 //		
 //		
